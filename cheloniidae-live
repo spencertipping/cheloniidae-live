@@ -274,14 +274,19 @@ Licensed under the terms of the MIT source code license
                                  (ops[k] + '$').alias ((k + '$').alias (eval ('(function(f,g){return function(){return f.fn().apply(this,arguments)' + ops[k] + 'g.fn().apply(this,arguments)}})')))})}) ();
 __ZJjC8aMNysrqVLHVhK4s1BdLTcZ2Bncjv8pXK9JI3F0
 
-meta::code('main', <<'__q3inzd5YfBYoidts0+MJ88Ik5u3GUY/49JQ9eA68mWA');
+meta::code('main', <<'__miRdzY0TwACgye0wMDpO6oDHE8SbkXXHWKCKKHd1+10');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
 :: get divergence-lib util
 
-Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes.
-__q3inzd5YfBYoidts0+MJ88Ik5u3GUY/49JQ9eA68mWA
+Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
+uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
+functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
+
+The line model is different. Rather than having a bucket of lines, we instead use a Git-style model of line management: each line represents a diff of the image and state. Because each state
+supports a full set of operations, we don't need parent management. (In this respect, managing lines is different from managing commits; commits form a category, whereas lines form a group.)
+__miRdzY0TwACgye0wMDpO6oDHE8SbkXXHWKCKKHd1+10
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
