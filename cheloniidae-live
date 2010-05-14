@@ -187,7 +187,7 @@ meta::define_form 'meta', sub {
 
 __plktoDCjGQioE48vwfrH0xL3ulcYnTWp+fUvaFwRnnc
 
-meta::bootstrap('pod', <<'__0h2CBA2cqa4qd6nox9dul6Jn9hcJFHw3uPdC89Xim7o');
+meta::bootstrap('pod', <<'__3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg');
 
 =head1 NAME
 
@@ -212,9 +212,10 @@ Currently the only known way to lose your data is to edit the serialization-rela
 something most people will normally do. In the future there may be a locking mechanism to prevent unintentional edits of these attributes.
 
 =cut
-__0h2CBA2cqa4qd6nox9dul6Jn9hcJFHw3uPdC89Xim7o
 
-meta::code('divergence-lib', <<'__ZJjC8aMNysrqVLHVhK4s1BdLTcZ2Bncjv8pXK9JI3F0');
+__3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
+
+meta::code('divergence-lib', <<'__K2VJJBJ2D5oT+O/JJo6rndkCC4GhUhls51upQhLepiU');
 Divergence JavaScript Standard Library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -222,12 +223,13 @@ Licensed under the terms of the MIT source code license
   var   tr = [],                                                      ps = [Function, String, Number, Boolean, RegExp, Array],
          a = function  (x) {return x},                                 k = function (x) {return function () {return x}},
        arr = function (xs) {return Array.prototype.slice.call (xs)},  k$ = k (a),
-   aliases = {},                                                     fns = {'()': '$0($1)', '[]': '$0[$1]', '!': '!$0', '!!': '!!$0', '~': '~$0'},
+   aliases = {},                                                     fns = {'()': '$0($1)', '[]': '$0[$1]', '!': '!$0', '!!': '!!$0', '~': '~$0'};
 
-      keys = function  (o) {var xs = []; for (var k in o) o.hasOwnProperty (k) && xs.push (k); return xs},
+  // Globals
+      keys = function  (o) {var xs = []; for (var k in o) o.hasOwnProperty (k) && xs.push (k); return xs};
       init = function  (o) {for (var i = 1, l = arguments.length; i < l; ++i) if (arguments[i].constructor === Function) arguments[i].call (o);
                                                                               else                                       for (var k in arguments[i]) o[k] = arguments[i][k];
-                            return o},
+                            return o};
        ops = {plus: '+', minus: '-', times: '*', over: '/', modulo: '%', lt: '<', gt: '>', le: '<=', ge: '>=', eq: '==', ne: '!=', req: '===', rne: '!==', and: '&&', or: '||',
               xor: '^', bitand: '&', bitor: '|', then: ','};
 
@@ -272,9 +274,9 @@ Licensed under the terms of the MIT source code license
   keys (fns).each ('$1.alias($0[$1])'.fn (fns));
   keys (ops).each (function (k) { ops[k]       .alias ( k       .alias (eval ('(function(x,y){return x'                                              + ops[k] + 'y})')));
                                  (ops[k] + '$').alias ((k + '$').alias (eval ('(function(f,g){return function(){return f.fn().apply(this,arguments)' + ops[k] + 'g.fn().apply(this,arguments)}})')))})}) ();
-__ZJjC8aMNysrqVLHVhK4s1BdLTcZ2Bncjv8pXK9JI3F0
+__K2VJJBJ2D5oT+O/JJo6rndkCC4GhUhls51upQhLepiU
 
-meta::code('main', <<'__miRdzY0TwACgye0wMDpO6oDHE8SbkXXHWKCKKHd1+10');
+meta::code('main', <<'__S3EZPVWxc3wKHfHdfe3fGm5mPhwZUKwdnh0HQaDgIBM');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -285,8 +287,63 @@ uniform abstraction, there are far fewer layers of abstraction here than there a
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
 
 The line model is different. Rather than having a bucket of lines, we instead use a Git-style model of line management: each line represents a diff of the image and state. Because each state
-supports a full set of operations, we don't need parent management. (In this respect, managing lines is different from managing commits; commits form a category, whereas lines form a group.)
-__miRdzY0TwACgye0wMDpO6oDHE8SbkXXHWKCKKHd1+10
+supports a full set of operations, we don't need parent management. (In this respect, managing lines is different from managing commits; commits form a category, whereas lines form a monoid.)
+
+  var qw = '$0.split(/\\s+/)'.fn();
+
+Vector geometry.
+  A basic setup with lines and points based on arrays. Arrays are given destructive and non-destructive componentwise arithmetic operators (destructive are suffixed with $, nondestructive are
+  not suffixed) whose names are the same as the aliased functions defined by Divergence. (See the /ops/ hash.) The vector geometry operators from the original Cheloniidae library are also
+  implemented here.
+
+  var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
+        line = 'this.x = $0, this.y = $1; this._ = $2'.fn().type ({midpoint: '$0().add_scaled ($_.x, 0.5).add_scaled ($_.y, 0.5)'.fn(vector)});
+
+      keys (ops).each ('Array.prototype[$2]       = $0($1[$2])'.fn ('("[$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2]]").fn()'.fn(),   ops)).
+                 each ('Array.prototype[$2 + "$"] = $0($1[$2])'.fn ( '("$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2],$_").fn()'.fn(), ops));
+
+      init (Number.prototype,   {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn()});
+
+      init  (Array.prototype, {distance: 'Math.sqrt($_.dot ($_))'.fn(),              dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
+                                   proj: '$0.times($_.dot($0), $0.dot($0))'.fn(),   orth: '$_.minus($_.proj($0))'.fn(),
+                                  clone: '$_.slice()'.fn(),                         line: 'new $0($_, $1)'.fn (line),
+
+                               toString: '"<" + $_.join(", ") + ">"'.fn(),
+                                  cross: '[$_[1]*$0[2] - $_[2]*$0[1], $_[2]*$0[0] - $_[0]*$0[2], $_[0]*$0[1] - $_[1]*$0[0]]'.fn(),
+                             add_scaled: '$_[0] += $0[0]*$1, $_[1] += $0[1]*$1, $_[2] += $0[2]*$2, $_'.fn(),
+                              normalize: '$_.over$ ($_.distance().vector())'.fn(),
+                                   into: '[$_.dot($0)/$0.distance(), $_.dot($1)/$1.distance(), $_.dot($2)/$2.distance()]'.fn(),
+                                   from: '$0().add_scaled($1, $_[0]).add_scaled($2, $_[1]).add_scaled($3, $_[2])'.fn(vector),
+                                  about:  function (v, angle) {var b1 = v.clone().normalize(), b2 = this.orth(b1).normalize(), b3 = b1.cross (b2), l = this.orth (b1).distance ();
+                                                               return this.proj (b1).add_scaled (b2, Math.cos (angle) * l).add_scaled (b3, Math.sin (angle) * l)}});
+
+Incidence angle computation and attenuation.
+  The original Cheloniidae source code covers this in more detail, but the idea is that we're using some elementary differential equations to figure out how much light gets attenuated when
+  traveling through a tinted medium at an angle.
+
+  var light_transmission = '((1.0 - $1) / Math.exp (-$1)) * Math.exp (-$0 * $1)'.fn (),                                 // thickness, opacity -> adjusted
+        planar_thickness = '$0.distance() * $1.distance() / Math.abs ($0.dot ($1))'.fn (),                              // surface normal, v  -> sec (theta) = thickness
+   cylindrical_thickness = '1.0 / Math.sqrt (1.0 - $0.dot($1) * $0.dot($1) / ($0.dot($0) * $1.dot($1)))'.fn ();         // axis, v            -> thickness
+
+Turtles.
+  A turtle manages a collection of lines. You can also create a bunch of lines and render those, but a turtle maintains state in between. Turtles are immutable, but the lines they draw are
+  stateful. It's perhaps an odd model, but it means that you can grab a turtle state from some time before without losing what you've drawn since. In other words, a turtle represents a
+  position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
+
+  init (String.prototype, {patching_constructor: '("new $_.constructor (init ({" + $_.toString() + ": $0}))").fn()'.fn()});
+
+  var rotational_turtle = '$0($_, $1)'.fn(init).type ({line: '$_.queue.push(line($_.position.clone(), $_.position.clone().add_scaled ($_.direction, $0.vector ()), $_.pen)), $_'.fn(),
+                                                       move: '$_.line($0), $_.jump($0)'.fn(),
+                                                       jump: 'new $_.constructor(init({position:   $_.position.clone().add_scaled ($_.direction, $0)}, $_))'.fn(),
+                                                       turn: 'new $_.constructor(init({direction:  $_.direction.about (complement, $0)}, $_))'.fn(),
+                                                       bank: 'new $_.constructor(init({complement: $_.complement.about (direction, $0)}, $_))'.fn(),
+                                                        pen: 'new $_.constructor(init({pen:        $0}))'.fn(),
+                                                      pitch:  function (angle) {var axis = this.direction.cross (this.complement);
+                                                                                return new this.constructor (init ({complement: this.complement.about (axis, angle),
+                                                                                                                     direction: this.direction. about (axis, angle)}))}}),
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(init).type (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(init)),
+                 turtle = 'new $0(init($2 || {}, {position: (0).vector(), direction: (1).y(), complement: (-1).z(), pen: new $1()}))'.fn (rotational_turtle, pen);
+__S3EZPVWxc3wKHfHdfe3fGm5mPhwZUKwdnh0HQaDgIBM
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
@@ -883,6 +940,10 @@ __SSgRGyOQPbEleu+2TMjU4OCmMnjOWFSaJj0iwGkBsug
 meta::sh('node-repl', <<'__q9vTbSQ20/rHKteKvyoqfWOUHbXPrRXR8WvCi2vaMDY');
 node-repl __code__
 __q9vTbSQ20/rHKteKvyoqfWOUHbXPrRXR8WvCi2vaMDY
+
+meta::sh('repl', <<'__hpfIOvOFVwSLotcBcirerUZLwIeNISkgfqy8K01Nbk8');
+js -f __code__ -f -
+__hpfIOvOFVwSLotcBcirerUZLwIeNISkgfqy8K01Nbk8
 
 meta::sh('stats', <<'__e/Rj98I2/T+yRRdecrhlw5H3dWmBW2Vup15b2cbzKLg');
 echo $(cat __code__ | grep -v '//' | grep -v '^\s*$' | wc -l) LOC, \
