@@ -276,7 +276,7 @@ Licensed under the terms of the MIT source code license
                                  (ops[k] + '$').alias ((k + '$').alias (eval ('(function(f,g){return function(){return f.fn().apply(this,arguments)' + ops[k] + 'g.fn().apply(this,arguments)}})')))})}) ();
 __hS8nzJ4OQobGi4fDnPDZFPHJR0KmKQWUmh891mMVcQY
 
-meta::code('main', <<'__+6i4Gm1Q6ZtII1S7kGjiw2OY8cO6gCgnJg8k1eiE7es');
+meta::code('main', <<'__BjEIipEf416B24hzTJWRm4yRl/VWEggG1ycS5nUVjGk');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -297,7 +297,7 @@ Vector geometry.
   implemented here.
 
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
-        line = 'this.x = $0, this.y = $1; this._ = $2'.fn().type ({midpoint: '$0().add_scaled ($_.x, 0.5).add_scaled ($_.y, 0.5)'.fn(vector)});
+        line = 'this.x = $0, this.y = $1; this.pen = $2'.fn().type ({midpoint: '$0().add_scaled ($_.x, 0.5).add_scaled ($_.y, 0.5)'.fn(vector)});
 
       keys (ops).each ('Array.prototype[$2]       = $0($1[$2])'.fn ('("[$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2]]").fn()'.fn(),   ops)).
                  each ('Array.prototype[$2 + "$"] = $0($1[$2])'.fn ( '("$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2],$_").fn()'.fn(), ops));
@@ -330,7 +330,7 @@ Turtles.
   stateful. It's perhaps an odd model, but it means that you can grab a turtle state from some time before without losing what you've drawn since. In other words, a turtle represents a
   position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
 
-  init (String.prototype, {patching_constructor: '("new $_.constructor (init ({" + $_.toString() + ": $0}))").fn()'.fn()});
+  init (String.prototype, {patching_constructor: '("new $_.constructor (init ({" + $_.toString() + ": $0}), $_)").fn()'.fn()});
 
   var rotational_turtle = '$0($_, $1)'.fn(init).type ({line: '$_.queue.push(line($_.position.clone(), $_.position.clone().add_scaled ($_.direction, $0.vector ()), $_.pen)), $_'.fn(),
                                                        move: '$_.line($0), $_.jump($0)'.fn(),
@@ -341,14 +341,25 @@ Turtles.
                                                       pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                 return new this.constructor (init ({complement: this.complement.about (axis, angle),
                                                                                                                      direction: this.direction. about (axis, angle)}))}}),
-                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(init).type (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(init)),
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(init).type (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(init), {
+                                                                                                   install: function (context) {context.globalAlpha = this.opacity;
+                                                                                                                                context.strokeStyle = this.color;
+                                                                                                                                context.lineWidth   = this.size}}),
                  turtle = 'new $0(init($2 || {}, {position: (0).vector(), direction: (1).y(), complement: (-1).z(), pen: new $1()}))'.fn (rotational_turtle, pen);
 
 Line rendering.
   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
   screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.
   Delimited continuations won't quite work here because they will be contained (and a timeout or interval requires escape and re-entry). Better is to do explicit queueing.
-__+6i4Gm1Q6ZtII1S7kGjiw2OY8cO6gCgnJg8k1eiE7es
+
+  var viewport = '$0($_, $1)'.fn(init).type ({transform: '$0.minus($_.pov).into ($_.up.cross ($_.forward), $_.up, $_.forward)'.fn(),
+                                                project: '$0.over($0[2])'.fn(),
+                                                  scale: '$0.times ([$_.width, $_.height, 0]).plus$ ([$_.width >> 1, $_.height >> 1, 0])'.fn(),
+                                            render_line:  ('$_.context.save(), $0.pen.install($_.context), $_.context.beginPath(),' +
+                                                           '$_.context.moveTo.apply ($_.context, $_.project ($_.transform ($0.x))),' +
+                                                           '$_.context.lineTo.apply ($_.context, $_.project ($_.transform ($0.y))),' +
+                                                           '$_.context.closePath(), $_.context.stroke(), $_.restore()').fn ()});
+__BjEIipEf416B24hzTJWRm4yRl/VWEggG1ycS5nUVjGk
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
