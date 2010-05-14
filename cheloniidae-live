@@ -215,7 +215,7 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('divergence-lib', <<'__K2VJJBJ2D5oT+O/JJo6rndkCC4GhUhls51upQhLepiU');
+meta::code('divergence-lib', <<'__hS8nzJ4OQobGi4fDnPDZFPHJR0KmKQWUmh891mMVcQY');
 Divergence JavaScript Standard Library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -249,7 +249,7 @@ Licensed under the terms of the MIT source code license
     call_cc: function (c) {var cc = [this, [c = c.fn()]]; while (cc[0] !== c) cc = cc[0].apply (this, cc[1]); return c.apply (this, cc[1])},
       curry: function (n) {var f = this; return n > 1 ? function () {var as = arr (arguments); return function () {return f.curry (n - 1).apply (this, as.concat (arr (arguments)))}} : this},
        tail: function  () {return [this, arguments]},
-       type: function  () {var f = function () {}, c = this; init.apply (this, [f.prototype].concat (arr (arguments))); return function () {var x = new f (); return c.apply (x, arguments)}},
+       type: function  () {var f = this.fn(); init.apply (this, [f.prototype].concat (arr (arguments))); return f},
        bind: function (x) {var f = this; return function () {return f.apply (x, arguments)}},
          fn: function  () {var f = this, xs = arr (arguments); return xs.length ? function () {return f.apply (this, xs.concat (arr (arguments)))} : this}});
 
@@ -274,9 +274,9 @@ Licensed under the terms of the MIT source code license
   keys (fns).each ('$1.alias($0[$1])'.fn (fns));
   keys (ops).each (function (k) { ops[k]       .alias ( k       .alias (eval ('(function(x,y){return x'                                              + ops[k] + 'y})')));
                                  (ops[k] + '$').alias ((k + '$').alias (eval ('(function(f,g){return function(){return f.fn().apply(this,arguments)' + ops[k] + 'g.fn().apply(this,arguments)}})')))})}) ();
-__K2VJJBJ2D5oT+O/JJo6rndkCC4GhUhls51upQhLepiU
+__hS8nzJ4OQobGi4fDnPDZFPHJR0KmKQWUmh891mMVcQY
 
-meta::code('main', <<'__S3EZPVWxc3wKHfHdfe3fGm5mPhwZUKwdnh0HQaDgIBM');
+meta::code('main', <<'__+6i4Gm1Q6ZtII1S7kGjiw2OY8cO6gCgnJg8k1eiE7es');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -343,7 +343,12 @@ Turtles.
                                                                                                                      direction: this.direction. about (axis, angle)}))}}),
                     pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(init).type (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(init)),
                  turtle = 'new $0(init($2 || {}, {position: (0).vector(), direction: (1).y(), complement: (-1).z(), pen: new $1()}))'.fn (rotational_turtle, pen);
-__S3EZPVWxc3wKHfHdfe3fGm5mPhwZUKwdnh0HQaDgIBM
+
+Line rendering.
+  We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
+  screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.
+  Delimited continuations won't quite work here because they will be contained (and a timeout or interval requires escape and re-entry). Better is to do explicit queueing.
+__+6i4Gm1Q6ZtII1S7kGjiw2OY8cO6gCgnJg8k1eiE7es
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
