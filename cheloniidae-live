@@ -215,7 +215,7 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('divergence-lib', <<'__U7IxkV2UihPio1liecs2j/Bbg0mcczUnKmhufOlCRzs');
+meta::code('divergence-lib', <<'__nmv+N+oxqiG9k2oHJjawhmYO4g+5V58mVFMv5bZgd/4');
 Divergence core library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -233,7 +233,7 @@ var d = (function () {
                                           macro: function (r, f) {d.inline_macros.push (r.maps_to (f)); return d}});
 
   d (String.prototype, (function (c) {return {maps_to: function (v) {var result = {}; result[this] = v; return result},
-                                               lookup: function  () {return '[$1].concat ($0.split(".")).fold("[]")'.fn(this)},
+                                               lookup: function  () {return '$0.split(".").fold("[]", $1)'.fn(this)},
                                                 alias: function (f) {return d.alias (this, f)},
                                                    fn: function  () {var s = d.macro_expand (this), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
                                                                      return f.fn.apply (f, arguments)}}}) ({}));
@@ -246,7 +246,8 @@ var d = (function () {
                         sort_by: function (f) {return this.sort ('$0($1) < $0($2)'.fn (f.fn()))},
                            each: function (f) {f = f.fn(); for (var i = 0, l = this.length; i < l; ++i) f (this[i]); return this},
                            grep: function (f) {var xs = [], f = f.fn(); for (var i = 0, l = this.length; i < l; ++i) f (this[i]) && xs.push (this[i]); return xs},
-                           fold: function (f) {var x = this[0], f = f.fn(); for (var i = 1, l = this.length; i < l; ++i) x = f (x, this[i]); return x},
+                           fold: function (f) {var xs = d.arr (arguments), f = xs.shift().fn(), x = xs.length ? xs[0] : this[0];
+                                               for (var i = 1, l = xs.length + this.length; i < l; ++i) x = f (x, i < xs.length ? xs[i] : this[i - xs.length]); return x},
                             map: function (f) {var xs = [], f = f.fn(); for (var i = 0, l = this.length; i < l; ++i) xs.push (f (this[i])); return xs},
                              fn: function  () {var xs = this, f = function () {return xs.map ('$1.fn().apply($_,$0)'.fn (arguments))}; return f.fn.apply (f, arguments)}});
 
@@ -257,6 +258,7 @@ var d = (function () {
   /\$(\d+)/g.macro ('"arguments[" + arguments[1] + "]"'.fn());
        /@_/g.macro ('Array.prototype.slice.call(arguments)');
       /\$_/g.macro ('this');
+   /@(\w+)/g.macro ('"this." + $1'.fn());
 
   (d.functionals = [Array, Number, Boolean, Function, String, RegExp].map ('$0.prototype')).push (d.functional_extensions);
 
@@ -280,9 +282,9 @@ var d = (function () {
 
   return d}) ();
 
-__U7IxkV2UihPio1liecs2j/Bbg0mcczUnKmhufOlCRzs
+__nmv+N+oxqiG9k2oHJjawhmYO4g+5V58mVFMv5bZgd/4
 
-meta::code('main', <<'__BjEIipEf416B24hzTJWRm4yRl/VWEggG1ycS5nUVjGk');
+meta::code('main', <<'__TJKUoLPQA3lD2b+L6e/20mRrPv5XGW6fajeSJwC6CrY');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -303,7 +305,7 @@ Vector geometry.
   implemented here.
 
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
-        line = 'this.x = $0, this.y = $1; this.pen = $2'.fn().type ({midpoint: '$0().add_scaled ($_.x, 0.5).add_scaled ($_.y, 0.5)'.fn(vector)});
+        line = '@x = $0, @y = $1; @pen = $2'.fn().type ({midpoint: '$0().add_scaled (@x, 0.5).add_scaled (@y, 0.5)'.fn(vector)});
 
       keys (ops).each ('Array.prototype[$2]       = $0($1[$2])'.fn ('("[$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2]]").fn()'.fn(),   ops)).
                  each ('Array.prototype[$2 + "$"] = $0($1[$2])'.fn ( '("$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2],$_").fn()'.fn(), ops));
@@ -365,7 +367,7 @@ Line rendering.
                                                            '$_.context.moveTo.apply ($_.context, $_.project ($_.transform ($0.x))),' +
                                                            '$_.context.lineTo.apply ($_.context, $_.project ($_.transform ($0.y))),' +
                                                            '$_.context.closePath(), $_.context.stroke(), $_.restore()').fn ()});
-__BjEIipEf416B24hzTJWRm4yRl/VWEggG1ycS5nUVjGk
+__TJKUoLPQA3lD2b+L6e/20mRrPv5XGW6fajeSJwC6CrY
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
