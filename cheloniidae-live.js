@@ -111,7 +111,7 @@ var d = (function () {
                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
                                                                               c.moveTo.apply (c, v.scale (v.project (ta)));
                                                                               c.lineTo.apply (c, v.scale (v.project (tb)));
-                                                                              c.closePath(); c.stroke(); c.restore()}
+                                                                              c.stroke(); c.restore()}
                                                                             return this}});
 
       d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});

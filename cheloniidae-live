@@ -297,7 +297,7 @@ var d = (function () {
 
 __rD3fc+Jsh34FKVviooHOz3iJLANG0+BJPeOF2NpylWU
 
-meta::code('main', <<'__c5IjjP4tVvytPnYMoU91P6eXaFNA78piRkRgEL3TBag');
+meta::code('main', <<'__iavBWLU/WmX+l/tBM5Q83x8wOMY8FlYds5nvZS3gByg');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -332,7 +332,7 @@ Vector geometry.
                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
                                                                               c.moveTo.apply (c, v.scale (v.project (ta)));
                                                                               c.lineTo.apply (c, v.scale (v.project (tb)));
-                                                                              c.closePath(); c.stroke(); c.restore()}
+                                                                              c.stroke(); c.restore()}
                                                                             return this}});
 
       d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});
@@ -412,7 +412,7 @@ Line rendering.
                                                                               this.forward = this.forward.about (right, angle).normalize ();
                                                                               this.up      = this.up.about      (right, angle).normalize ();
                                                                               return this}});
-__c5IjjP4tVvytPnYMoU91P6eXaFNA78piRkRgEL3TBag
+__iavBWLU/WmX+l/tBM5Q83x8wOMY8FlYds5nvZS3gByg
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
