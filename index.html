@@ -17,7 +17,7 @@
       t = cs.fold ('$1.fn()($0)', t);
 
       c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
-      c.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn  ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch ((c.y_down - (c.y_down = e.clientX)).degrees()) :
+      c.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn  ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch ((c.y_down - (c.y_down = e.clientY)).degrees()) :
                                                                              v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
                                                                 v.context.clearRect (0, 0, v.width, v.height),
                                                                 v.cancel ().render ())};
