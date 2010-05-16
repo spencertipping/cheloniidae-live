@@ -295,7 +295,7 @@ var d = (function () {
 
 __dxbx8+B50Oamkxu1Icep9x146oEOSR24v75vp19xmrA
 
-meta::code('main', <<'__LXcXxfHsfvwnlkCfDtHbRe4eVZ+iIcuplrm1y939iSw');
+meta::code('main', <<'__qLdqCw72jQQK+MbAnQwVhG0aXIAACdc0t+yGOxSat0c');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -315,7 +315,7 @@ Vector geometry.
   defined by Divergence. The vector geometry operators from the original Cheloniidae library are also implemented here.
 
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
-        line = '@x = $0, @y = $1, @pen = $2'.ctor ({midpoint: '$0().add_scaled (@x, 0.5).add_scaled (@y, 0.5)'.fn(vector)});
+        line = '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint: '@a.times_vn(0.5).add_scaled (@b, 0.5)'.fn()});
 
       d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});
       d (d.operators.assignment.transforms, {'$0 + "_v"':  '"$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2],$_"', '$0 + "_vn"':  '"$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0,$_"'});
@@ -327,7 +327,7 @@ Vector geometry.
 
       d (Array.prototype, {distance: 'Math.sqrt(@dot($_))'.fn(),                dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
                                proj: '$0.times_v(@dot($0), $0.dot($0))'.fn(),  orth: '@minus_v(@proj($0))'.fn(),
-                              clone: '@slice()'.fn(),                          line: 'new $0($_, $1)'.fn (line),
+                              clone: '[$_[0], $_[1], $_[2]]'.fn(),             line: 'new $0($_, $1)'.fn (line),
 
                            toString: '"<" + @join(", ") + ">"'.fn(),
                               cross: '[$_[1]*$0[2] - $_[2]*$0[1], $_[2]*$0[0] - $_[0]*$0[2], $_[0]*$0[1] - $_[1]*$0[0]]'.fn(),
@@ -353,11 +353,11 @@ Turtles.
 
   d.init (String.prototype, {patching_constructor: '("new @constructor (d.init ({" + @toString() + ": $0}), $_)").fn()'.fn()});
 
-  var rotational_turtle = '$0($_, $1)'.fn(d.init).ctor ({line: '@queue.push(line(@position.clone(), @position.clone().add_scaled (@direction, $0.vector ()), @pen)), $_'.fn(),
+  var rotational_turtle = '$0($_, $1)'.fn(d.init).ctor ({line: '@queue.push(new line(@position.clone(), @position.clone().add_scaled (@direction, $0), @pen)), $_'.fn(),
                                                          move: '@line($0), @jump($0)'.fn(),
                                                          jump: 'new @constructor(d.init({position:   @position.clone().add_scaled (@direction, $0)}, $_))'.fn(),
-                                                         turn: 'new @constructor(d.init({direction:  @direction.about (complement, $0)}, $_))'.fn(),
-                                                         bank: 'new @constructor(d.init({complement: @complement.about (direction, $0)}, $_))'.fn(),
+                                                         turn: 'new @constructor(d.init({direction:  @direction.about (@complement, $0)}, $_))'.fn(),
+                                                         bank: 'new @constructor(d.init({complement: @complement.about (@direction, $0)}, $_))'.fn(),
                                                           pen: 'new @constructor(d.init({pen:        $0}))'.fn(),
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                   return new this.constructor (d.init ({complement: this.complement.about (axis, angle),
@@ -375,12 +375,13 @@ Line rendering.
 
   var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
                                                   project: '$0.over_vn($0[2])'.fn(),
-                                                    scale: '$0.times_v ([@width, @height, 0]).plus_vd ([@width >> 1, @height >> 1, 0])'.fn(),
+                                                    scale: '$0.times_vn (@height).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
+                                            in_view_space: '@scale(@project(@transform($0)))'.fn(),
                                               render_line:  ('@context.save(), $0.pen.install(@context), @context.beginPath(),' +
-                                                             '@context.moveTo.apply (@context, @project (@transform ($0.x))),' +
-                                                             '@context.lineTo.apply (@context, @project (@transform ($0.y))),' +
+                                                             '@context.moveTo.apply (@context, @in_view_space ($0.a)),' +
+                                                             '@context.lineTo.apply (@context, @in_view_space ($0.b)),' +
                                                              '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
-__LXcXxfHsfvwnlkCfDtHbRe4eVZ+iIcuplrm1y939iSw
+__qLdqCw72jQQK+MbAnQwVhG0aXIAACdc0t+yGOxSat0c
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
@@ -446,6 +447,10 @@ __qP6xPZE75s9g0XJIiC6FGw0vnj2j0glUzsAHxyA3lvY
 meta::function('code', <<'__NBNecoJ9JVwyGbA+8LrNYjQKQyQOxdFAkjgZ4ueT5QA');
 join "\n\n", map preprocess(retrieve("code::$_")), @_;
 __NBNecoJ9JVwyGbA+8LrNYjQKQyQOxdFAkjgZ4ueT5QA
+
+meta::function('compile', <<'__i+f2QX4ZRIfSu+0xhkIsgDWz9ga5RgLBunvpZuUWAFQ');
+file::write('cheloniidae-live.js', unlit('main'));
+__i+f2QX4ZRIfSu+0xhkIsgDWz9ga5RgLBunvpZuUWAFQ
 
 meta::function('cp', <<'__yn1SQkcEk6o+gnuCy3QGVFtQb2piaCoUdJPGUkLjpD4');
 my ($from, $to) = @_;
