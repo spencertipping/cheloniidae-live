@@ -22,7 +22,7 @@ var d = (function () {
                                                lookup: function  () {return '$0.split(".").fold("$0[$1]", $1)'.fn(this)},
                                                 alias: function (f) {return d.alias (this, f)},
                                                  fail: function  () {throw new Error (this.toString())},
-                                                   fn: function  () {var s = d.trace (d.macro_expand (this)), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
+                                                   fn: function  () {var s = d.macro_expand (this), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
                                                                      return f.fn.apply (f, arguments)}}}) ({}));
 
   d (RegExp.prototype, {maps_to: function (f) {var s = this; return function (x) {return x.replace (s, f)}},
@@ -105,8 +105,8 @@ var d = (function () {
                                                       render: function (v) {var c = v.context, ta = v.transform (this.a), tb = v.transform (this.b);
                                                                             if (this.adjust_for_positive_z (ta, tb)) {
                                                                               c.save(); c.beginPath(); this.pen.install (c);
-                                                                              c.globalAlpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
-                                                                                                                  c.globalAlpha);
+                                                                              var alpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())), c.globalAlpha);
+                                                                              c.globalAlpha = alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
                                                                               c.moveTo.apply (c, v.scale (v.project (ta)));
                                                                               c.lineTo.apply (c, v.scale (v.project (tb)));
@@ -172,12 +172,21 @@ var d = (function () {
 //   screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.
 //   Delimited continuations won't quite work here because they will be contained (and a timeout or interval requires escape and re-entry). Better is to do explicit queueing.
 
-  var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
+  var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@forward.cross (@up), @up, @forward)'.fn(),
                                                   project: '$0.over_vn($0[2])'.fn(),
                                                     scale: '$0.times_vn (@scale_factor()).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
                                              scale_factor: '@height'.fn(),
-                                                   render: function (offset) {offset || (offset = 0) || this.depth_sort && this.queue.sort_by ('-$1.depth($0)'.fn (this.pov));
-                                                                              for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
-                                                                                   i < l; ++i) this.queue[i].render (this);
-                                                                              if (i < this.queue.length) setTimeout (this.render.bind (this).fn (i), this.delay || 10);
+                                                   cancel: '@timeout && clearTimeout (@timeout), @timeout = null, $_'.fn(),
+                                                   render:  function (offset) {offset || (offset = 0) || this.depth_sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov));
+                                                                               for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
+                                                                                    i < l; ++i) this.queue[i].render (this);
+                                                                               this.timeout = i < this.queue.length && setTimeout (this.render.bind (this).fn (i), this.delay || 10);
+                                                                               return this},
+                                                    slide: '@pov.add_scaled (@up, $1).add_scaled (@forward.cross (@up), $0), $_'.fn(),
+                                                     zoom: '@pov.add_scaled (@forward, $0)'.fn(),
+                                                     turn: '@pov = @pov.about (@up, $0), @forward = @forward.about (@up, $0), $_'.fn(),
+                                                    pitch:  function (angle) {var right = this.forward.cross (this.up);
+                                                                              this.pov     = this.pov.about     (right, angle);
+                                                                              this.forward = this.forward.about (right, angle).normalize ();
+                                                                              this.up      = this.up.about      (right, angle).normalize ();
                                                                               return this}});
