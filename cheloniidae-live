@@ -215,7 +215,7 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('divergence-lib', <<'__nmv+N+oxqiG9k2oHJjawhmYO4g+5V58mVFMv5bZgd/4');
+meta::code('divergence-lib', <<'__Evr+fM5lUSgj6z7i8/7n99iI/3lxXNrY9SHDwjEpxqM');
 Divergence core library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -225,15 +225,15 @@ var d = (function () {
                                                                                                   else                          for (var k in $_) o[k] = $_[k]; return o};
   d.init (d, {inline_macros:  [],            id: function    (x) {return x},
                 functionals:  [],           arr: function    (o) {return Array.prototype.slice.call (o)},
-                    aliases:  {},           map: function (o, f) {var x = {}; d.keys (o).each (function (k) {d.init (x, f (k, o[k]))}); return x},
+                    aliases:  {},           map: function (o, f) {var x = {}; d.keys (o).each (function (k) {d.init (x, f (k, o[k]) || {})}); return x},
              default_action: 'init',       keys: function    (o) {var xs = []; for (var k in o) o.hasOwnProperty (k) && xs.push (k); return xs},
       functional_extensions:  {},     functions: function     () {var as = d.arr (arguments); return d.functionals.each (function (p) {d.init.apply (this, [p].concat (as))}), d},
-                                   macro_expand: function    (s) {d.inline_macros.each (function (m) {s = m(s)}); return s},
+                                   macro_expand: function    (s) {return d.inline_macros.fold (function (s, m) {return m(s)}, s)},
                                           alias: function (s, f) {d.aliases[s] = f.fn(); return d},
                                           macro: function (r, f) {d.inline_macros.push (r.maps_to (f)); return d}});
 
   d (String.prototype, (function (c) {return {maps_to: function (v) {var result = {}; result[this] = v; return result},
-                                               lookup: function  () {return '$0.split(".").fold("[]", $1)'.fn(this)},
+                                               lookup: function  () {return '$0.split(".").fold("$0[$1]", $1)'.fn(this)},
                                                 alias: function (f) {return d.alias (this, f)},
                                                    fn: function  () {var s = d.macro_expand (this), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
                                                                      return f.fn.apply (f, arguments)}}}) ({}));
@@ -255,23 +255,32 @@ var d = (function () {
   d  (Boolean.prototype, {fn: function () {return this.valueOf () ? d.id.fn.apply (d.fn, arguments) : (1).fn ()}});
   d   (Number.prototype, {fn: function () {var x = this, f = function () {return arguments[x]}; return f.fn.apply (f, arguments)}});
 
-  /\$(\d+)/g.macro ('"arguments[" + arguments[1] + "]"'.fn());
-       /@_/g.macro ('Array.prototype.slice.call(arguments)');
-      /\$_/g.macro ('this');
-   /@(\w+)/g.macro ('"this." + $1'.fn());
+               /^\./ .macro ('(arguments[0] || this).');
+                /@_/g.macro ('Array.prototype.slice.call(arguments)');
+               /\$_/g.macro ('this');
+           /\$(\d+)/g.macro ('"arguments[" + arguments[1] + "]"'.fn());
+            /@(\w+)/g.macro ('"this." + $1'.fn());
 
-  (d.functionals = [Array, Number, Boolean, Function, String, RegExp].map ('$0.prototype')).push (d.functional_extensions);
+  /\{\|([\w,\s]+)\|/g.macro ('"(function(" + $1 + "){return "'.fn()); /\|\}/g.macro ('}).fn(arguments)');
+              /\{\</g.macro ('(function(){return ');                  /\>\}/g.macro ('})');
 
-  (function (fns, ops) {d.keys (fns).each ('$1.alias($0[$1])'.fn (fns));
-                        d.keys (ops).each (function (k) { ops[k]       .alias ( k       .alias (eval ('(function(x,y){return x'                                              + ops[k] + 'y})')));
-                                                         (ops[k] + '$').alias ((k + '$').alias (eval ('(function(f,g){return function(){return f.fn().apply(this,arguments)' + ops[k] +
-                                                                                                                                              'g.fn().apply(this,arguments)}})')))})}) (
-    {'()':'$0($1)', '[]':'$0[$1]', '!':'!$0', '!!':'!!$0', '~':'~$0'},
-    {plus:'+', minus:'-', times:'*', over:'/', modulo:'%', lt:'<', gt:'>', le:'<=', ge:'>=', eq:'==', ne:'!=', req:'===', rne:'!==', and:'&&', or:'||', xor:'^', bitand:'&', bitor:'|', then:','});
+  (d.functionals = [Array, Number, Boolean, Function, String, RegExp].map ('.prototype')).push (d.functional_extensions);
 
+  d (d.operators = {},
+       {create_aliases: function () {d.map (d.operators, function (_, v) {d.map (v.transforms, function (name, value) {d.map (v.operators, '$0($2).alias($1($3))'.fn (name.fn(), value.fn()))})})},
+                binary: {transforms: {'$0':       '"$0" + $0 + "$1"', '$0 + "$"': '"{|xs| xs[0].fn().apply($_,@_)" + $0 + "xs[1].fn().apply($_,@_)|}"',
+                                      '$0 + "_"': '"$_" + $0 + "$0"', '$0 + "_$"': '"{|xs, t| t.fn().apply($_,@_)" + $0 + "xs[0].fn().apply($_,@_)|}.fn($_)"'},
+                          operators: {plus:'+', minus:'-', times:'*', over:'/', modulo:'%', lt:'<', gt:'>', le:'<=', ge:'>=', eq:'==', ne:'!=', req:'===', rne:'!==',
+                                      and:'&&', or:'||', xor:'^', bitand:'&', bitor:'|', then:',', lshift: '<<', rshift: '>>', rushift: '>>>'}},
+                 unary: {transforms: {'$0':       '$0 + "$0"', '$0 + "$"': '"{|xs| " + $0 + "xs[0].fn().apply($_,@_)|}"',
+                                      '$0 + "_"': '$0 + "$_"', '$0 + "_$"': '"{|xs, t| " + $0 + "t.fn().apply($_,@_)|}"'},
+                          operators: {not:'!', notnot:'!!', complement:'~', negative:'-', positive:'+'}},
+           applicative: {transforms: {'$0': '$0'},
+                          operators: {'()': '$0($1)', '[]': '$0[$1]'}}}).create_aliases ();
   d.functions ({
     prototype:  function  () {var f = this.fn(), g = function () {f.apply (this, arguments)}; d.init.apply (this, [g.prototype].concat (d.arr (arguments))); return g},
       compose:  function (g) {var f = this.fn(); g = g.fn(); return function () {return f (g.apply (this, arguments))}},
+ flat_compose:  function (g) {var f = this.fn(); g = g.fn(); return function () {return f.apply (this, g.apply (this, arguments))}},
        plural:  function  () {return '$1.map ($0)'.fn(this)},
         curry:  function (n) {var f = this.fn(); return n > 1 ? function () {var as = d.arr(arguments); return function () {return f.curry (n - 1).apply (this, as.concat (d.arr (arguments)))}} : f},
         proxy:  function (g) {var f = this.fn(); return g ? function () {return f.apply.apply (f, g.fn() (this, arguments))} : function () {return f.apply (this, arguments)}},
@@ -282,9 +291,9 @@ var d = (function () {
 
   return d}) ();
 
-__nmv+N+oxqiG9k2oHJjawhmYO4g+5V58mVFMv5bZgd/4
+__Evr+fM5lUSgj6z7i8/7n99iI/3lxXNrY9SHDwjEpxqM
 
-meta::code('main', <<'__TJKUoLPQA3lD2b+L6e/20mRrPv5XGW6fajeSJwC6CrY');
+meta::code('main', <<'__BmF5qaQk/vDvyQQuHn7VBsAAOfvcs3kghl0jtmd8tHw');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -307,23 +316,28 @@ Vector geometry.
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
         line = '@x = $0, @y = $1; @pen = $2'.fn().type ({midpoint: '$0().add_scaled (@x, 0.5).add_scaled (@y, 0.5)'.fn(vector)});
 
-      keys (ops).each ('Array.prototype[$2]       = $0($1[$2])'.fn ('("[$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2]]").fn()'.fn(),   ops)).
-                 each ('Array.prototype[$2 + "$"] = $0($1[$2])'.fn ( '("$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2],$_").fn()'.fn(), ops));
+      d (d.operators.binary.transforms, {'$0 + "_v"':  '"[$_[0]" + $0 +  "$0[0],$_[1]" + $0 +  "$0[1],$_[2]" + $0 +  "$0[2]]"',
+                                         '$0 + "_vd"':  '"$_[0]" + $0 + "=$0[0],$_[1]" + $0 + "=$0[1],$_[2]" + $0 + "=$0[2],$_"',
+                                         '$0 + "_vn"':  '"$_[0]" + $0 +  "$0,   $_[1]" + $0 +  "$0,   $_[2]" + $0 +  "$0,   $_"',
+                                         '$0 + "_vnd"': '"$_[0]" + $0 + "=$0,   $_[1]" + $0 + "=$0,   $_[2]" + $0 + "=$0,   $_"'});
+      d.operators.create_aliases ();
 
-      init (Number.prototype,   {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn()});
+      d.keys (d.aliases).grep (/_v/).each ('Array.prototype[$1] = $0[$1].fn()'.fn (d.aliases));
 
-      init  (Array.prototype, {distance: 'Math.sqrt($_.dot ($_))'.fn(),              dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
-                                   proj: '$0.times($_.dot($0), $0.dot($0))'.fn(),   orth: '$_.minus($_.proj($0))'.fn(),
-                                  clone: '$_.slice()'.fn(),                         line: 'new $0($_, $1)'.fn (line),
+      d (Number.prototype, {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn()});
 
-                               toString: '"<" + $_.join(", ") + ">"'.fn(),
-                                  cross: '[$_[1]*$0[2] - $_[2]*$0[1], $_[2]*$0[0] - $_[0]*$0[2], $_[0]*$0[1] - $_[1]*$0[0]]'.fn(),
-                             add_scaled: '$_[0] += $0[0]*$1, $_[1] += $0[1]*$1, $_[2] += $0[2]*$2, $_'.fn(),
-                              normalize: '$_.over$ ($_.distance().vector())'.fn(),
-                                   into: '[$_.dot($0)/$0.distance(), $_.dot($1)/$1.distance(), $_.dot($2)/$2.distance()]'.fn(),
-                                   from: '$0().add_scaled($1, $_[0]).add_scaled($2, $_[1]).add_scaled($3, $_[2])'.fn(vector),
-                                  about:  function (v, angle) {var b1 = v.clone().normalize(), b2 = this.orth(b1).normalize(), b3 = b1.cross (b2), l = this.orth (b1).distance ();
-                                                               return this.proj (b1).add_scaled (b2, Math.cos (angle) * l).add_scaled (b3, Math.sin (angle) * l)}});
+      d (Array.prototype, {distance: 'Math.sqrt(@dot ($_))'.fn(),               dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
+                               proj: '$0.times_v(@dot($0), $0.dot($0))'.fn(),  orth: '@minus_v(@proj($0))'.fn(),
+                              clone: '@slice()'.fn(),                          line: 'new $0($_, $1)'.fn (line),
+
+                           toString: '"<" + @join(", ") + ">"'.fn(),
+                              cross: '[$_[1]*$0[2] - $_[2]*$0[1], $_[2]*$0[0] - $_[0]*$0[2], $_[0]*$0[1] - $_[1]*$0[0]]'.fn(),
+                         add_scaled: '$_[0] += $0[0]*$1, $_[1] += $0[1]*$1, $_[2] += $0[2]*$1, $_'.fn(),
+                          normalize: '@over_vnd (@distance())'.fn(),
+                               into: '[@dot($0)/$0.distance(), @dot($1)/$1.distance(), @dot($2)/$2.distance()]'.fn(),
+                               from: '$0.times_vn($_[0]).add_scaled($1, $_[1]).add_scaled($2, $_[2])'.fn(),
+                              about:  function (v, angle) {var b1 = v.clone().normalize(), b2 = this.orth(b1).normalize(), b3 = b1.cross (b2), l = this.orth (b1).distance ();
+                                                           return this.proj (b1).add_scaled (b2, Math.cos (angle) * l).add_scaled (b3, Math.sin (angle) * l)}});
 
 Incidence angle computation and attenuation.
   The original Cheloniidae source code covers this in more detail, but the idea is that we're using some elementary differential equations to figure out how much light gets attenuated when
@@ -367,7 +381,7 @@ Line rendering.
                                                            '$_.context.moveTo.apply ($_.context, $_.project ($_.transform ($0.x))),' +
                                                            '$_.context.lineTo.apply ($_.context, $_.project ($_.transform ($0.y))),' +
                                                            '$_.context.closePath(), $_.context.stroke(), $_.restore()').fn ()});
-__TJKUoLPQA3lD2b+L6e/20mRrPv5XGW6fajeSJwC6CrY
+__BmF5qaQk/vDvyQQuHn7VBsAAOfvcs3kghl0jtmd8tHw
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
