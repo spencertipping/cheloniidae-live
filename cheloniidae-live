@@ -215,7 +215,7 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('divergence-lib', <<'__dxbx8+B50Oamkxu1Icep9x146oEOSR24v75vp19xmrA');
+meta::code('divergence-lib', <<'__5k0keG/GsvqPwimysi64CiwKmvPZa4i54hFTdmdk6Qc');
 Divergence core library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -230,12 +230,14 @@ var d = (function () {
       functional_extensions:  {},     functions: function     () {var as = d.arr (arguments); return d.functionals.each (function (p) {d.init.apply (this, [p].concat (as))}), d},
                                    macro_expand: function    (s) {return d.inline_macros.fold (function (s, m) {return m(s)}, s)},
                                           alias: function (s, f) {d.aliases[s] = f.fn(); return d},
-                                          macro: function (r, f) {d.inline_macros.push (r.maps_to (f)); return d}});
+                                          macro: function (r, f) {d.inline_macros.push (r.maps_to (f)); return d},
+                                          trace: function    (x) {d.tracer && d.tracer (x); return x}});
 
   d (String.prototype, (function (c) {return {maps_to: function (v) {var result = {}; result[this] = v; return result},
                                                lookup: function  () {return '$0.split(".").fold("$0[$1]", $1)'.fn(this)},
                                                 alias: function (f) {return d.alias (this, f)},
-                                                   fn: function  () {var s = d.macro_expand (this), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
+                                                 fail: function  () {throw new Error (this.toString())},
+                                                   fn: function  () {var s = d.trace (d.macro_expand (this)), f = d.aliases[s] || c[s] || (c[s] = eval ('(function(){return ' + s + '})'));
                                                                      return f.fn.apply (f, arguments)}}}) ({}));
 
   d (RegExp.prototype, {maps_to: function (f) {var s = this; return function (x) {return x.replace (s, f)}},
@@ -293,9 +295,9 @@ var d = (function () {
 
   return d}) ();
 
-__dxbx8+B50Oamkxu1Icep9x146oEOSR24v75vp19xmrA
+__5k0keG/GsvqPwimysi64CiwKmvPZa4i54hFTdmdk6Qc
 
-meta::code('main', <<'__qLdqCw72jQQK+MbAnQwVhG0aXIAACdc0t+yGOxSat0c');
+meta::code('main', <<'__bfDrWRcBEr9vBIvUAxMOhesBqI3STdgxwljWiQwqees');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -310,6 +312,8 @@ supports a full set of operations, we don't need parent management. (In this res
 
   var qw = '$0.split(/\\s+/)'.fn();
 
+  d.tracer = console.log.bind (console);
+
 Vector geometry.
   A basic setup with lines and points based on arrays. Arrays are given destructive and non-destructive componentwise arithmetic operators whose names are the same as the aliased functions
   defined by Divergence. The vector geometry operators from the original Cheloniidae library are also implemented here.
@@ -323,7 +327,8 @@ Vector geometry.
 
       d.keys (d.aliases).grep (/_v/).each ('Array.prototype[$1] = $0[$1].fn()'.fn (d.aliases));
 
-      d (Number.prototype, {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn()});
+      d (Number.prototype, {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn(),
+                           degrees: '$_ / 180.0 * Math.PI'.fn()});
 
       d (Array.prototype, {distance: 'Math.sqrt(@dot($_))'.fn(),                dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
                                proj: '$0.times_v(@dot($0), $0.dot($0))'.fn(),  orth: '@minus_v(@proj($0))'.fn(),
@@ -351,14 +356,14 @@ Turtles.
   stateful. It's perhaps an odd model, but it means that you can grab a turtle state from some time before without losing what you've drawn since. In other words, a turtle represents a
   position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
 
-  d.init (String.prototype, {patching_constructor: '("new @constructor (d.init ({" + @toString() + ": $0}), $_)").fn()'.fn()});
+  d.init (String.prototype, {patching_constructor: '("new @constructor (d.init ({}, $_, {" + $_ + ": $0}))").fn()'.fn()});
 
   var rotational_turtle = '$0($_, $1)'.fn(d.init).ctor ({line: '@queue.push(new line(@position.clone(), @position.clone().add_scaled (@direction, $0), @pen)), $_'.fn(),
-                                                         move: '@line($0), @jump($0)'.fn(),
-                                                         jump: 'new @constructor(d.init({position:   @position.clone().add_scaled (@direction, $0)}, $_))'.fn(),
-                                                         turn: 'new @constructor(d.init({direction:  @direction.about (@complement, $0)}, $_))'.fn(),
-                                                         bank: 'new @constructor(d.init({complement: @complement.about (@direction, $0)}, $_))'.fn(),
-                                                          pen: 'new @constructor(d.init({pen:        $0}))'.fn(),
+                                                         move: '@line($0).jump($0)'.fn(),
+                                                         jump: 'new @constructor(d.init({}, $_, {position:   @position.clone().add_scaled (@direction, $0)}))'.fn(),
+                                                         turn: 'new @constructor(d.init({}, $_, {direction:  @direction.about (@complement, $0)}))'.fn(),
+                                                         bank: 'new @constructor(d.init({}, $_, {complement: @complement.about (@direction, $0)}))'.fn(),
+                                                          pen: 'new @constructor(d.init({}, $_, {pen:        $0}))'.fn(),
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                   return new this.constructor (d.init ({complement: this.complement.about (axis, angle),
                                                                                                                          direction: this.direction. about (axis, angle)}))}}),
@@ -381,7 +386,7 @@ Line rendering.
                                                              '@context.moveTo.apply (@context, @in_view_space ($0.a)),' +
                                                              '@context.lineTo.apply (@context, @in_view_space ($0.b)),' +
                                                              '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
-__qLdqCw72jQQK+MbAnQwVhG0aXIAACdc0t+yGOxSat0c
+__bfDrWRcBEr9vBIvUAxMOhesBqI3STdgxwljWiQwqees
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.

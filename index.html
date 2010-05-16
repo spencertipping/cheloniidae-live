@@ -10,7 +10,7 @@
     <script>
       var c = document.getElementById ('screen');
       var t = turtle ({queue: []});
-      t = t.move (1).turn (90).move (1).turn (90).move (1);
+      t = t.move (0.3).turn (90 .degrees()).move (0.3).turn (90 .degrees()).move (0.3);
 
       var v = new viewport ({pov: (-10).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350});
 
