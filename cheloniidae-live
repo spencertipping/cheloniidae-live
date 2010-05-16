@@ -297,7 +297,7 @@ var d = (function () {
 
 __rD3fc+Jsh34FKVviooHOz3iJLANG0+BJPeOF2NpylWU
 
-meta::code('main', <<'__iORwdzX96jU2bvfQ8d2H6U8QRz0S1SylOmq2cr3/PSk');
+meta::code('main', <<'__c5IjjP4tVvytPnYMoU91P6eXaFNA78piRkRgEL3TBag');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -399,10 +399,10 @@ Line rendering.
                                                     scale: '$0.times_vn (@scale_factor()).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
                                              scale_factor: '@height'.fn(),
                                                    cancel: '@timeout && clearTimeout (@timeout), @timeout = null, $_'.fn(),
-                                                   render:  function (offset) {offset || (offset = 0) || this.depth_sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov));
-                                                                               for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
+                                                   render:  function   (sort) {sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)); return this.intermediate_render (0)},
+                                      intermediate_render:  function (offset) {for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
                                                                                     i < l; ++i) this.queue[i].render (this);
-                                                                               this.timeout = i < this.queue.length && setTimeout (this.render.bind (this).fn (i), this.delay || 10);
+                                                                               this.timeout = i < this.queue.length && setTimeout (this.intermediate_render.bind (this).fn (i), this.delay || 10);
                                                                                return this},
                                                     slide: '@pov.add_scaled (@up, $1).add_scaled (@forward.cross (@up), $0), $_'.fn(),
                                                      zoom: '@pov.add_scaled (@forward, $0)'.fn(),
@@ -412,7 +412,7 @@ Line rendering.
                                                                               this.forward = this.forward.about (right, angle).normalize ();
                                                                               this.up      = this.up.about      (right, angle).normalize ();
                                                                               return this}});
-__iORwdzX96jU2bvfQ8d2H6U8QRz0S1SylOmq2cr3/PSk
+__c5IjjP4tVvytPnYMoU91P6eXaFNA78piRkRgEL3TBag
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.

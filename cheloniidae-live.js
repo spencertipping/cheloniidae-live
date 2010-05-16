@@ -178,10 +178,10 @@ var d = (function () {
                                                     scale: '$0.times_vn (@scale_factor()).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
                                              scale_factor: '@height'.fn(),
                                                    cancel: '@timeout && clearTimeout (@timeout), @timeout = null, $_'.fn(),
-                                                   render:  function (offset) {offset || (offset = 0) || this.depth_sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov));
-                                                                               for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
+                                                   render:  function   (sort) {sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)); return this.intermediate_render (0)},
+                                      intermediate_render:  function (offset) {for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
                                                                                     i < l; ++i) this.queue[i].render (this);
-                                                                               this.timeout = i < this.queue.length && setTimeout (this.render.bind (this).fn (i), this.delay || 10);
+                                                                               this.timeout = i < this.queue.length && setTimeout (this.intermediate_render.bind (this).fn (i), this.delay || 10);
                                                                                return this},
                                                     slide: '@pov.add_scaled (@up, $1).add_scaled (@forward.cross (@up), $0), $_'.fn(),
                                                      zoom: '@pov.add_scaled (@forward, $0)'.fn(),
