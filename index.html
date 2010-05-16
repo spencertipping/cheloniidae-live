@@ -11,15 +11,16 @@
       var c  = document.getElementById ('screen');
       var t  = turtle ({queue: []}).jump (-80);
       var cs = ['.move(160)', '.turn(168 .degrees())', '.pitch(0.5 .degrees())'].repeat (100);
-      var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 1, delay: 10, depth_sort: true});
+      var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0, depth_sort: true});
       t = cs.fold ('$1.fn()($0)', t);
 
       c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
       c.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn  ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
+                                                                 e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
                                                                              v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
                                                                 v.context.clearRect (0, 0, v.width, v.height),
                                                                 v.cancel ().render ())};
-      c.onmouseup    = function (e) {c.x_down = c.y_down = null};
+      document.onmouseup = function (e) {c.x_down = c.y_down = null};
       c.onmousewheel = function (e) {v.zoom (e.detail || e.wheelDelta)};
 
       v.queue = t.queue;

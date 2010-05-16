@@ -99,8 +99,8 @@ var d = (function () {
         line = '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint: '@a.times_vn(0.5).add_scaled (@b, 0.5)'.fn(),
                                                        depth: '$0.minus_v(@midpoint()).distance()'.fn(),
                                        adjust_for_positive_z: function (a, b) {if (a[2] <= 0 && b[2] <= 0) return false;
-                                                                               else if         (a[2] <= 0) {var f = (1.0 - a[2]) / (b[2] - a[2]); return a.times_vnd (1.0 - f).add_scaled (b, f)}
-                                                                               else if         (b[2] <= 0) {var f = (1.0 - b[2]) / (a[2] - b[2]); return b.times_vnd (1.0 - f).add_scaled (a, f)}
+                                                                               else if         (a[2] <= 0) {var f = (1.0 - a[2]) / (b[2] - a[2]); return a.times_d_vn (1.0 - f).add_scaled (b, f)}
+                                                                               else if         (b[2] <= 0) {var f = (1.0 - b[2]) / (a[2] - b[2]); return b.times_d_vn (1.0 - f).add_scaled (a, f)}
                                                                                else                        return true},
                                                       render: function (v) {var c = v.context, ta = v.transform (this.a), tb = v.transform (this.b);
                                                                             if (this.adjust_for_positive_z (ta, tb)) {
