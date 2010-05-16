@@ -102,16 +102,16 @@ var d = (function () {
                                                                                else if         (a[2] <= 0) {var f = (1.0 - a[2]) / (b[2] - a[2]); return a.times_vnd (1.0 - f).add_scaled (b, f)}
                                                                                else if         (b[2] <= 0) {var f = (1.0 - b[2]) / (a[2] - b[2]); return b.times_vnd (1.0 - f).add_scaled (a, f)}
                                                                                else                        return true},
-                                                      render: function (v) {var c = v.context;
-                                                                            var ta = v.transform (this.a), tb = v.transform (this.b);
+                                                      render: function (v) {var c = v.context, ta = v.transform (this.a), tb = v.transform (this.b);
                                                                             if (this.adjust_for_positive_z (ta, tb)) {
-                                                                               c.save(); c.beginPath(); this.pen.install (c);
-                                                                               c.globalAlpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
-                                                                                                                   c.globalAlpha);
-                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
-                                                                               c.moveTo.apply (c, v.clip (v.scale (v.project (ta))));
-                                                                               c.lineTo.apply (c, v.clip (v.scale (v.project (tb))));
-                                                                               c.closePath(); c.stroke(); c.restore()}}});
+                                                                              c.save(); c.beginPath(); this.pen.install (c);
+                                                                              c.globalAlpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
+                                                                                                                  c.globalAlpha);
+                                                                              c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
+                                                                              c.moveTo.apply (c, v.scale (v.project (ta)));
+                                                                              c.lineTo.apply (c, v.scale (v.project (tb)));
+                                                                              c.closePath(); c.stroke(); c.restore()}
+                                                                            return this}});
 
       d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});
       d (d.operators.assignment.transforms, {'$0 + "_v"':  '"$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2],$_"', '$0 + "_vn"':  '"$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0,$_"'});
@@ -176,5 +176,8 @@ var d = (function () {
                                                   project: '$0.over_vn($0[2])'.fn(),
                                                     scale: '$0.times_vn (@scale_factor()).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
                                              scale_factor: '@height'.fn(),
-                                                     clip: '[$0[0] < 0 ? 0 : $0[0] >= @width - 1 ? @width - 1 : Math.round ($0[0]), $0[1] < 0 ? 0 : $0[1] >= @height - 1 ? @height - 1 : Math.round ($0[1])]'.fn(),
-                                            in_view_space: '@clip(@scale(@project(@transform($0))))'.fn()});
+                                                   render: function (offset) {offset || (offset = 0) || this.depth_sort && this.queue.sort_by ('-$1.depth($0)'.fn (this.pov));
+                                                                              for (var i = offset, l = this.queue.length < offset + this.batch ? this.queue.length : offset + this.batch;
+                                                                                   i < l; ++i) this.queue[i].render (this);
+                                                                              if (i < this.queue.length) setTimeout (this.render.bind (this).fn (i), this.delay || 10);
+                                                                              return this}});
