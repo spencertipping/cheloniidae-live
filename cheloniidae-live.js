@@ -105,7 +105,8 @@ var d = (function () {
                                                       render: function (v) {var c = v.context, ta = v.transform (this.a), tb = v.transform (this.b);
                                                                             if (this.adjust_for_positive_z (ta, tb)) {
                                                                               c.save(); c.beginPath(); this.pen.install (c);
-                                                                              var alpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())), c.globalAlpha);
+                                                                              var alpha = 1.0 - light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
+                                                                                                                    c.globalAlpha);
                                                                               c.globalAlpha = alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
                                                                               c.moveTo.apply (c, v.scale (v.project (ta)));
@@ -161,7 +162,7 @@ var d = (function () {
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                   return new this.constructor (d.init ({}, this, {complement: this.complement.about (axis, angle),
                                                                                                                                    direction: this.direction. about (axis, angle)}))}}),
-                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 0.1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 0.5})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
                                                                                                        install: function (context) {context.globalAlpha = this.opacity;
                                                                                                                                     context.strokeStyle = this.color;
                                                                                                                                     context.lineWidth   = this.size}}),

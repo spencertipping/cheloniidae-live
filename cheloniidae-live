@@ -297,7 +297,7 @@ var d = (function () {
 
 __rD3fc+Jsh34FKVviooHOz3iJLANG0+BJPeOF2NpylWU
 
-meta::code('main', <<'__AHvTvsTkUIv+ZAKBntLlVWYiCgkf4QN+q5JUiYXfoY4');
+meta::code('main', <<'__DmRF4jjSqMb8osCLHM244mf8RXluo7PpTBl4PWYum50');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -326,7 +326,8 @@ Vector geometry.
                                                       render: function (v) {var c = v.context, ta = v.transform (this.a), tb = v.transform (this.b);
                                                                             if (this.adjust_for_positive_z (ta, tb)) {
                                                                               c.save(); c.beginPath(); this.pen.install (c);
-                                                                              var alpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())), c.globalAlpha);
+                                                                              var alpha = 1.0 - light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
+                                                                                                                    c.globalAlpha);
                                                                               c.globalAlpha = alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
                                                                               c.moveTo.apply (c, v.scale (v.project (ta)));
@@ -382,7 +383,7 @@ Turtles.
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                   return new this.constructor (d.init ({}, this, {complement: this.complement.about (axis, angle),
                                                                                                                                    direction: this.direction. about (axis, angle)}))}}),
-                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 0.1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 0.5})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
                                                                                                        install: function (context) {context.globalAlpha = this.opacity;
                                                                                                                                     context.strokeStyle = this.color;
                                                                                                                                     context.lineWidth   = this.size}}),
@@ -411,7 +412,7 @@ Line rendering.
                                                                               this.forward = this.forward.about (right, angle).normalize ();
                                                                               this.up      = this.up.about      (right, angle).normalize ();
                                                                               return this}});
-__AHvTvsTkUIv+ZAKBntLlVWYiCgkf4QN+q5JUiYXfoY4
+__DmRF4jjSqMb8osCLHM244mf8RXluo7PpTBl4PWYum50
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.

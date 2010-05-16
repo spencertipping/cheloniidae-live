@@ -8,12 +8,10 @@
     <canvas id='screen' width='600' height='350'></canvas>
 
     <script>
-      d.tracer = console.log.bind (console);
-
       var c  = document.getElementById ('screen');
-      var t  = turtle ({queue: []}).jump (-40);
-      var cs = ['.move(80)', '.turn(168 .degrees())', '.pitch(0.5 .degrees())'].repeat (100);
-      var v  = new viewport ({pov: (-100).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 1, delay: 10, depth_sort: true});
+      var t  = turtle ({queue: []}).jump (-80);
+      var cs = ['.move(160)', '.turn(168 .degrees())', '.pitch(0.5 .degrees())'].repeat (100);
+      var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 1, delay: 10, depth_sort: true});
       t = cs.fold ('$1.fn()($0)', t);
 
       c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
