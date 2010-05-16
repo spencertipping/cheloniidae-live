@@ -109,9 +109,9 @@ var d = (function () {
       d (Number.prototype, {vector: '[+$_, +$_, +$_]'.fn(), x: '[+$_, 0, 0]'.fn(), y: '[0, +$_, 0]'.fn(), z: '[0, 0, +$_]'.fn(),
                            degrees: '$_ / 180.0 * Math.PI'.fn()});
 
-      d (Array.prototype, {distance: 'Math.sqrt(@dot($_))'.fn(),                dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
-                               proj: '$0.times_v(@dot($0), $0.dot($0))'.fn(),  orth: '@minus_v(@proj($0))'.fn(),
-                              clone: '[$_[0], $_[1], $_[2]]'.fn(),             line: 'new $0($_, $1)'.fn (line),
+      d (Array.prototype, {distance: 'Math.sqrt(@dot($_))'.fn(),                 dot: '$_[0]*$0[0] + $_[1]*$0[1] + $_[2]*$0[2]'.fn(),
+                               proj: '$0.times_vn(@dot($0) / $0.dot($0))'.fn(), orth: '@minus_v(@proj($0))'.fn(),
+                              clone: '[$_[0], $_[1], $_[2]]'.fn(),              line: 'new $0($_, $1)'.fn (line),
 
                            toString: '"<" + @join(", ") + ">"'.fn(),
                               cross: '[$_[1]*$0[2] - $_[2]*$0[1], $_[2]*$0[0] - $_[0]*$0[2], $_[0]*$0[1] - $_[1]*$0[0]]'.fn(),
@@ -144,8 +144,8 @@ var d = (function () {
                                                          bank: 'new @constructor(d.init({}, $_, {complement: @complement.about (@direction, $0)}))'.fn(),
                                                           pen: 'new @constructor(d.init({}, $_, {pen:        $0}))'.fn(),
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
-                                                                                  return new this.constructor (d.init ({complement: this.complement.about (axis, angle),
-                                                                                                                         direction: this.direction. about (axis, angle)}))}}),
+                                                                                  return new this.constructor (d.init ({}, this, {complement: this.complement.about (axis, angle),
+                                                                                                                                   direction: this.direction. about (axis, angle)}))}}),
                     pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
                                                                                                      install: function (context) {context.globalAlpha = this.opacity;
                                                                                                                                   context.strokeStyle = this.color;
@@ -160,8 +160,9 @@ var d = (function () {
   var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
                                                   project: '$0.over_vn($0[2])'.fn(),
                                                     scale: '$0.times_vn (@height).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
-                                            in_view_space: '@scale(@project(@transform($0)))'.fn(),
+                                                     clip: '[$0[0] < 0 ? 0 : $0[0] >= @width - 1 ? @width - 1 : Math.round ($0[0]), $0[1] < 0 ? 0 : $0[1] >= @height - 1 ? @height - 1 : Math.round ($0[1])]'.fn(),
+                                            in_view_space: '@clip(@scale(@project(@transform($0))))'.fn(),
                                               render_line:  ('@context.save(), $0.pen.install(@context), @context.beginPath(),' +
-                                                             '@context.moveTo.apply (@context, @in_view_space ($0.a)),' +
-                                                             '@context.lineTo.apply (@context, @in_view_space ($0.b)),' +
+                                                             '@context.moveTo.apply (@context, d.trace (@in_view_space ($0.a))),' +
+                                                             '@context.lineTo.apply (@context, d.trace (@in_view_space ($0.b))),' +
                                                              '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
