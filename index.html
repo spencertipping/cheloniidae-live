@@ -4,13 +4,24 @@
     <script src='cheloniidae-live.js'></script>
   </head>
 
-  <body>
-    <canvas id='screen' width='600' height='350'></canvas>
+  <body style='font-family:sans-serif; font-size: 9pt'>
+    <div style='float:right'>
+      <strong>Mouse commands</strong>
+      <ul>
+      <li><em>Drag</em> - move the camera</li>
+      <li><em>Shift-drag</em> - rotate the camera</li>
+      <li><em>Control-drag</em> - zoom</li>
+      </ul>
+    </div>
+    <canvas id='screen' width='600' height='350'>
+      This page requires a browser with HTML5 canvas support. Valid browsers include <a href='http://getfirefox.com'>Mozilla Firefox</a> and <a href='http://google.com/chrome'>Google
+      Chrome</a>.
+    </canvas>
 
     <script>
       var c  = document.getElementById ('screen');
       var t  = turtle ({queue: []}).jump (-80);
-      var cs = ['.move(160)', '.turn(168 .degrees())', '.pitch(-0.5 .degrees())'].map('.fn()').repeat (1000);
+      var cs = ['.move(160)', '.turn(176 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
       var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0});
       t = cs.fold ('$1($0)', t);
 
