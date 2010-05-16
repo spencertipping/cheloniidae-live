@@ -10,13 +10,13 @@
     <script>
       var c = document.getElementById ('screen');
       var t = turtle ({queue: []});
-      var cs = ['.move(0.3)', '.turn(90 .degrees())', '.move(0.3)', '.turn(90 .degrees())', '.move(0.3)'];
+      var cs = ['.move(40)', '.turn(125 .degrees())'].repeat (90);
       t = cs.fold ('d.trace ($1.fn()($0))', t);
 
-      var v = new viewport ({pov: (-10).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350});
+      var v = new viewport ({pov: (-100).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350});
 
       d.trace (t.queue.map ('$0.a.toString() + " -> " + $0.b.toString()'));
-      t.queue.each (v.render_line.bind (v));
+      t.queue.each ('$1.render($0)'.fn (v));
     </script>
   </body>
 </html>

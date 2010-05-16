@@ -91,14 +91,27 @@ var d = (function () {
 
   var qw = '$0.split(/\\s+/)'.fn();
 
-  d.tracer = console.log.bind (console);
-
 // Vector geometry.
 //   A basic setup with lines and points based on arrays. Arrays are given destructive and non-destructive componentwise arithmetic operators whose names are the same as the aliased functions
 //   defined by Divergence. The vector geometry operators from the original Cheloniidae library are also implemented here.
 
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
-        line = '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint: '@a.times_vn(0.5).add_scaled (@b, 0.5)'.fn()});
+        line = '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint: '@a.times_vn(0.5).add_scaled (@b, 0.5)'.fn(),
+                                                       depth: '$0.minus_v(@midpoint()).distance()'.fn(),
+                                       adjust_for_positive_z: function (a, b) {if (a[2] <= 0 && b[2] <= 0) return false;
+                                                                               else if         (a[2] <= 0) {var f = (1.0 - a[2]) / (b[2] - a[2]); return a.times_vnd (1.0 - f).add_scaled (b, f)}
+                                                                               else if         (b[2] <= 0) {var f = (1.0 - b[2]) / (a[2] - b[2]); return b.times_vnd (1.0 - f).add_scaled (a, f)}
+                                                                               else                        return true},
+                                                      render: function (v) {var c = v.context;
+                                                                            var ta = v.transform (this.a), tb = v.transform (this.b);
+                                                                            if (this.adjust_for_positive_z (ta, tb)) {
+                                                                               c.save(); c.beginPath(); this.pen.install (c);
+                                                                               c.globalAlpha = light_transmission (cylindrical_thickness (ta.minus_v (tb), v.transform (this.midpoint ())),
+                                                                                                                   c.globalAlpha);
+                                                                               c.lineWidth *= 2.0 * v.scale_factor() / (ta[2] + tb[2]);
+                                                                               c.moveTo.apply (c, v.clip (v.scale (v.project (ta))));
+                                                                               c.lineTo.apply (c, v.clip (v.scale (v.project (tb))));
+                                                                               c.closePath(); c.stroke(); c.restore()}}});
 
       d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});
       d (d.operators.assignment.transforms, {'$0 + "_v"':  '"$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2],$_"', '$0 + "_vn"':  '"$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0,$_"'});
@@ -121,6 +134,8 @@ var d = (function () {
                                from: '$0.times_vn($_[0]).add_scaled($1, $_[1]).add_scaled($2, $_[2])'.fn(),
                               about:  function (v, angle) {var b1 = v.clone().normalize(), b2 = this.orth(b1).normalize(), b3 = b1.cross (b2), l = this.orth (b1).distance ();
                                                            return this.proj (b1).add_scaled (b2, Math.cos (angle) * l).add_scaled (b3, Math.sin (angle) * l)}});
+
+      d (Array.prototype, {repeat: function (n) {var xs = []; for (var i = 0; i < n; ++i) xs.push.apply (xs, this); return xs}});
 
 // Incidence angle computation and attenuation.
 //   The original Cheloniidae source code covers this in more detail, but the idea is that we're using some elementary differential equations to figure out how much light gets attenuated when
@@ -146,10 +161,10 @@ var d = (function () {
                                                         pitch:  function (angle) {var axis = this.direction.cross (this.complement);
                                                                                   return new this.constructor (d.init ({}, this, {complement: this.complement.about (axis, angle),
                                                                                                                                    direction: this.direction. about (axis, angle)}))}}),
-                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
-                                                                                                     install: function (context) {context.globalAlpha = this.opacity;
-                                                                                                                                  context.strokeStyle = this.color;
-                                                                                                                                  context.lineWidth   = this.size}}),
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 0.1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
+                                                                                                       install: function (context) {context.globalAlpha = this.opacity;
+                                                                                                                                    context.strokeStyle = this.color;
+                                                                                                                                    context.lineWidth   = this.size}}),
                  turtle = 'new $0(d.init($2 || {}, {position: (0).vector(), direction: (1).y(), complement: (-1).z(), pen: new $1()}))'.fn (rotational_turtle, pen);
 
 // Line rendering.
@@ -159,10 +174,7 @@ var d = (function () {
 
   var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
                                                   project: '$0.over_vn($0[2])'.fn(),
-                                                    scale: '$0.times_vn (@height).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
+                                                    scale: '$0.times_vn (@scale_factor()).plus_d_v ([@width >> 1, @height >> 1, 0])'.fn(),
+                                             scale_factor: '@height'.fn(),
                                                      clip: '[$0[0] < 0 ? 0 : $0[0] >= @width - 1 ? @width - 1 : Math.round ($0[0]), $0[1] < 0 ? 0 : $0[1] >= @height - 1 ? @height - 1 : Math.round ($0[1])]'.fn(),
-                                            in_view_space: '@clip(@scale(@project(@transform($0))))'.fn(),
-                                              render_line:  ('@context.save(), $0.pen.install(@context), @context.beginPath(),' +
-                                                             '@context.moveTo.apply (@context, d.trace (@in_view_space ($0.a))),' +
-                                                             '@context.lineTo.apply (@context, d.trace (@in_view_space ($0.b))),' +
-                                                             '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
+                                            in_view_space: '@clip(@scale(@project(@transform($0))))'.fn()});
