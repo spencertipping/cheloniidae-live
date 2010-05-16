@@ -15,13 +15,12 @@
       t = cs.fold ('$1.fn()($0)', t);
 
       c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
-      c.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn  ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
-                                                                 e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
-                                                                             v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
-                                                                v.context.clearRect (0, 0, v.width, v.height),
-                                                                v.cancel ().render ())};
+      document.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
+                                                                        e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
+                                                                                    v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
+                                                                       v.context.clearRect (0, 0, v.width, v.height),
+                                                                       v.cancel ().render ())};
       document.onmouseup = function (e) {c.x_down = c.y_down = null};
-      c.onmousewheel = function (e) {v.zoom (e.detail || e.wheelDelta)};
 
       v.queue = t.queue;
       v.render();
