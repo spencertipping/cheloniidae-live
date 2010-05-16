@@ -10,9 +10,9 @@
     <script>
       var c  = document.getElementById ('screen');
       var t  = turtle ({queue: []}).jump (-80);
-      var cs = ['.move(160)', '.turn(168 .degrees())', '.pitch(-0.5 .degrees())'].repeat (1000);
+      var cs = ['.move(160)', '.turn(168 .degrees())', '.pitch(-0.5 .degrees())'].map('.fn()').repeat (1000);
       var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0});
-      t = cs.fold ('$1.fn()($0)', t);
+      t = cs.fold ('$1($0)', t);
 
       c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
       document.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
