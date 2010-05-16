@@ -215,7 +215,7 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('divergence-lib', <<'__1wd1b3zdq42OLuRNZS+nvGmc0a4OitklahWqgBmB6JE');
+meta::code('divergence-lib', <<'__dxbx8+B50Oamkxu1Icep9x146oEOSR24v75vp19xmrA');
 Divergence core library | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -280,22 +280,22 @@ var d = (function () {
            applicative: {transforms: {'$0': '$0'},
                           operators: {'()': '$0($1)', '[]': '$0[$1]'}}}).create_aliases ();
   d.functions ({
-    prototype:  function  () {var f = this.fn(), g = function () {f.apply (this, arguments)}; d.init.apply (this, [g.prototype].concat (d.arr (arguments))); return g},
       compose:  function (g) {var f = this.fn(); g = g.fn(); return function () {return f (g.apply (this, arguments))}},
  flat_compose:  function (g) {var f = this.fn(); g = g.fn(); return function () {return f.apply (this, g.apply (this, arguments))}},
        plural:  function  () {return '$1.map ($0)'.fn(this)},
         curry:  function (n) {var f = this.fn(); return n > 1 ? function () {var as = d.arr(arguments); return function () {return f.curry (n - 1).apply (this, as.concat (d.arr (arguments)))}} : f},
         proxy:  function (g) {var f = this.fn(); return g ? function () {return f.apply.apply (f, g.fn() (this, arguments))} : function () {return f.apply (this, arguments)}},
          bind:  function (x) {var f = this.fn(); return d.init (function () {return f.apply (x, arguments)}, {binding: x, original: f})},
-         type:  function  () {var f = function () {}, c = this.fn(); d.init.apply (this, [f.prototype].concat (d.arr (arguments))); return function () {return c.apply (new f(), arguments)}},
+         type:  function  () {var f = function () {}; f = f.ctor.apply (f, arguments); return function () {return c.apply (new f(), arguments)}},
+         ctor:  function  () {var f = this.fn(), g = function () {f.apply (this, arguments)}; d.init.apply (this, [g.prototype].concat (d.arr (arguments))); return g},
          tail: '[$_, @_]'.fn(),
           cps:  function (c) {var cc = [this.fn(), [c = (c || d.id).fn().proxy()]]; while (cc[0] !== c) cc = cc[0].fn().apply (this, cc[1]); return c.apply (this, cc[1])}});
 
   return d}) ();
 
-__1wd1b3zdq42OLuRNZS+nvGmc0a4OitklahWqgBmB6JE
+__dxbx8+B50Oamkxu1Icep9x146oEOSR24v75vp19xmrA
 
-meta::code('main', <<'__EcPOjkmnlMOagS4FrqDd/+g6tjhn+3So9Z6yIz9Z04c');
+meta::code('main', <<'__LXcXxfHsfvwnlkCfDtHbRe4eVZ+iIcuplrm1y939iSw');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -315,13 +315,10 @@ Vector geometry.
   defined by Divergence. The vector geometry operators from the original Cheloniidae library are also implemented here.
 
   var vector = '@_.length ? @_.length === 1 ? $0 : @_ : [0,0,0]'.fn(),
-        line = '@x = $0, @y = $1, @pen = $2'.prototype ({midpoint: '$0().add_scaled (@x, 0.5).add_scaled (@y, 0.5)'.fn(vector)});
+        line = '@x = $0, @y = $1, @pen = $2'.ctor ({midpoint: '$0().add_scaled (@x, 0.5).add_scaled (@y, 0.5)'.fn(vector)});
 
-      d (d.operators.binary.transforms, {'$0 + "_v"':  '"[$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2]]"',
-                                         '$0 + "_vn"': '"[$_[0]" + $0 + "$0,   $_[1]" + $0 + "$0,   $_[2]" + $0 + "$0]"'});
-
-      d (d.operators.assignment.transforms, {'$0 + "_v"':  '"$_[0]" + $0 + "$0[0],$_[1]" + $0 + "$0[1],$_[2]" + $0 + "$0[2],$_"',
-                                             '$0 + "_vn"': '"$_[0]" + $0 + "$0,   $_[1]" + $0 + "$0,   $_[2]" + $0 + "$0,   $_"'});
+      d (d.operators.binary.transforms,     {'$0 + "_v"': '"[$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2]]"',   '$0 + "_vn"': '"[$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0]"'});
+      d (d.operators.assignment.transforms, {'$0 + "_v"':  '"$_[0]"+$0+"$0[0],$_[1]"+$0+"$0[1],$_[2]"+$0+"$0[2],$_"', '$0 + "_vn"':  '"$_[0]"+$0+"$0,$_[1]"+$0+"$0,$_[2]"+$0+"$0,$_"'});
       d.operators.create_aliases ();
 
       d.keys (d.aliases).grep (/_v/).each ('Array.prototype[$1] = $0[$1].fn()'.fn (d.aliases));
@@ -356,19 +353,19 @@ Turtles.
 
   d.init (String.prototype, {patching_constructor: '("new @constructor (d.init ({" + @toString() + ": $0}), $_)").fn()'.fn()});
 
-  var rotational_turtle = '$0($_, $1)'.fn(d.init).prototype ({line: '@queue.push(line(@position.clone(), @position.clone().add_scaled (@direction, $0.vector ()), @pen)), $_'.fn(),
-                                                              move: '@line($0), @jump($0)'.fn(),
-                                                              jump: 'new @constructor(d.init({position:   @position.clone().add_scaled (@direction, $0)}, $_))'.fn(),
-                                                              turn: 'new @constructor(d.init({direction:  @direction.about (complement, $0)}, $_))'.fn(),
-                                                              bank: 'new @constructor(d.init({complement: @complement.about (direction, $0)}, $_))'.fn(),
-                                                               pen: 'new @constructor(d.init({pen:        $0}))'.fn(),
-                                                             pitch:  function (angle) {var axis = this.direction.cross (this.complement);
-                                                                                       return new this.constructor (d.init ({complement: this.complement.about (axis, angle),
-                                                                                                                              direction: this.direction. about (axis, angle)}))}}),
-                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(d.init).prototype (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
-                                                                                                          install: function (context) {context.globalAlpha = this.opacity;
-                                                                                                                                       context.strokeStyle = this.color;
-                                                                                                                                       context.lineWidth   = this.size}}),
+  var rotational_turtle = '$0($_, $1)'.fn(d.init).ctor ({line: '@queue.push(line(@position.clone(), @position.clone().add_scaled (@direction, $0.vector ()), @pen)), $_'.fn(),
+                                                         move: '@line($0), @jump($0)'.fn(),
+                                                         jump: 'new @constructor(d.init({position:   @position.clone().add_scaled (@direction, $0)}, $_))'.fn(),
+                                                         turn: 'new @constructor(d.init({direction:  @direction.about (complement, $0)}, $_))'.fn(),
+                                                         bank: 'new @constructor(d.init({complement: @complement.about (direction, $0)}, $_))'.fn(),
+                                                          pen: 'new @constructor(d.init({pen:        $0}))'.fn(),
+                                                        pitch:  function (angle) {var axis = this.direction.cross (this.complement);
+                                                                                  return new this.constructor (d.init ({complement: this.complement.about (axis, angle),
+                                                                                                                         direction: this.direction. about (axis, angle)}))}}),
+                    pen = '$0($_, $1 || {color: "#808080", opacity: 0.5, size: 1})'.fn(d.init).ctor (qw('color size opacity').map('$0.maps_to ($0.patching_constructor())').fold(d.init), {
+                                                                                                     install: function (context) {context.globalAlpha = this.opacity;
+                                                                                                                                  context.strokeStyle = this.color;
+                                                                                                                                  context.lineWidth   = this.size}}),
                  turtle = 'new $0(d.init($2 || {}, {position: (0).vector(), direction: (1).y(), complement: (-1).z(), pen: new $1()}))'.fn (rotational_turtle, pen);
 
 Line rendering.
@@ -376,14 +373,14 @@ Line rendering.
   screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.
   Delimited continuations won't quite work here because they will be contained (and a timeout or interval requires escape and re-entry). Better is to do explicit queueing.
 
-  var viewport = '$0($_, $1)'.fn(d.init).prototype ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
-                                                       project: '$0.over_vn($0[2])'.fn(),
-                                                         scale: '$0.times_v ([@width, @height, 0]).plus_vd ([@width >> 1, @height >> 1, 0])'.fn(),
-                                                   render_line:  ('@context.save(), $0.pen.install(@context), @context.beginPath(),' +
-                                                                  '@context.moveTo.apply (@context, @project (@transform ($0.x))),' +
-                                                                  '@context.lineTo.apply (@context, @project (@transform ($0.y))),' +
-                                                                  '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
-__EcPOjkmnlMOagS4FrqDd/+g6tjhn+3So9Z6yIz9Z04c
+  var viewport = '$0($_, $1)'.fn(d.init).ctor ({transform: '$0.minus_v(@pov).into (@up.cross (@forward), @up, @forward)'.fn(),
+                                                  project: '$0.over_vn($0[2])'.fn(),
+                                                    scale: '$0.times_v ([@width, @height, 0]).plus_vd ([@width >> 1, @height >> 1, 0])'.fn(),
+                                              render_line:  ('@context.save(), $0.pen.install(@context), @context.beginPath(),' +
+                                                             '@context.moveTo.apply (@context, @project (@transform ($0.x))),' +
+                                                             '@context.lineTo.apply (@context, @project (@transform ($0.y))),' +
+                                                             '@context.closePath(), @context.stroke(), @context.restore()').fn ()});
+__LXcXxfHsfvwnlkCfDtHbRe4eVZ+iIcuplrm1y939iSw
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
