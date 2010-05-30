@@ -436,11 +436,28 @@ as a key there (e.g. 'foo'), then it will be sandwiched between binary operators
 
 __oSLOYYpe/SNAnWnDnfTYuEmxXuWfsfv7U3mglh1Vkww
 
-meta::code('main', <<'__tui3+6q9nFYdcdm1VgU0/+f1oKOnshVvRtX646pBlro');
-Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
+meta::code('divergence-vector-lib', <<'__kGhP7Imuf7c9HuP8Lhk9yQlVzAHedNCwmvxzyxLcgjw');
+Divergence vector geometry module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
-:: get divergence-lib divergence-rebase util
+d.rebase (function () {
+  var range = n >$> (n > 0 ? range(n - 1) << n - 1 : []);
+
+  var     reduction = (left, right, join, op, n) >$> (left + (range(n) * (i >$> '@xs[#{i}] #{op} $0.xs[#{i}]')).join(join) + right).fn(),
+      componentwise = reduction.fn ('new @constructor ([', '])', ','),
+           distance = _ >$> Math.sqrt (this % this),
+                dot = reduction.fn ('', '', '+', '*'),
+            initial = n >$> '[' + (range(n) * (_ >$> 0)).join (',') + ']',
+               four = n >$> '+-*/'.split('') * (op >$> op.maps_to (componentwise (op, n))) / d.init;
+
+  d.vector = range(6) * (n >$> d.init ('@xs = $0 || #{initial(n)}'.ctor (four (n), {'%': dot (n), distance: distance, toString: _ >$> '<#{this.xs.join(", ")}>'}),
+                                       {create: 'new d.vector[#{n}] (@_)'.fn()}))}) ();
+
+__kGhP7Imuf7c9HuP8Lhk9yQlVzAHedNCwmvxzyxLcgjw
+
+meta::code('main', <<'__werZf0+FEoMEhPVUNg5C5P+xZg0OW9RQfzyXWJEwCs4');
+Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
+Licensed under the terms of the MIT source code license
 
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
@@ -551,16 +568,12 @@ Line rendering.
                                                                               this.forward = this.forward.about (right, angle).normalize ();
                                                                               this.up      = this.up.about      (right, angle).normalize ();
                                                                               return this}});
-__tui3+6q9nFYdcdm1VgU0/+f1oKOnshVvRtX646pBlro
+__werZf0+FEoMEhPVUNg5C5P+xZg0OW9RQfzyXWJEwCs4
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
 :: get main
 __UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0
-
-meta::code('util', <<'__MPk0PTno+Xk+05NuiWkhKJDdoggh4uPjBtujjGea6+U');
-This is for more generic utilities that are likely to be factored out into a separate library later. Most bottom-up projects will end up having such code.
-__MPk0PTno+Xk+05NuiWkhKJDdoggh4uPjBtujjGea6+U
 
 meta::data('default-action', <<'__zmNcTqv/Xk9W26j7HjnKI1UwqitrGFM+7xrzhiAWxXc');
 shell
