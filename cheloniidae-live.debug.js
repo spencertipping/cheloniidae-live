@@ -1,3 +1,8 @@
+// A debugging configuration that annotates Cheloniidae live
+
+d.tracer = console.log.bind (console);
+d.debug.trace (function () {
+
 // Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 // Licensed under the terms of the MIT source code license
 
@@ -88,3 +93,5 @@ var cheloniidae = d.rebase (function () {
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)))})}}) ();
+
+}) ();

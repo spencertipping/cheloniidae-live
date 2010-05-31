@@ -27,6 +27,8 @@ d.rebase (function () {
 
                     event: '@node = $0, @value = $1, @time = new Date()'.ctor ({toString: _ >$> '(#{this.node}) = (#{this.value}) at #{this.time.getTime()}'}),
 
+                    trace: f >$> (new t.watcher() |$> (w >$> (w.use_tracing(), w.annotate (f)))),
+
                   watcher: '@name = d.gensym("hook"), @events = new $0.ring_buffer($1 && $1.log_size || 10000), @predicate = $1 && $1.predicate || (0).fn()'.fn(t).ctor ({
                                    use_logging: _ >$> (global[this.name] = this.hook_function (this.log.bind   (this))),
                                    use_tracing: p >$> (this.predicate = p || this.predicate, global[this.name] = this.hook_function (this.trace.bind (this))),
