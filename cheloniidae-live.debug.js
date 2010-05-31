@@ -1,17 +1,14 @@
 // A debugging configuration that annotates Cheloniidae live
 
 d.tracer = console.log.bind (console);
-d.debug.trace (function () {
-
-// Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
-// Licensed under the terms of the MIT source code license
+var preprocess = d.debug.trace;
 
 // Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 // uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 // functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
 
 d.rebase.enable_inline_macro();
-var cheloniidae = d.rebase (function () {
+var cheloniidae = preprocess (d.rebase (function () {
   var   qw = s >$> s.split(/\s+/), merging_constructor = attributes >$> (attributes * (a >$> '@#{a} = ($1 || {}).#{a} || ($0 || {}).#{a}')).join (',').fn(),
                                   patching_constructor =          k >$> 'new @constructor ($_, {#{k}: $0})'.fn(),
       clip = x >$> (x < 0 ? 0 : x > 1 ? 1 : x),
@@ -61,11 +58,11 @@ var cheloniidae = d.rebase (function () {
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
-                            jump: distance >$> new cheloniidae.rotational_turtle (this, {position:   this.position + (this.direction * distance)}),
-                            turn:    angle >$> new cheloniidae.rotational_turtle (this, {direction:  this.direction.about (this.complement, angle)}),
-                            bank:    angle >$> new cheloniidae.rotational_turtle (this, {complement: this.complement.about (this.direction, angle)}),
+                            jump: distance >$> (d.trace (this.constructor.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
+                            turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
+                            bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this.direction ^ this.complement) |$>
-                                                (axis >$> new cheloniidae.rotational_turtle (this,
+                                                (axis >$> new this.constructor (this,
                                                               {complement: this.complement.about (axis, angle), direction: this.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
@@ -92,6 +89,4 @@ var cheloniidae = d.rebase (function () {
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
-                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}}) ();
-
-}) ();
+                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();

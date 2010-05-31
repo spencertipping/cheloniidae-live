@@ -215,16 +215,14 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('debug', <<'__l/hOIwVy8UE8beeVLFBJ8PSwxRc5W9ajT8FW44wBWmI');
+meta::code('debug', <<'__bdXm9ZJ6/nkYjI7hreB08QKB9Sg3V47eZypNWrGTV7I');
 A debugging configuration that annotates Cheloniidae live
 
 d.tracer = console.log.bind (console);
-d.debug.trace (function () {
+var preprocess = d.debug.trace;
 
-:: get main
-
-}) ();
-__l/hOIwVy8UE8beeVLFBJ8PSwxRc5W9ajT8FW44wBWmI
+:: get lib
+__bdXm9ZJ6/nkYjI7hreB08QKB9Sg3V47eZypNWrGTV7I
 
 meta::code('divergence-debug-lib', <<'__mHeYnWK4xBvNt9HxWaf0vgJKkLpn8iShCfTaJXPA/7M');
 Divergence debug module | Spencer Tipping <spencer@spencertipping.com>
@@ -651,16 +649,13 @@ d.rebase (function () {
 
 __lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY
 
-meta::code('main', <<'__nZgV5vm1OcayKLbCtwI5bTo64/XPK+cVvUlyhlU2N6Q');
-Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
-Licensed under the terms of the MIT source code license
-
+meta::code('lib', <<'__Gz5e01ayrMG6smwHpbxkK6ZiaYb+Hswuns5mfVfS26k');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
 
 d.rebase.enable_inline_macro();
-var cheloniidae = d.rebase (function () {
+var cheloniidae = preprocess (d.rebase (function () {
   var   qw = s >$> s.split(/\s+/), merging_constructor = attributes >$> (attributes * (a >$> '@#{a} = ($1 || {}).#{a} || ($0 || {}).#{a}')).join (',').fn(),
                                   patching_constructor =          k >$> 'new @constructor ($_, {#{k}: $0})'.fn(),
       clip = x >$> (x < 0 ? 0 : x > 1 ? 1 : x),
@@ -710,11 +705,11 @@ Turtles.
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
-                            jump: distance >$> new cheloniidae.rotational_turtle (this, {position:   this.position + (this.direction * distance)}),
-                            turn:    angle >$> new cheloniidae.rotational_turtle (this, {direction:  this.direction.about (this.complement, angle)}),
-                            bank:    angle >$> new cheloniidae.rotational_turtle (this, {complement: this.complement.about (this.direction, angle)}),
+                            jump: distance >$> (d.trace (this.constructor.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
+                            turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
+                            bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this.direction ^ this.complement) |$>
-                                                (axis >$> new cheloniidae.rotational_turtle (this,
+                                                (axis >$> new this.constructor (this,
                                                               {complement: this.complement.about (axis, angle), direction: this.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
@@ -741,8 +736,17 @@ Line rendering.
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
-                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}}) ();
-__nZgV5vm1OcayKLbCtwI5bTo64/XPK+cVvUlyhlU2N6Q
+                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();
+__Gz5e01ayrMG6smwHpbxkK6ZiaYb+Hswuns5mfVfS26k
+
+meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
+Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
+Licensed under the terms of the MIT source code license
+
+var preprocess = d.id;
+
+:: get lib
+__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
