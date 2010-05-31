@@ -31,7 +31,7 @@
                    unary: set(qw('u++ u-- ++ -- u+ u- u! u~ new typeof var case try finally throw return case else delete void import export ( [ { ?:')),
                syntactic: set(qw('case var if while for do switch return throw delete export import try catch finally void with else function new typeof in instanceof')),
                statement: set(qw('case var if while for do switch return throw delete export import try catch finally void with else')),
-               connected: set(qw('else catch finally')),
+               connected: set(qw('else catch finally')),                                                                       digit: set('0123456789.'.split('')),
                    ident: set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_'.split ('')),                  punct: set('+-*/%&|^!~=<>?:;.,'.split ('')),
                    right: set(qw('= += -= *= /= %= &= ^= |= <<= >>= >>>= u~ u! new typeof u+ u- u++ u-- ++ --')),            openers: {'(':')', '[':']', '{':'}', '?':':'},
      implicit_assignment: set(qw('++ -- u++ u--')),                                                                       sandwiches: set(qw('$ $$ $$$ _ __ ___ _$ _$$ __$')),
@@ -39,10 +39,12 @@
            prefix_binary: set(qw('if function catch for switch with while')),                                                closers: {')':'(', ']':'[', '}':'{', ':':'?:'},
             translations: {'u+':'+', 'u-':'-', 'u~':'~', 'u!':'!', 'u--':'--', 'u++':'++'},                                 arity_of: '$0.unary[$1] ? 1 : $1 == "?" ? 3 : 2'.fn(r),
            lvalue_assign: set(qw('+= -= *= /= %= ^= |= &= <<= >>= >>>=')),                                            should_convert: '! ($0.literal[$1] || $0.syntactic[$1])'.fn(r),
+               no_spaces: set(qw('.')),
 
                 alias_in: '$0.init ($1, $0.map ($2, {|h, k, v| k.maps_to (h[v] || v.fn()) |}.fn($1)))'.fn(d),
 
                     init: '$0.deparse($0.transform($0.parse($1)))'.fn(r),
+                   local: '$0.transform($0.parse($1)).toString()'.fn(r),
 
 //   Deparsing.
 //   This is certainly the easiest part. All we have to do is follow some straightforward rules about how operators and such get serialized. Luckily this is all encapsulated into the toString
@@ -75,7 +77,7 @@
 
                    parse: function (s) {var mark = 0, s = s.toString(), i = 0, $_ = '', l = s.length, token = '', expect_re = true, escaped = false, t = new r.syntax(null, '('),
                                                       c = s.charAt.bind (s), openers = [],
-                                             precedence = r.precedence, ident = r.ident, punct = r.punct,
+                                             precedence = r.precedence, ident = r.ident, punct = r.punct, digit = r.digit,
                                             line_breaks = [0].concat (s.split('\n').map('.length')), lb = 1,
                                           located_token = function () {var jump = lb << 1, l = 0, r = new String (token);
                                                                        while (jump >>= 1) mark >= line_breaks[l + jump] && (l += jump);
@@ -86,17 +88,17 @@
                           while ((mark = i) < l && ($_ = c(i))) {
           escaped = token = '';
 
-               if                                (' \n\r\t'.indexOf ($_) > -1)                                                       {++i; continue}
-          else if                               ('([{?:}])'.indexOf ($_) > -1)                                                        expect_re = '([{:?'.indexOf ($_) > -1, ++i;
-          else if                 ($_ === '/' && c(i + 1) === '*' && (i += 2)) {while (c(++i) !== '/' || c(i - 1) !== '*' || ! ++i);  continue}
-          else if                             ($_ === '/' && c(i + 1) === '/') {while       (($_ = c(++i)) !== '\n' && $_ !== '\r');  continue}
-          else if ($_ === '/' && expect_re && ! (expect_re = ! (token = '/'))) {while            (($_ = c(++i)) !== '/' || escaped)   escaped = ! escaped && $_ === '\\';
-                                                                                while                               (ident[c(++i)]);}
-          else if              ($_ === '"' && ! (expect_re = ! (token = '"')))  while   (($_ = c(++i)) !== '"' || escaped || ! ++i)   escaped = ! escaped && $_ === '\\';
-          else if              ($_ === "'" && ! (expect_re = ! (token = "'")))  while   (($_ = c(++i)) !== "'" || escaped || ! ++i)   escaped = ! escaped && $_ === '\\';
-          else if                    (expect_re && punct[$_] && (token = 'u'))  while  (punct[$_ = c(i)] && precedence[token + $_])   token += $_, ++i;
-          else if                            (punct[$_] && (expect_re = true))  while  (punct[$_ = c(i)] && precedence[token + $_])   token += $_, ++i;
-          else                                                                 {while                               (ident[c(++i)]);  expect_re = precedence.hasOwnProperty (token = s.substring(mark, i))}
+               if                                (' \n\r\t'.indexOf ($_) > -1)                                                             {++i; continue}
+          else if                               ('([{?:}])'.indexOf ($_) > -1)                                                              expect_re = '([{:?'.indexOf ($_) > -1, ++i;
+          else if                 ($_ === '/' && c(i + 1) === '*' && (i += 2)) {while       (c(++i) !== '/' || c(i - 1) !== '*' || ! ++i);  continue}
+          else if                             ($_ === '/' && c(i + 1) === '/') {while             (($_ = c(++i)) !== '\n' && $_ !== '\r');  continue}
+          else if ($_ === '/' && expect_re && ! (expect_re = ! (token = '/'))) {while                  (($_ = c(++i)) !== '/' || escaped)   escaped = ! escaped && $_ === '\\';
+                                                                                while                                     (ident[c(++i)]);}
+          else if              ($_ === '"' && ! (expect_re = ! (token = '"')))  while         (($_ = c(++i)) !== '"' || escaped || ! ++i)   escaped = ! escaped && $_ === '\\';
+          else if              ($_ === "'" && ! (expect_re = ! (token = "'")))  while         (($_ = c(++i)) !== "'" || escaped || ! ++i)   escaped = ! escaped && $_ === '\\';
+          else if                    (expect_re && punct[$_] && (token = 'u'))  while        (punct[$_ = c(i)] && precedence[token + $_])   token += $_, ++i;
+          else if                            (punct[$_] && (expect_re = true))  while        (punct[$_ = c(i)] && precedence[token + $_])   token += $_, ++i;
+          else                                                                 {while (ident[$_ = c(++i)] || digit[c(mark)] && digit[$_]);  expect_re = precedence.hasOwnProperty (token = s.substring (mark, i))}
 
           expect_re && token.charAt(0) === 'u' || (token = s.substring (mark, i));
           token in {} && (token = '@' + token);
@@ -144,6 +146,7 @@
                                              this.xs[1] && r.connected[this.xs[1].op] ? (($_ = s(this.xs[0])).charAt($_.length - 1) === '}' ? $_ + ' ' : $_ + ';') + s(this.xs[1]) :
                                                                      r.unary[this.op] ? (r.translations[this.op] || this.op) + ' ' + s(this.xs[0]) :
                                                              r.prefix_binary[this.op] ? this.op + ' ' + s(this.xs[0]) + ' ' + s(this.xs[1]) :
+                                                                 r.no_spaces[this.op] ? s(this.xs[0]) + this.op + s(this.xs[1]) :
                                                                                         s(this.xs[0]) + ' ' + this.op + ' ' + s(this.xs[1])}}),
 
 //   Macro support.
@@ -185,6 +188,15 @@
 
           function (e) {return e.op == '>$>' ? new r.syntax(e.parent, 'function').with_node (e.xs[0].op == '(' ? e.xs[0] : new r.syntax (null, '(', [e.xs[0]])).
                                                                                   with_node (new r.syntax (null, '{').with_node (new r.syntax (null, 'return').with_node (e.xs[1]))) : e},
+
+//     Function preloading.
+//     Since Rebase doesn't provide an expression-mode variable binding syntax (this would be difficult), binding variables becomes a matter of using functions. This has the advantage that you
+//     end up with a proper lexical scope too.
+
+//       | x |$> f === f(x)
+//       | (x, y) |$> f === f (x, y)
+
+          function (e) {return e.op == '|$>' ? new r.syntax(e.parent, '(!').with_node (e.xs[1]).with_node (e.xs[0].op == '(' ? e.xs[0] : new r.syntax(null, '(').with_node (e.xs[0])) : e},
 
 //     Comments.
 //     Structural comments can be useful for removing chunks of code or for getting comments through SpiderMonkey's parse-deparse cycle (SpiderMonkey, and perhaps other JS interpreters, removes
