@@ -17,6 +17,7 @@
       <li><em>Control-drag</em> - zoom</li>
       </ul>
     </div>
+
     <canvas id='screen' width='600' height='350' style='border: solid 1px #888'>
       This page requires a browser with HTML5 canvas support. Valid browsers include <a href='http://getfirefox.com'>Mozilla Firefox</a> and <a href='http://google.com/chrome'>Google
       Chrome</a>.
@@ -26,7 +27,7 @@
       d.debug.trace (function () {
         var c  = document.getElementById ('screen');
         var t  = cheloniidae.turtle ({queue: []}).jump (-80);
-        var cs = ['.move(160)', '.turn(176 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
+        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
         var v  = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0});
         t = cs.fold ('$1($0)', t);
 

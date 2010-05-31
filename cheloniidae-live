@@ -634,7 +634,7 @@ d.rebase (function () {
 
 __lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY
 
-meta::code('lib', <<'__PYMaTBzYq5bAxZJweGVcdKJfEcfgHQ05f2FwhpWUIoo');
+meta::code('lib', <<'__sgZtFcQrWTsStk90VKNDNckTry5u5riYqGzMgKo9t7M');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -686,7 +686,7 @@ Turtles.
   stateful. It's perhaps an odd model, but it means that you can grab a turtle state from some time before without losing what you've drawn since. In other words, a turtle represents a
   position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
 
-       rotational_turtle: merging_constructor(qw('position direction complement pen')).ctor ({
+       rotational_turtle: merging_constructor(qw('position direction complement pen queue')).ctor ({
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
@@ -722,7 +722,7 @@ Line rendering.
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();
-__PYMaTBzYq5bAxZJweGVcdKJfEcfgHQ05f2FwhpWUIoo
+__sgZtFcQrWTsStk90VKNDNckTry5u5riYqGzMgKo9t7M
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>

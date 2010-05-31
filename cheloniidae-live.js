@@ -54,7 +54,7 @@ var cheloniidae = preprocess (d.rebase (function () {
 //   stateful. It's perhaps an odd model, but it means that you can grab a turtle state from some time before without losing what you've drawn since. In other words, a turtle represents a
 //   position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
 
-       rotational_turtle: merging_constructor(qw('position direction complement pen')).ctor ({
+       rotational_turtle: merging_constructor(qw('position direction complement pen queue')).ctor ({
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
