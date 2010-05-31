@@ -565,7 +565,7 @@ d.rebase (function () {
 
 __lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY
 
-meta::code('main', <<'__sR6y+9knUTyBhAjfMOUviTxq8ihPYO/s2DUoW0HSQm0');
+meta::code('main', <<'__bu88/Bcqc7cjMDXjLhGXo1O4NET/sqR1s8gMu6UKV2s');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -602,8 +602,8 @@ Vector geometry.
                                                                               c.stroke(); c.restore()}
                                                                             return this}});
 
-      d (Number.prototype, {degrees: '$_ / 180.0 * Math.PI'.fn()});
-      d  (Array.prototype, {repeat: function (n) {var xs = []; for (var i = 0; i < n; ++i) xs.push.apply (xs, this); return xs}});
+  d (Number.prototype, {degrees: '$_ / 180.0 * Math.PI'.fn()});
+  d  (Array.prototype, {repeat: function (n) {var xs = []; for (var i = 0; i < n; ++i) xs.push.apply (xs, this); return xs}});
 
 Incidence angle computation and attenuation.
   The original Cheloniidae source code covers this in more detail, but the idea is that we're using some elementary differential equations to figure out how much light gets attenuated when
@@ -657,8 +657,8 @@ Line rendering.
                                                                               this.pov     = this.pov.about     (right, angle);
                                                                               this.forward = this.forward.about (right, angle).normalize ();
                                                                               this.up      = this.up.about      (right, angle).normalize ();
-                                                                              return this}});
-__sR6y+9knUTyBhAjfMOUviTxq8ihPYO/s2DUoW0HSQm0
+                                                                              return this}})}) ();
+__bu88/Bcqc7cjMDXjLhGXo1O4NET/sqR1s8gMu6UKV2s
 
 meta::code('scratch', <<'__UFvA92B98GVzh3boXGxl19QiD9162rJI14MuI2vyVq0');
 This is for scratchwork that isn't part of your system. It could be used for testing or other experimentation.
