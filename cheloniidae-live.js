@@ -58,7 +58,7 @@ var cheloniidae = preprocess (d.rebase (function () {
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
-                            jump: distance >$> (d.trace (this.constructor.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
+                            jump: distance >$> (d.trace (this.constructor.original.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this.direction ^ this.complement) |$>
