@@ -4,6 +4,7 @@
     <script src='divergence.js'></script>
     <script src='divergence.rebase.js'></script>
     <script src='divergence.vector.js'></script>
+    <script src='divergence.debug.js'></script>
     <script src='cheloniidae-live.js'></script>
   </head>
 
@@ -23,18 +24,18 @@
 
     <script>
       var c  = document.getElementById ('screen');
-      var t  = turtle ({queue: []}).jump (-80);
+      var t  = cheloniidae.turtle ({queue: []}).jump (-80);
       var cs = ['.move(160)', '.turn(176 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
-      var v  = new viewport ({pov: (-350).z(), up: (1).y(), forward: (1).z(), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0});
+      var v  = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), width: 600, height: 350, batch: 50, delay: 0});
       t = cs.fold ('$1($0)', t);
 
-      c.onmousedown  = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
-      document.onmousemove  = function (e) {(c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
-                                                                        e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
-                                                                                    v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
-                                                                       v.context.clearRect (0, 0, v.width, v.height),
-                                                                       v.cancel ().render (false))};
-      document.onmouseup = function (e) {(c.x_down || c.y_down) && (v.context.clearRect (0, 0, v.width, v.height), v.cancel().render(true)); c.x_down = c.y_down = null};
+      c.onmousedown = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
+      document.onmousemove = e >$> ((c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
+                                                                e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
+                                                                            v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
+                                                               v.context.clearRect (0, 0, v.width, v.height),
+                                                               v.cancel ().render (false)));
+      document.onmouseup = e >$> ((c.x_down || c.y_down) && (v.context.clearRect (0, 0, v.width, v.height), v.cancel().render(true)), c.x_down = c.y_down = null);
 
       v.queue = t.queue;
       v.render();
