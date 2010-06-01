@@ -808,10 +808,11 @@ meta::function('code', <<'__NBNecoJ9JVwyGbA+8LrNYjQKQyQOxdFAkjgZ4ueT5QA');
 join "\n\n", map preprocess(retrieve("code::$_")), @_;
 __NBNecoJ9JVwyGbA+8LrNYjQKQyQOxdFAkjgZ4ueT5QA
 
-meta::function('compile', <<'__fS4SFKwDwlQRAPgdkfOItg4KJJn5c4BwZzQkiAe8Kvc');
+meta::function('compile', <<'__6LXyXI9oH3zXrcQWSfZHkMefVde7SnaSytOOsXZJT6Y');
 my $name = name();
 file::write("$name.js", unlit('main'));
-__fS4SFKwDwlQRAPgdkfOItg4KJJn5c4BwZzQkiAe8Kvc
+file::write("$name.debug.js", unlit('debug'));
+__6LXyXI9oH3zXrcQWSfZHkMefVde7SnaSytOOsXZJT6Y
 
 meta::function('cp', <<'__yn1SQkcEk6o+gnuCy3QGVFtQb2piaCoUdJPGUkLjpD4');
 my ($from, $to) = @_;
