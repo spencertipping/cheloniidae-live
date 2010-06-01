@@ -1,7 +1,7 @@
 // A debugging configuration that annotates Cheloniidae live
 
 d.tracer = console.log.bind (console);
-var preprocess = d.debug.trace;
+var preprocess = d.debug.trace.fn (function (e) {return e.xs && e.xs.grep(/complement/)});
 
 // Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 // uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
