@@ -644,7 +644,7 @@ as a key there (e.g. 'foo'), then it will be sandwiched between binary operators
 
 __WaQoSM5hMIotoujTqinlSgnspTESmZqk1hQOaCrAYDQ
 
-meta::code('divergence.vector-lib', <<'__lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY');
+meta::code('divergence.vector-lib', <<'__Lg554u2Lq1j9IA2QB2zXKXSdn1NwOwaEINPvPQuzqFg');
 Divergence vector geometry module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -662,7 +662,7 @@ d.rebase (function () {
                                                             {'&': v >$> this * ((this % v) / (v % v)), '|': v >$> this - (this & v), '%': dot (n),
                                                         towards : (v, x) >$> this * (1.0 - x) + v * x,
                                                            unit : _ >$> this / this.distance(),  distance : _ >$> Math.sqrt (this % this),
-                                                           into : _ >$> this.constructor.create.apply (this, range(arguments.length) * (i >$> this % arguments[i].unit())),
+                                                           into : _ >$> this.constructor.create.apply (this, d.arr(arguments) * (v >$> this % v.unit())),
                                                            from : _ >$> range(arguments.length) * (i >$> arguments[i] * this[i]) / ((x, y) >$> x + y),
                                                        toString : _ >$> '<#{Array.prototype.join.call(this, ", ")}>'}),
                                        {create: 'new d.vector[#{n}] (#{(range(n) * (i >$> "$" + i)).join(",")})'.fn()}));
@@ -671,7 +671,7 @@ d.rebase (function () {
                       about : function (v, angle) {var b1 = v.unit(), o = this | b1, b2 = o.unit(), b3 = b1 ^ b2, l = o.distance();
                                                    return (this & b1) + b2 * (Math.cos(angle) * l) + b3 * (Math.sin(angle) * l)}})}) ();
 
-__lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY
+__Lg554u2Lq1j9IA2QB2zXKXSdn1NwOwaEINPvPQuzqFg
 
 meta::code('lib', <<'__VUpgI4mAdbkZaMQ4Vw1W2j2aEl+tezQ+cU0+cIE/m+o');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
