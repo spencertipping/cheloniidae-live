@@ -394,7 +394,7 @@ d.rebase (function () {
 
 __STVvavt4OEcpNbBbOcO5rELH+QCwMLA8HCxJ9H8QkXk
 
-meta::code('divergence.rebase-lib', <<'__WaQoSM5hMIotoujTqinlSgnspTESmZqk1hQOaCrAYDQ');
+meta::code('divergence.rebase-lib', <<'__SBlwPWgPo57k7gvzP7vlvvZFxCctCavkbzuL/EeyhOM');
 Divergence Rebase module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -430,7 +430,7 @@ as a key there (e.g. 'foo'), then it will be sandwiched between binary operators
                statement: set(qw('case var if while for do switch return throw delete export import try catch finally void with else')),
                connected: set(qw('else catch finally')),                                                                       digit: set('0123456789.'.split('')),
                    ident: set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_'.split ('')),                  punct: set('+-*/%&|^!~=<>?:;.,'.split ('')),
-                   right: set(qw('= += -= *= /= %= &= ^= |= <<= >>= >>>= u~ u! new typeof u+ u- u++ u-- ++ --')),            openers: {'(':')', '[':']', '{':'}', '?':':'},
+                   right: set(qw('= += -= *= /= %= &= ^= |= <<= >>= >>>= u~ u! new typeof u+ u- u++ u-- ++ -- ?')),          openers: {'(':')', '[':']', '{':'}', '?':':'},
      implicit_assignment: set(qw('++ -- u++ u--')),                                                                       sandwiches: set(qw('$ $$ $$$ _ __ ___ _$ _$$ __$')),
                  literal: set(qw('= ++ -- u++ u-- (! [! . ?: , ? u! ( { [ === !== == != ; : && ||')),                   sandwich_ops: set(qw('+ - * / % ^ | & << >> >>> < >')),
            prefix_binary: set(qw('if function catch for switch with while')),                                                closers: {')':'(', ']':'[', '}':'{', ':':'?:'},
@@ -642,7 +642,7 @@ as a key there (e.g. 'foo'), then it will be sandwiched between binary operators
 
   r.enable_inline_macro = (function (enabled) {return function () {enabled || (enabled = !! d.inline_macros.push ('$0.toString()'.compose (r.transform).compose (r.parse)))}}) (false)}) ();
 
-__WaQoSM5hMIotoujTqinlSgnspTESmZqk1hQOaCrAYDQ
+__SBlwPWgPo57k7gvzP7vlvvZFxCctCavkbzuL/EeyhOM
 
 meta::code('divergence.vector-lib', <<'__+aLFVY46NOpOtqNazoo+ZfA125kYBXxn+YlZZL1SZ0U');
 Divergence vector geometry module | Spencer Tipping <spencer@spencertipping.com>
