@@ -644,12 +644,12 @@ as a key there (e.g. 'foo'), then it will be sandwiched between binary operators
 
 __SBlwPWgPo57k7gvzP7vlvvZFxCctCavkbzuL/EeyhOM
 
-meta::code('divergence.vector-lib', <<'__+aLFVY46NOpOtqNazoo+ZfA125kYBXxn+YlZZL1SZ0U');
+meta::code('divergence.vector-lib', <<'__zDbTBwvKkGvky3SfbcSTpzwctIPaiPIKUVLKcxvD9O0');
 Divergence vector geometry module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
 d.rebase (function () {
-  var range = n >$> (n > 0 ? range(n - 1) << n - 1 : []);
+  var range = [] |$> (range_cache >$> (n >$> (range_cache[n] || (range_cache[n] = (n > 0 ? range(n - 1) + [n - 1] : [])))));
 
   var         unify = n >$> (x >$> (x.length ? x : this.constructor.create.apply (this, range(n) * (_ >$> x)))),
           reduction = (left, right, join, op, n) >$> (left + (range(n) * (i >$> '$_[#{i}] #{op} $0[#{i}]')).join(join) + right).compose (unify (n)),
@@ -659,11 +659,11 @@ d.rebase (function () {
                four = n >$> '+-*/'.split('') * (op >$> op.maps_to (componentwise (op, n))) / d.init;
 
   d.vector = range(6) * (n >$> d.init (constructor(n).ctor (four (n),
-                                                            {'&': v >$> this * ((this % v) / (v % v)), '|': v >$> this - (this & v), '%': dot (n),
+                                                            {'&': v >$> v * ((this % v) / (v % v)), '|': v >$> this - (this & v), '%': dot (n),
                                                         towards : (v, x) >$> this * (1.0 - x) + v * x,
                                                            unit : _ >$> this / this.distance(),  distance : _ >$> Math.sqrt (this % this),
                                                            into : _ >$> this.constructor.create.apply (this, d.arr(arguments) * (v >$> this % v.unit()).bind(this)),
-                                                           from : _ >$> range(arguments.length) * (i >$> arguments[i] * this[i]) / ((x, y) >$> x + y),
+                                                           from : _ >$> ((this, arguments) |$> ((t, a) >$> range(a.length) * (i >$> a[i] * t[i]))) / ((x, y) >$> x + y),
                                                        toString : _ >$> '<#{Array.prototype.join.call(this, ", ")}>'}),
                                        {create: 'new d.vector[#{n}] (#{(range(n) * (i >$> "$" + i)).join(",")})'.fn()}));
   var v3 = d.vector[3];
@@ -671,9 +671,9 @@ d.rebase (function () {
                       about : function (v, angle) {var b1 = v.unit(), o = this | b1, b2 = o.unit(), b3 = b1 ^ b2, l = o.distance();
                                                    return (this & b1) + b2 * (Math.cos(angle) * l) + b3 * (Math.sin(angle) * l)}})}) ();
 
-__+aLFVY46NOpOtqNazoo+ZfA125kYBXxn+YlZZL1SZ0U
+__zDbTBwvKkGvky3SfbcSTpzwctIPaiPIKUVLKcxvD9O0
 
-meta::code('lib', <<'__l5x//lqCuarQQ1ubgdR5kntZV5lkcgA7Sit1Ti/p18I');
+meta::code('lib', <<'__0OawfHyhgURLjqIEi7EJfFeOGTAHM51uJ6RHhQidJ6Q');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -733,14 +733,13 @@ Turtles.
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
-                                                ((t, axis) >$> new t.constructor (t,
-                                                                   {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
+                                                ((t, axis) >$> new t.constructor (t, {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
                   turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),
-                                                                        pen: new cheloniidae.pen({opacity: 1, color: '#808080', size: 0.25}), queue: []}, state || {}),
+                                                                        pen: new cheloniidae.pen({opacity: 0.5, color: '#444', size: 0.5}), queue: []}, state || {}),
 
 Line rendering.
   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
@@ -755,14 +754,14 @@ Line rendering.
                                                    render:  sort >$> (sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)), this.intermediate_render (0)),
                                       intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ('$1.render($0)'.fn(this)),
                                                                         this.timeout = offset + this.batch < this.queue.length &&
-                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), this.delay || 10), this),
+                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), + this.delay), this),
                                                     slide:  (x, y) >$> (this.pov += (this.forward ^ this.up) * x + this.up * y, this),
                                                      zoom:      z  >$> (this.pov += this.forward * z, this),
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();
-__l5x//lqCuarQQ1ubgdR5kntZV5lkcgA7Sit1Ti/p18I
+__0OawfHyhgURLjqIEi7EJfFeOGTAHM51uJ6RHhQidJ6Q
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>

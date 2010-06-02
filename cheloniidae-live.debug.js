@@ -63,14 +63,13 @@ var cheloniidae = preprocess (d.rebase (function () {
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
-                                                ((t, axis) >$> new t.constructor (t,
-                                                                   {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
+                                                ((t, axis) >$> new t.constructor (t, {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
                   turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),
-                                                                        pen: new cheloniidae.pen({opacity: 1, color: '#808080', size: 0.25}), queue: []}, state || {}),
+                                                                        pen: new cheloniidae.pen({opacity: 0.5, color: '#444', size: 0.5}), queue: []}, state || {}),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
@@ -85,7 +84,7 @@ var cheloniidae = preprocess (d.rebase (function () {
                                                    render:  sort >$> (sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)), this.intermediate_render (0)),
                                       intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ('$1.render($0)'.fn(this)),
                                                                         this.timeout = offset + this.batch < this.queue.length &&
-                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), this.delay || 10), this),
+                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), + this.delay), this),
                                                     slide:  (x, y) >$> (this.pov += (this.forward ^ this.up) * x + this.up * y, this),
                                                      zoom:      z  >$> (this.pov += this.forward * z, this),
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
