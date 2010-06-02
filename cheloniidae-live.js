@@ -82,12 +82,12 @@ var cheloniidae = preprocess (d.rebase (function () {
                                              scale_factor: '@height'.fn(),
                                                    cancel: '@timeout && clearTimeout (@timeout), @timeout = null, $_'.fn(),
                                                    render:  sort >$> (sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)), this.intermediate_render (0)),
-                                      intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ((l >$> l.render (this)).bind (this)),
+                                      intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ('$1.render($0)'.fn(this)),
                                                                         this.timeout = offset + this.batch < this.queue.length &&
-                                                                                       setTimeout (this.intermediate_render.bind (this).fn (i), this.delay || 10), this),
+                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), this.delay || 10), this),
                                                     slide:  (x, y) >$> (this.pov += (this.forward ^ this.up) * x + this.up * y, this),
                                                      zoom:      z  >$> (this.pov += this.forward * z, this),
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
-                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();
+                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();

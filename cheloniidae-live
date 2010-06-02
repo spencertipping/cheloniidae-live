@@ -673,7 +673,7 @@ d.rebase (function () {
 
 __+aLFVY46NOpOtqNazoo+ZfA125kYBXxn+YlZZL1SZ0U
 
-meta::code('lib', <<'__JtIdj48nvhzDNd1bBisEM5tZYJSGr+YGNkm/LcISbaU');
+meta::code('lib', <<'__l5x//lqCuarQQ1ubgdR5kntZV5lkcgA7Sit1Ti/p18I');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -753,16 +753,16 @@ Line rendering.
                                              scale_factor: '@height'.fn(),
                                                    cancel: '@timeout && clearTimeout (@timeout), @timeout = null, $_'.fn(),
                                                    render:  sort >$> (sort && this.queue.sort_by ('$1.depth($0)'.fn (this.pov)), this.intermediate_render (0)),
-                                      intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ((l >$> l.render (this)).bind (this)),
+                                      intermediate_render:  offset >$> (this.queue.slice (offset, offset + this.batch).each ('$1.render($0)'.fn(this)),
                                                                         this.timeout = offset + this.batch < this.queue.length &&
-                                                                                       setTimeout (this.intermediate_render.bind (this).fn (i), this.delay || 10), this),
+                                                                                       setTimeout (this.intermediate_render.bind (this).fn (offset + this.batch), this.delay || 10), this),
                                                     slide:  (x, y) >$> (this.pov += (this.forward ^ this.up) * x + this.up * y, this),
                                                      zoom:      z  >$> (this.pov += this.forward * z, this),
                                                      turn:  angle  >$> (this.pov  = this.pov.about (this.up, angle), this.forward = this.forward.about (this.up, angle), this),
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
-                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();
-__JtIdj48nvhzDNd1bBisEM5tZYJSGr+YGNkm/LcISbaU
+                                                                                                                 this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();
+__l5x//lqCuarQQ1ubgdR5kntZV5lkcgA7Sit1Ti/p18I
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
