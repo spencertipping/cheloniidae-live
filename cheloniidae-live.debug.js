@@ -1,7 +1,7 @@
 // A debugging configuration that annotates Cheloniidae live
 
 d.tracer = console.log.bind (console);
-var watcher    = new d.debug.watcher ({predicate: function (e) {return e.node.xs && e.node.xs.grep(/complement/)}});
+var watcher    = new d.debug.watcher ();
 var preprocess = watcher.annotate.bind (watcher);
 
 // Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly

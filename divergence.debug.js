@@ -9,7 +9,9 @@
 // important. The unrequited log is a stack; when it gets an initialization signal an event is pushed, and when an expression is successfully evaluated an event is popped. Expressions that remain
 // are erroneous or otherwise unevaluated.
 
-// The idea here is that a program evaluates expressions to achieve things. If we have a record of those evaluations, we can mostly reconstruct what the program was doing.
+// There is an interesting problem that arises with invasive debugging like this. If you have method calls such as toString(), which are evaluated automatically upon type coercion, then you could
+// end up with an infinite loop. The best way around this is to first run the problematic code, logging the results, then deactivate the hook, and finally print the queue. This is less convenient
+// than tracing directly, but the advantage is that toString() and any other functions that are run implicitly won't cause the debugger to enter an infinite loop.
 
 d.rebase (function () {
   var t = d.debug = _ >$> d.debug.init (this, arguments), global = this, syn = x >$> new d.rebase.syntax(null, x),
@@ -43,11 +45,18 @@ d.rebase (function () {
 
                             use_logging: _ >$> (global[this.name] = this.hook_function (this.log.bind (this)), this),
                             use_tracing: p >$> (this.predicate = p || this.predicate, global[this.name] = this.hook_function (this.trace.bind (this)), this),
-                     remove_global_hook: function () {delete global[this.name]; this.installed_hook = null; return this},
 
-                          hook_function: destination >$> (this |$> ((w, hook) >$> (hook = (index, value) >$> (value === hook ? w.unrequited.push (w.trace_points[index]) : w.unrequited.pop(),
-                                                                                                              destination (new t.event (w.trace_points[index], value, hook)),
-                                                                                                              value)))),
+                           destroy_hook: function () {delete global[this.name]; this.installed_hook = null; return this},
+                          activate_hook: _ >$> (global[this.name] && (global[this.name].active = true),  this),
+                        deactivate_hook: _ >$> (global[this.name] && (global[this.name].active = false), this),
+                            hook_active: _ >$> (global[this.name] && global[this.name].active),
+
+                          hook_function: destination >$> (this |$> ((w, hook) >$> (hook = (index, value) >$> (hook.active && (
+                                                                                                                value === hook ? w.unrequited.push (w.trace_points[index]) : w.unrequited.pop(),
+                                                                                                                destination (new t.event (w.trace_points[index], value, hook))),
+                                                                                                              value),
+                                                                                   hook.active = true,
+                                                                                   hook))),
 
                           annotate_tree: function (v) {global[this.name] || (this.installed_hook = this.use_logging());
                                                        var $_ = this,  trace_points = this.trace_points = this.trace_points || [],
@@ -71,5 +80,5 @@ d.rebase (function () {
                                annotate: f >$> d.rebase.deparse (this.annotate_local (f)),
                          annotate_local: f >$> this.annotate_tree (d.rebase.parse (f)).toString(),
 
-                                  trace: e >$> (this.predicate(e) && d.trace(e)),
+                                  trace: e >$> ((this, this.hook_active()) |$> ((t, a) >$> (t.deactivate_hook(), t.predicate(e) && d.trace(e), a && t.activate_hook()))),
                                     log: e >$> (e ? this.events << e : this.events.to_array())})})}) ();
