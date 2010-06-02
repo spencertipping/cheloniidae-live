@@ -229,14 +229,15 @@ something most people will normally do. In the future there may be a locking mec
 
 __3uM+GRhsAnxE6BFehM2nkGju4J93JQjqONxKbpE0Cdg
 
-meta::code('debug', <<'__8TgER37xn41VvrtaiFQcIahwuWNaGptE8mHKfgWFPNI');
+meta::code('debug', <<'__jAdv9xOd0TnXLpH+fTii57TrjOueDgRKMz7/9vbKOso');
 A debugging configuration that annotates Cheloniidae live
 
 d.tracer = console.log.bind (console);
-var preprocess = d.debug.trace.fn (function (e) {return e.xs && e.xs.grep(/complement/)});
+var watcher    = new d.debug.watcher ({predicate: function (e) {return e.node.xs && e.node.xs.grep(/complement/)}});
+var preprocess = watcher.annotate.bind (watcher);
 
 :: get lib
-__8TgER37xn41VvrtaiFQcIahwuWNaGptE8mHKfgWFPNI
+__jAdv9xOd0TnXLpH+fTii57TrjOueDgRKMz7/9vbKOso
 
 meta::code('divergence-lib', <<'__qKzrHnT3x3Es1rbotO3zXgu/BFGo4qmtRjXHqNxCJOA');
 Divergence core library | Spencer Tipping <spencer@spencertipping.com>
@@ -305,13 +306,17 @@ var d = (function () {
 
 __qKzrHnT3x3Es1rbotO3zXgu/BFGo4qmtRjXHqNxCJOA
 
-meta::code('divergence.debug-lib', <<'__IbEq7gdSZ+sPuz9b2mjJQ0OI//QELOwMMFQox4+/5uY');
+meta::code('divergence.debug-lib', <<'__BOAWrqAGl3TK0XXCGyq9Oe9z6JfK4tfGUVcILFCMVVM');
 Divergence debug module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
 This debug module enables expression-level debugging and tracing for functions. It records history (controlled by history-recording commands) and lets you replay sequences of events or
 systematically search through them. Note that this can be arbitrarily memory-intensive; recording every single expression that goes through a system is an expensive way to debug things. To
-compensate, there are calls you can make to start and stop tracing as your program is running. You can also set triggers depending on program values and use a sliding window.
+compensate it uses a sliding window that tracks only the last 10000 results. (This can be changed on a per-watcher basis.)
+
+It also keeps track of expressions that are reached but never evaluated. These are stored in an "unrequited" log, which is separate from the main event log since these events are usually more
+important. The unrequited log is a stack; when it gets an initialization signal an event is pushed, and when an expression is successfully evaluated an event is popped. Expressions that remain
+are erroneous or otherwise unevaluated.
 
 The idea here is that a program evaluates expressions to achieve things. If we have a record of those evaluations, we can mostly reconstruct what the program was doing.
 
@@ -326,48 +331,59 @@ d.rebase (function () {
                                                                         catch (e) {tracer ('#{name} (#{c}) threw #{e}'); throw e}},
                                                            {original: f})}});
 
-  d.init (t, {ring_buffer: '@size = $0, @elements = $1 || [], @position = -1'.fn().ctor ({'<<': '@elements[@position = @position + 1 % @size] = $0, $_'.fn(),
-                                                                                    'to_array': '@elements.slice(@position + 1).concat (@elements.slice(0, @position + 1))'.fn()}),
+  d.init (t, {ring_buffer: '@size = $0, @elements = $1 || [], @position = -1'.ctor ({'<<': '@elements[@position = @position + 1 % @size] = $0, $_'.fn(),
+                                                                               'to_array': '@elements.slice(@position + 1).concat (@elements.slice(0, @position + 1))'.fn()}),
                  reserved:  qs('break continue default'),   first_only: qs('.'),
                      stop:  qs('++ -- u++ u-- new'),       second_only: qs('function catch = : += -= *= /= %= ^= |= &= <<= >>= >>>= in'),
                      skip:  qs('{ ( [ , ; ?: case var if while for do switch return throw delete export import try catch finally void with else'),
         protected_resolve:  qs('[! .'),
 
-                    event: '@node = $0, @value = $1, @time = new Date()'.ctor ({toString: _ >$> '(#{this.node}) = (#{this.value}) at #{this.time.getTime()}'}),
+                    event: '@node = $0, @value = $1, @time = new Date(), @hook = $2'.ctor ({toString: _ >$> (this.is_before_evaluation() ?
+                                                                                                              '(#{this.node}) is about to be evaluated' :
+                                                                                                              '(#{this.node}) = (#{this.value}) at #{this.time.getTime()}'),
+                                                                                is_before_evaluation: _ >$> (this.value === this.hook)}),
 
                     trace: (p, f) >$> new t.watcher().use_tracing(f && p).annotate (f || p),
 
-                  watcher: '@name = d.gensym("hook"), @events = new $0.ring_buffer($1 && $1.log_size || 10000), @predicate = $1 && $1.predicate || (0).fn()'.fn(t).ctor ({
-                                   use_logging: _ >$> (global[this.name] = this.hook_function (this.log.bind (this)), this),
-                                   use_tracing: p >$> (this.predicate = p || this.predicate, global[this.name] = this.hook_function (this.trace.bind (this)), this),
-                            remove_global_hook: function () {delete global[this.name]; this.installed_hook = null; return this},
+                  watcher: (options >$> (this.name       = d.gensym ('hook'),
+                                         this.events     = new t.ring_buffer (options && options.event_log_size || 10000),
+                                         this.unrequited = [],
+                                         this.predicate  = options && options.predicate || (0).fn())).ctor ({
 
-                                 hook_function: destination >$> ((index, value) >$> (destination (new t.event (this.trace_points[index], value)), value)).bind (this),
+                            use_logging: _ >$> (global[this.name] = this.hook_function (this.log.bind (this)), this),
+                            use_tracing: p >$> (this.predicate = p || this.predicate, global[this.name] = this.hook_function (this.trace.bind (this)), this),
+                     remove_global_hook: function () {delete global[this.name]; this.installed_hook = null; return this},
 
-                                 annotate_tree: function (v) {global[this.name] || (this.installed_hook = this.use_logging());
-                                                              var $_ = this,  trace_points = this.trace_points = this.trace_points || [],
-                                                                             annotate_node = (s, v) >$> syn('(!') << $_.name << (syn('(') << (syn(',') << (trace_points.push(s) - 1) << v)),
-                                                                         annotate_children =     v  >$> (v.xs ? (v.xs * annotate_tree).fold ((x, y) >$> x << y, syn(v.op)) : v),
-                                                                             annotate_tree =     v  >$> (! v || t.reserved[v] ? v :
-                                                                                                                 t.stop[v.op] ? annotate_node(v, v) :
-                                                                                                                 t.skip[v.op] ? annotate_children(v) :
-                                                                                                           t.first_only[v.op] ? syn(v.op) << annotate_tree(v.xs[0]) << v.xs[1] :
-                                                                                                          t.second_only[v.op] ? syn(v.op) << v.xs[0] << annotate_tree(v.xs[1]) :
-                                                                   v.op == '(!' && v.xs[0] && t.protected_resolve[v.xs[0].op] ? annotate_node (v,
-                                                                                                                                  syn(v.op) << (syn(v.xs[0].op) << annotate_tree(v.xs[0].xs[0]) <<
-                                                                                                                                                                   v.xs[0].xs[1]) <<
-                                                                                                                                               annotate_tree (v.xs[1])) :
-                                                                                                                       ! v.xs ? /^@?[A-Za-z_$][A-Za-z0-9_$]*$/.test(v) ? annotate_node(v, v) : v :
-                                                                                                                                annotate_node (v, annotate_children (v)));
-                                                              return annotate_tree (v)},
+                          hook_function: destination >$> (this |$> ((w, hook) >$> (hook = (index, value) >$> (value === hook ? w.unrequited.push (w.trace_points[index]) : w.unrequited.pop(),
+                                                                                                              destination (new t.event (w.trace_points[index], value, hook)),
+                                                                                                              value)))),
 
-                                      annotate: f >$> d.rebase.deparse (this.annotate_local (f)),
-                                annotate_local: f >$> this.annotate_tree (d.rebase.parse (f)).toString(),
+                          annotate_tree: function (v) {global[this.name] || (this.installed_hook = this.use_logging());
+                                                       var $_ = this,  trace_points = this.trace_points = this.trace_points || [],
+                                                                      annotate_node = (s, v) >$> syn('(') << (syn(',') <<
+                                                                                                   (syn('(!') << $_.name << (syn('(') << (syn(',') << trace_points.length << $_.name))) << 
+                                                                                                   (syn('(!') << $_.name << (syn('(') << (syn(',') << (trace_points.push(s) - 1) << v)))),
+                                                                  annotate_children =     v  >$> (v.xs ? (v.xs * annotate_tree).fold ((x, y) >$> x << y, syn(v.op)) : v),
+                                                                      annotate_tree =     v  >$> (! v || t.reserved[v] ? v :
+                                                                                                          t.stop[v.op] ? annotate_node(v, v) :
+                                                                                                          t.skip[v.op] ? annotate_children(v) :
+                                                                                                    t.first_only[v.op] ? syn(v.op) << annotate_tree(v.xs[0]) << v.xs[1] :
+                                                                                                   t.second_only[v.op] ? syn(v.op) << v.xs[0] << annotate_tree(v.xs[1]) :
+                                                            v.op == '(!' && v.xs[0] && t.protected_resolve[v.xs[0].op] ? annotate_node (v,
+                                                                                                                           syn(v.op) << (syn(v.xs[0].op) << annotate_tree(v.xs[0].xs[0]) <<
+                                                                                                                                                            v.xs[0].xs[1]) <<
+                                                                                                                                        annotate_tree (v.xs[1])) :
+                                                                                                                ! v.xs ? /^@?[A-Za-z_$][A-Za-z0-9_$]*$/.test(v) ? annotate_node(v, v) : v :
+                                                                                                                         annotate_node (v, annotate_children (v)));
+                                                       return annotate_tree (v)},
 
-                                         trace: e >$> (this.predicate(e) && d.trace(e)),
-                                           log: e >$> (e ? this.events << e : this.events.to_array())})})}) ();
+                               annotate: f >$> d.rebase.deparse (this.annotate_local (f)),
+                         annotate_local: f >$> this.annotate_tree (d.rebase.parse (f)).toString(),
 
-__IbEq7gdSZ+sPuz9b2mjJQ0OI//QELOwMMFQox4+/5uY
+                                  trace: e >$> (this.predicate(e) && d.trace(e)),
+                                    log: e >$> (e ? this.events << e : this.events.to_array())})})}) ();
+
+__BOAWrqAGl3TK0XXCGyq9Oe9z6JfK4tfGUVcILFCMVVM
 
 meta::code('divergence.rebase-lib', <<'__WaQoSM5hMIotoujTqinlSgnspTESmZqk1hQOaCrAYDQ');
 Divergence Rebase module | Spencer Tipping <spencer@spencertipping.com>
@@ -648,7 +664,7 @@ d.rebase (function () {
 
 __lBgKp7Zqx5dX8VhI0h599MQ/nuyRVS8f5p/FA8rpZQY
 
-meta::code('lib', <<'__sgZtFcQrWTsStk90VKNDNckTry5u5riYqGzMgKo9t7M');
+meta::code('lib', <<'__VUpgI4mAdbkZaMQ4Vw1W2j2aEl+tezQ+cU0+cIE/m+o');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -676,7 +692,7 @@ Vector geometry.
                                                                                                           b[2] <= 0 ? [a, b.towards (a, (1.0 - b[2]) / (a[2] - b[2]))] : [a, b]),
                                           initialize_context: c >$> (c.save(), c.beginPath(), this.pen.install(c), this),
                                             finalize_context: c >$> (c.stroke(), c.restore(), this),
-                                                      render: v >$> ((this, v.context, adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
+                                                      render: v >$> ((this, v.context, this.adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
                                                                      ((t, c, aps) >$> (aps &&
                                                                        (c |$> t.initialize_context,
                                                                         c.globalAlpha = (cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint ())), c.globalAlpha) |$>
@@ -707,14 +723,14 @@ Turtles.
                             jump: distance >$> (d.trace (this.constructor.original.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
-                           pitch:    angle >$> ((this.direction ^ this.complement) |$>
-                                                (axis >$> new this.constructor (this,
-                                                              {complement: this.complement.about (axis, angle), direction: this.direction.about (axis, angle)})))}),
+                           pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
+                                                ((t, axis) >$> new t.constructor (t,
+                                                                   {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
-                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1), pen: new cheloniidae.pen()}, state || {}),
+                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1), pen: new cheloniidae.pen(), queue: []}, state || {}),
 
 Line rendering.
   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
@@ -736,7 +752,7 @@ Line rendering.
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)))})}})) ();
-__sgZtFcQrWTsStk90VKNDNckTry5u5riYqGzMgKo9t7M
+__VUpgI4mAdbkZaMQ4Vw1W2j2aEl+tezQ+cU0+cIE/m+o
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>

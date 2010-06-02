@@ -30,7 +30,7 @@ var cheloniidae = preprocess (d.rebase (function () {
                                                                                                           b[2] <= 0 ? [a, b.towards (a, (1.0 - b[2]) / (a[2] - b[2]))] : [a, b]),
                                           initialize_context: c >$> (c.save(), c.beginPath(), this.pen.install(c), this),
                                             finalize_context: c >$> (c.stroke(), c.restore(), this),
-                                                      render: v >$> ((this, v.context, adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
+                                                      render: v >$> ((this, v.context, this.adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
                                                                      ((t, c, aps) >$> (aps &&
                                                                        (c |$> t.initialize_context,
                                                                         c.globalAlpha = (cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint ())), c.globalAlpha) |$>
@@ -61,14 +61,14 @@ var cheloniidae = preprocess (d.rebase (function () {
                             jump: distance >$> (d.trace (this.constructor.original.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
-                           pitch:    angle >$> ((this.direction ^ this.complement) |$>
-                                                (axis >$> new this.constructor (this,
-                                                              {complement: this.complement.about (axis, angle), direction: this.direction.about (axis, angle)})))}),
+                           pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
+                                                ((t, axis) >$> new t.constructor (t,
+                                                                   {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
 
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
-                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1), pen: new cheloniidae.pen()}, state || {}),
+                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1), pen: new cheloniidae.pen(), queue: []}, state || {}),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
