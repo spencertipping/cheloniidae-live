@@ -25,7 +25,7 @@ var cheloniidae = preprocess (d.rebase (function () {
 //   defined by Divergence. The vector geometry operators from the original Cheloniidae library are also implemented here.
 
        vector:  v3,
-         line: '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint:     _  >$> (this.a + this.b) / 2.0,
+         line: '@a = $0, @b = $1, @pen = $2'.ctor ({midpoint:     _  >$> (this.a + this.b) * 0.5,
                                                        depth:     v  >$> (v - this.midpoint()).distance(),
                                        adjust_for_positive_z: (a, b) >$> (a[2] <= 0 && b[2] <= 0 ? null : a[2] <= 0 ? [a.towards (b, (1.0 - a[2]) / (b[2] - a[2])), b] :
                                                                                                           b[2] <= 0 ? [a, b.towards (a, (1.0 - b[2]) / (a[2] - b[2]))] : [a, b]),
@@ -34,8 +34,8 @@ var cheloniidae = preprocess (d.rebase (function () {
                                                       render: v >$> ((this, v.context, this.adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
                                                                      ((t, c, aps) >$> (aps &&
                                                                        (c |$> t.initialize_context,
-                                                                        c.globalAlpha = (cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint ())), c.globalAlpha) |$>
-                                                                                        cheloniidae.light_transmission |$> clip,
+                                                                        c.globalAlpha = 1.0 - clip ((cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint())), c.globalAlpha) |$>
+                                                                                                    cheloniidae.light_transmission),
                                                                         c.lineWidth  *= v.scale_factor() / (aps[0][2] + aps[1][2]),
                                                                         v.scale (v.project (aps[0])) |$> (p >$> c.moveTo (p[0], p[1])),
                                                                         v.scale (v.project (aps[1])) |$> (p >$> c.lineTo (p[0], p[1])),
@@ -59,7 +59,7 @@ var cheloniidae = preprocess (d.rebase (function () {
                              pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
-                            jump: distance >$> (d.trace (this.constructor.original.toString()), new this.constructor (this, {position:   this.position + (this.direction * distance)})),
+                            jump: distance >$> new this.constructor (this, {position:   this.position + (this.direction * distance)}),
                             turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
                             bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
                            pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
@@ -69,7 +69,8 @@ var cheloniidae = preprocess (d.rebase (function () {
                      pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
-                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1), pen: new cheloniidae.pen(), queue: []}, state || {}),
+                  turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),
+                                                                        pen: new cheloniidae.pen({opacity: 1, color: '#808080', size: 0.25}), queue: []}, state || {}),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the

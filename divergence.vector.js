@@ -15,7 +15,7 @@ d.rebase (function () {
                                                             {'&': v >$> this * ((this % v) / (v % v)), '|': v >$> this - (this & v), '%': dot (n),
                                                         towards : (v, x) >$> this * (1.0 - x) + v * x,
                                                            unit : _ >$> this / this.distance(),  distance : _ >$> Math.sqrt (this % this),
-                                                           into : _ >$> this.constructor.create.apply (this, d.arr(arguments) * (v >$> this % v.unit())),
+                                                           into : _ >$> this.constructor.create.apply (this, d.arr(arguments) * (v >$> this % v.unit()).bind(this)),
                                                            from : _ >$> range(arguments.length) * (i >$> arguments[i] * this[i]) / ((x, y) >$> x + y),
                                                        toString : _ >$> '<#{Array.prototype.join.call(this, ", ")}>'}),
                                        {create: 'new d.vector[#{n}] (#{(range(n) * (i >$> "$" + i)).join(",")})'.fn()}));

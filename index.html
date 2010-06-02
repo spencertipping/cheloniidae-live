@@ -4,13 +4,13 @@
     <script src='divergence.js'></script>
     <script src='divergence.rebase.js'></script>
     <script src='divergence.debug.js'></script>
+    <script src='divergence.vector.js'></script>
 
     <script>
       d.tracer = console.log.bind (console);
-      d.rebase.init = d.debug.trace.compose (d.rebase.init);
+//      d.rebase.init = d.debug.trace.fn (function (e) {return e.node.xs && e.node.xs.grep(/^'%'$/)}).compose (d.rebase.init);
     </script>
 
-    <script src='divergence.vector.js'></script>
     <script src='cheloniidae-live.js'></script>
   </head>
 
@@ -32,8 +32,8 @@
     <script>
       d.rebase (function () {
         var c  = document.getElementById ('screen');
-        var t  = cheloniidae.turtle ({queue: []}).jump (-80);
-        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (3);
+        var t  = cheloniidae.turtle ().jump (-80);
+        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
         var v  = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
                                             width: 600, height: 350, batch: 50, delay: 0});
         t = cs.fold ('$1($0)', t);
