@@ -36,6 +36,8 @@
       <div>
         <button onclick='run_script(document.getElementById("commands").value)'>Run</button>
       </div>
+      <div id='error-area' style='color:red'></div>
+
       <textarea rows='24' cols='80' id='commands'>jump (-80);
 for (var i = 0; i < 100; ++i) {
   move (160);
@@ -43,9 +45,6 @@ for (var i = 0; i < 100; ++i) {
   pitch (1);
 }
 </textarea>
-
-      <div id='error-area' style='color:red'>
-      </div>
     </div>
 
     <script>
