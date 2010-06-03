@@ -33,9 +33,9 @@
       d.rebase (function () {
         var c  = document.getElementById ('screen');
         var t  = cheloniidae.turtle ().jump (-80);
-        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (200);
+        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
         var v  = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
-                                            width: 600, height: 350, batch: 50, delay: 0});
+                                            width: 600, height: 350, batch: 10, delay: 0});
         t = cs.fold ('$1($0)', t);
 
         c.onmousedown = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
