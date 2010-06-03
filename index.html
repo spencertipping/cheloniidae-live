@@ -5,10 +5,10 @@
     <script src='divergence.rebase.js'></script>
     <script src='divergence.debug.js'></script>
 
-    <script>
+<!--    <script>
       d.tracer = console.log.bind (console);
 //      d.rebase.init = d.debug.trace.compose (d.rebase.init);
-    </script>
+    </script> -->
 
     <script src='divergence.vector.js'></script>
     <script src='cheloniidae-live.js'></script>
@@ -29,26 +29,56 @@
       Chrome</a>.
     </canvas>
 
-    <script>
-      d.rebase (function () {
-        var c  = document.getElementById ('screen');
-        var t  = cheloniidae.turtle ().jump (-80);
-        var cs = ['.move(160)', '.turn(176.0 .degrees())', '.pitch(0.5 .degrees())'].map('.fn()').repeat (100);
-        var v  = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
-                                            width: 600, height: 350, batch: 10, delay: 0});
-        t = cs.fold ('$1($0)', t);
+    <div id='controls'>
+      <h2>Turtle Commands</h2>
+      <p>You can write JavaScript programs to drive the turtle around. Available commands are <code>move(d)</code>, <code>jump(d)</code>, <code>turn(a)</code>, <code>bank(a)</code>, and
+         <code>pitch(a)</code>, where <code>d</code> represents a distance (roughly in pixels) and <code>a</code> represents an angle in degrees.</p>
+      <div>
+        <button onclick='run_script(document.getElementById("commands").value)'>Run</button>
+      </div>
+      <textarea rows='24' cols='80' id='commands'>jump (-80);
+for (var i = 0; i < 100; ++i) {
+  move (160);
+  turn (161);
+  pitch (1);
+}
+</textarea>
 
-        c.onmousedown = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
+      <div id='error-area' style='color:red'>
+      </div>
+    </div>
+
+    <script>
+      var run_script = d.rebase (function (s) {
+        var c = document.getElementById ('screen');
+        var t = cheloniidae.turtle ();
+        var v = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
+                                           width: 600, height: 350, batch: 10, delay: 0});
+        var commands = [];
+
+        var move = d >$> commands << (t >$> t.move (d)),
+            jump = d >$> commands << (t >$> t.jump (d)),
+            turn = a >$> commands << (t >$> t.turn (a.degrees())),
+            bank = a >$> commands << (t >$> t.bank (a.degrees())),
+           pitch = a >$> commands << (t >$> t.pitch(a.degrees()));
+
+        document.getElementById ('error-area').innerHTML = '';
+
+        try       {eval ('(function() {' + s + '}) ()');
+                   t = commands.fold ('$1($0)', t);
+                   v.context.clearRect (0, 0, v.width, v.height),
+                   v.queue = t.queue;
+                   v.render()}
+        catch (e) {document.getElementById ('error-area').innerHTML = e.toString()}
+
+               c.onmousedown = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
         document.onmousemove = e >$> ((c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
                                                                   e.ctrlKey ? v.zoom  (c.y_down - (c.y_down = e.clientY)) :
                                                                               v.slide (c.x_down - (c.x_down = e.clientX), c.y_down - (c.y_down = e.clientY)),
                                                                  v.context.clearRect (0, 0, v.width, v.height),
                                                                  v.cancel ().render (false)));
-        document.onmouseup = e >$> ((c.x_down || c.y_down) && (v.context.clearRect (0, 0, v.width, v.height), v.cancel().render(true)), c.x_down = c.y_down = null);
-
-        v.queue = t.queue;
-        v.render();
-      }) ();
+        document.onmouseup   = e >$> ((c.x_down || c.y_down) && (v.context.clearRect (0, 0, v.width, v.height), v.cancel().render(true)), c.x_down = c.y_down = null);
+      });
     </script>
   </body>
 </html>
