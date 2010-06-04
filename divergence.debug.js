@@ -26,9 +26,9 @@ d.rebase (function () {
 
   d.init (t, {ring_buffer: '@size = $0, @elements = $1 || [], @position = -1'.ctor ({'<<': '@elements[@position = @position + 1 % @size] = $0, $_'.fn(),
                                                                                'to_array': '@elements.slice(@position + 1).concat (@elements.slice(0, @position + 1))'.fn()}),
-                 reserved:  qs('break continue default'),   first_only: qs('.'),
-                     stop:  qs('++ -- u++ u-- new'),       second_only: qs('function catch = : += -= *= /= %= ^= |= &= <<= >>= >>>= in'),
-                     skip:  qs('{ ( [ , ; ?: case var if while for do switch return throw delete export import try catch finally void with else'),
+                 reserved:  qs('break continue default eval'),   first_only: qs('.'),
+                     stop:  qs('++ -- u++ u-- new'),            second_only: qs('function catch = : += -= *= /= %= ^= |= &= <<= >>= >>>= in'),
+                     skip:  qs('{ ( [ , ; ?: case var if while for do switch return throw delete export import try finally void with else'),
         protected_resolve:  qs('[! .'),
 
                     event: '@node = $0, @value = $1, @time = new Date(), @hook = $2'.ctor ({toString: _ >$> (this.is_before_evaluation() ?

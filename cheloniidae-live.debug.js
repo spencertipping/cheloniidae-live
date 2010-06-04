@@ -32,7 +32,7 @@ var cheloniidae = preprocess (d.rebase (function () {
                                           initialize_context: c >$> (c.save(), c.beginPath(), this.pen.install(c), this),
                                             finalize_context: c >$> (c.stroke(), c.restore(), this),
                                                       render: v >$> ((this, v.context, this.adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
-                                                                     ((t, c, aps) >$> (aps &&
+                                                                     ((t, c, aps) >$> (aps && (aps[0] - aps[1]).distance() > 0.1 &&
                                                                        (c |$> t.initialize_context,
                                                                         c.globalAlpha = 1.0 - clip ((cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint())), c.globalAlpha) |$>
                                                                                                     cheloniidae.light_transmission),

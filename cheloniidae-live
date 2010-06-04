@@ -306,7 +306,7 @@ var d = (function () {
 
 __qKzrHnT3x3Es1rbotO3zXgu/BFGo4qmtRjXHqNxCJOA
 
-meta::code('divergence.debug-lib', <<'__STVvavt4OEcpNbBbOcO5rELH+QCwMLA8HCxJ9H8QkXk');
+meta::code('divergence.debug-lib', <<'__G54qyo348/amPvbwypY/mU36PHu8V2Sn3dyAuJ4nwdY');
 Divergence debug module | Spencer Tipping <spencer@spencertipping.com>
 Licensed under the terms of the MIT source code license
 
@@ -335,9 +335,9 @@ d.rebase (function () {
 
   d.init (t, {ring_buffer: '@size = $0, @elements = $1 || [], @position = -1'.ctor ({'<<': '@elements[@position = @position + 1 % @size] = $0, $_'.fn(),
                                                                                'to_array': '@elements.slice(@position + 1).concat (@elements.slice(0, @position + 1))'.fn()}),
-                 reserved:  qs('break continue default'),   first_only: qs('.'),
-                     stop:  qs('++ -- u++ u-- new'),       second_only: qs('function catch = : += -= *= /= %= ^= |= &= <<= >>= >>>= in'),
-                     skip:  qs('{ ( [ , ; ?: case var if while for do switch return throw delete export import try catch finally void with else'),
+                 reserved:  qs('break continue default eval'),   first_only: qs('.'),
+                     stop:  qs('++ -- u++ u-- new'),            second_only: qs('function catch = : += -= *= /= %= ^= |= &= <<= >>= >>>= in'),
+                     skip:  qs('{ ( [ , ; ?: case var if while for do switch return throw delete export import try finally void with else'),
         protected_resolve:  qs('[! .'),
 
                     event: '@node = $0, @value = $1, @time = new Date(), @hook = $2'.ctor ({toString: _ >$> (this.is_before_evaluation() ?
@@ -392,7 +392,7 @@ d.rebase (function () {
                                   trace: e >$> ((this, this.hook_active()) |$> ((t, a) >$> (t.deactivate_hook(), t.predicate(e) && d.trace(e), a && t.activate_hook()))),
                                     log: e >$> (e ? this.events << e : this.events.to_array())})})}) ();
 
-__STVvavt4OEcpNbBbOcO5rELH+QCwMLA8HCxJ9H8QkXk
+__G54qyo348/amPvbwypY/mU36PHu8V2Sn3dyAuJ4nwdY
 
 meta::code('divergence.rebase-lib', <<'__SBlwPWgPo57k7gvzP7vlvvZFxCctCavkbzuL/EeyhOM');
 Divergence Rebase module | Spencer Tipping <spencer@spencertipping.com>
@@ -673,7 +673,7 @@ d.rebase (function () {
 
 __zDbTBwvKkGvky3SfbcSTpzwctIPaiPIKUVLKcxvD9O0
 
-meta::code('lib', <<'__0OawfHyhgURLjqIEi7EJfFeOGTAHM51uJ6RHhQidJ6Q');
+meta::code('lib', <<'__A6jgDbkEHzitLEkdeaeBqpr/JiKwmqp3Ij3t0uyvkMg');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -702,7 +702,7 @@ Vector geometry.
                                           initialize_context: c >$> (c.save(), c.beginPath(), this.pen.install(c), this),
                                             finalize_context: c >$> (c.stroke(), c.restore(), this),
                                                       render: v >$> ((this, v.context, this.adjust_for_positive_z (v.transform (this.a), v.transform (this.b))) |$>
-                                                                     ((t, c, aps) >$> (aps &&
+                                                                     ((t, c, aps) >$> (aps && (aps[0] - aps[1]).distance() > 0.1 &&
                                                                        (c |$> t.initialize_context,
                                                                         c.globalAlpha = 1.0 - clip ((cheloniidae.cylindrical_thickness(aps[0] - aps[1], v.transform (t.midpoint())), c.globalAlpha) |$>
                                                                                                     cheloniidae.light_transmission),
@@ -761,7 +761,7 @@ Line rendering.
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();
-__0OawfHyhgURLjqIEi7EJfFeOGTAHM51uJ6RHhQidJ6Q
+__A6jgDbkEHzitLEkdeaeBqpr/JiKwmqp3Ij3t0uyvkMg
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
