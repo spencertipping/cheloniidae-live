@@ -14,7 +14,9 @@
     <script src='cheloniidae-live.js'></script>
   </head>
 
-  <body style='font-family:sans-serif; font-size: 9pt'>
+  <body style='font-family:sans-serif; font-size: 9pt; margin-left: auto; margin-right: auto; width: 850px'>
+    <h1>Cheloniidae Live</h1>
+
     <div style='float:right'>
       <strong>Mouse commands</strong>
       <ul>
@@ -38,19 +40,35 @@
       </div>
       <div id='error-area' style='color:red'></div>
 
-      <textarea rows='24' cols='80' id='commands'>jump (-80);
-for (var i = 0; i < 100; ++i) {
-  move (160);
-  turn (161);
-  pitch (1);
-}
-</textarea>
+      <div style='float:right'>
+        <strong>Examples</strong>
+        <ul id='examples'></ul>
+      </div>
+      <textarea rows='24' cols='80' id='commands'></textarea>
     </div>
 
     <script>
+      d.rebase (function () {
+        var e = document.getElementById ('examples');
+        var examples = {square: 'r4i {m100 t90}', circle: 'r360i {m1 t1}', spiral: 'r120i {\nmove(i);t60}', dome: 'p60 r120i {\nmove(i);t60 p-2}',
+                         torus: 'r20i {p90 j100 r60j {m6 p6} j-100 p-90 t90 j5 t-90 b18}',
+                     corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}'};
+
+        d.keys (examples) * (k >$> (
+          (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
+            e.appendChild (li), li.appendChild (a), a.appendChild (t), a.href = '#', a.onclick = (_ >$> (
+              document.getElementById ('commands').value = examples[k].replace (/r(\d+)(\w+)/g, (_, n, i) >$> '\nfor (var #{i} = 0; #{i} < #{n}; ++#{i})').
+                                                                       replace (/m([\d-\.]+)/g, (_, n)    >$> '\nmove(#{n});').
+                                                                       replace (/j([\d-\.]+)/g, (_, n)    >$> '\njump(#{n});').
+                                                                       replace (/t([\d-\.]+)/g, (_, n)    >$> '\nturn(#{n});').
+                                                                       replace (/b([\d-\.]+)/g, (_, n)    >$> '\nbank(#{n});').
+                                                                       replace (/p([\d-\.]+)/g, (_, n)    >$> '\npitch(#{n});').
+                                                                       replace (/}/g, '\n}'), false))))));
+      }) ();
+
       var run_script = d.rebase (function (s) {
         var c = document.getElementById ('screen');
-        var t = cheloniidae.turtle ();
+        var t = cheloniidae.turtle ({pen: new cheloniidae.pen ({color: '#444', opacity: 0.8, size: 1})});
         var v = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
                                            width: 600, height: 350, batch: 10, delay: 0});
         var commands = [];
