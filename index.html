@@ -3,12 +3,11 @@
     <title>Cheloniidae Live</title>
     <script src='divergence.js'></script>
     <script src='divergence.rebase.js'></script>
-    <script src='divergence.debug.js'></script>
+<!--    <script src='divergence.debug.js'></script> -->
     <script src='divergence.vector.js'></script>
 
 <!--    <script>
       d.tracer = console.log.bind (console);
-      d.rebase.trace = d.trace;
       d.rebase.init = d.debug.trace.fn (function () {return false}).compose (d.rebase.init);
     </script> -->
 
@@ -51,8 +50,8 @@
     <script>
       d.rebase (function () {
         var e = document.getElementById ('examples');
-        var examples = {square: 'r4i {m100 t90}', circle: 'r360i {m1 t1}', spiral: 'r120i {\nmove(i + 1);t60}', dome: 'p60 r120i {\nmove(i + 1);t60 p-2}',
-                         torus: 'r20i {p90 j100 r60j {m6 p6} j-100 p-90 t90 j5 t-90 b18}',
+        var examples = {square: 'r4i {m100 t90}', circle: 'r360i {m1 t1}', spiral: 'r120i {\nmove(i);t60}', dome: 'p60 r120i {\nmove(i);t60 p-2}',
+                         torus: 'r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}', squares: 'r100i {m100 t89 p2}',
                      corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}'};
 
         d.keys (examples) * (k >$> (
