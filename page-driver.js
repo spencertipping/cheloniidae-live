@@ -1,7 +1,7 @@
 d.rebase (function () {
   var e = document.getElementById ('examples');
   var examples = {square: 'r4i {m100 t90}', circle: 'r360i {m1 t1}', spiral: 'r120i {\nmove(i);t60}', dome: 'p60 r120i {\nmove(i);t60 p-2}',
-                   torus: 'r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}', squares: 'r100i {m100 t89 p2}',
+                   torus: 'r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}', squares: 'r100i {m100 t89 p2}', sphere: 'p60 r20i {p4.5 r40j {m10 p9} p-4.5 t9}',
                corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}'};
 
   d.keys (examples) * (k >$> (
@@ -13,8 +13,7 @@ d.rebase (function () {
                                                                  replace (/t([\d-\.]+)/g, (_, n)    >$> '\nturn(#{n});').
                                                                  replace (/b([\d-\.]+)/g, (_, n)    >$> '\nbank(#{n});').
                                                                  replace (/p([\d-\.]+)/g, (_, n)    >$> '\npitch(#{n});').
-                                                                 replace (/}/g, '\n}'), false))))));
-}) ();
+                                                                 replace (/}/g, '\n}'), false))))))}) ();
 
 var run_script = d.rebase (function (s) {
   var c = document.getElementById ('screen');
@@ -31,7 +30,7 @@ var run_script = d.rebase (function (s) {
 
   document.getElementById ('error-area').innerHTML = '';
 
-  try       {eval ('(function() {' + s.toString() + '}) ()');
+  try       {eval ('(function() {' + s.toString() + '})') ();
              t = commands.fold ('$1($0)', t);
              v.context.clearRect (0, 0, v.width, v.height),
              v.queue = t.queue;
