@@ -2,7 +2,9 @@ d.rebase (function () {
   var e = document.getElementById ('examples');
   var examples = {square: 'r4i {m100 t90}', circle: 'r360i {m1 t1}', spiral: 'r120i {\nmove(i);t60}', dome: 'p60 r120i {\nmove(i);t60 p-2}',
                    torus: 'r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}', squares: 'r100i {m100 t89 p2}', sphere: 'p60 r20i {p4.5 r40j {m10 p9} p-4.5 t9}',
-               corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}'};
+               corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}',
+               
+               'The Ultimate Corkscrew (contributed by mastermind)': 'j-200 p-45 r1300i {b2 r4j {m-30 t90 m100 t90} j1}'};
 
   d.keys (examples) * (k >$> (
     (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
