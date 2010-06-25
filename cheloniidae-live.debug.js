@@ -56,16 +56,17 @@ var cheloniidae = preprocess (d.rebase (function () {
 //   position, direction, etc. all at a moment; you get a new turtle after a line is drawn.
 
        rotational_turtle: merging_constructor(qw('position direction complement pen queue')).ctor ({
-                             pen: patching_constructor ('pen'),
+                        with_pen: patching_constructor ('pen'),
                        draw_line: distance >$> (this.queue.push (new cheloniidae.line (this.position, this.position + (this.direction * distance), this.pen)), this),
                             move: distance >$> this.draw_line (distance).jump (distance),
                             jump: distance >$> new this.constructor (this, {position:   this.position + (this.direction * distance)}),
-                            turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle)}),
-                            bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle)}),
+                            turn:    angle >$> new this.constructor (this, {direction:  this.direction.about (this.complement, angle.degrees())}),
+                            bank:    angle >$> new this.constructor (this, {complement: this.complement.about (this.direction, angle.degrees())}),
                            pitch:    angle >$> ((this, this.direction ^ this.complement) |$>
-                                                ((t, axis) >$> new t.constructor (t, {complement: t.complement.about (axis, angle), direction: t.direction.about (axis, angle)})))}),
+                                                ((t, axis) >$> new t.constructor (t, {complement: t.complement.about (axis, angle.degrees()),
+                                                                                       direction: t.direction.about  (axis, angle.degrees())})))}),
 
-                     pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> p.maps_to (patching_constructor (p))) / d.init, {
+                     pen: qw('color size opacity') |$> (ps >$> merging_constructor(ps).ctor (ps * (p >$> 'with_#{p}'.maps_to (patching_constructor (p))) / d.init, {
                                                                                              install: c >$> (c.globalAlpha = this.opacity, c.strokeStyle = this.color, c.lineWidth = this.size)})),
 
                   turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),

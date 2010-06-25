@@ -4,20 +4,35 @@ d.rebase (function () {
                    torus: 'r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}', squares: 'r100i {m100 t89 p2}', sphere: 'p60 r20i {p4.5 r40j {m10 p9} p-4.5 t9}',
                corkscrew: 'p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}', original: 'j-80 r100i {m160 t161 p1}',
                
-               'The Ultimate Corkscrew (contributed by mastermind)': 'j-200 p-45 r1300i {b2 r4j {m-30 t90 m100 t90} j1}',
+                   'Ultimate Corkscrew (contributed by mastermind)': 'j-200 p-45 r1300i {b2 r4j {m-30 t90 m100 t90} j1}',
                            'Circular Braid (contributed by JamesM)': 'p60 r15i {p4.5 r35j {m10 p9} p-4.5 t9}',
-                            'Five-pointed Star (contributed by JP)': 'j-170 p-30 r500i {b3 r2j {m3 t48 m50 t97} j1}'};
+                   'Five-pointed Spiral Vortex (contributed by JP)': 'j-170 p-30 r500i {b3 r2j {m3 t48 m50 t97} j1}',
+                                   'Donut (contributed by niko TM)': 'p30 r45j {r360i {m1 t1} t8 j2}',
+                                   
+                'Odd-looking Tree (power-user mode)': '// Power-user mode\n' +
+                                                      'var tree = function (t, distance, recursion_level) {\n' +
+                                                      '  if (recursion_level > 0)\n' +
+                                                      '    for (var i = 0; i < 3; ++i)\n' +
+                                                      '      tree (t.pitch (Math.random() * 60 - 30).bank (Math.random() * 180).\n' +
+                                                      '              move (distance * (Math.random() * 0.2 + 0.8)),\n' +
+                                                      '            distance * (Math.random() * 0.5 + 0.4),\n' +
+                                                      '            recursion_level - 1);\n' +
+                                                      '  else t.move (distance * Math.random());\n' +
+                                                      '};\n' +
+                                                      'tree (t.with_pen (t.pen.with_color (\'#797\')).turn(180).jump(-100), 100, 6);'};
 
   d.keys (examples) * (k >$> (
     (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
       e.appendChild (li), li.appendChild (a), a.appendChild (t), a.href = '#', a.onclick = (_ >$> (
-        document.getElementById ('commands').value = examples[k].replace (/r(\d+)(\w+)/g, (_, n, i) >$> '\nfor (var #{i} = 0; #{i} < #{n}; ++#{i})').
-                                                                 replace (/m([\d-\.]+)/g, (_, n)    >$> '\nmove(#{n});').
-                                                                 replace (/j([\d-\.]+)/g, (_, n)    >$> '\njump(#{n});').
-                                                                 replace (/t([\d-\.]+)/g, (_, n)    >$> '\nturn(#{n});').
-                                                                 replace (/b([\d-\.]+)/g, (_, n)    >$> '\nbank(#{n});').
-                                                                 replace (/p([\d-\.]+)/g, (_, n)    >$> '\npitch(#{n});').
-                                                                 replace (/}/g, '\n}'), false))))))}) ();
+        run_script (document.getElementById ('commands').value = examples[k].indexOf ('// Power-user mode') === 0 ? examples[k] :
+                                                                 examples[k].replace (/r(\d+)(\w+)/g,     (_, n, i) >$> '\nfor (var #{i} = 0; #{i} < #{n}; ++#{i})').
+                                                                             replace (/m(-?\d[\d-\.]*)/g, (_, n)    >$> '\nmove(#{n});').
+                                                                             replace (/j(-?\d[\d-\.]*)/g, (_, n)    >$> '\njump(#{n});').
+                                                                             replace (/t(-?\d[\d-\.]*)/g, (_, n)    >$> '\nturn(#{n});').
+                                                                             replace (/b(-?\d[\d-\.]*)/g, (_, n)    >$> '\nbank(#{n});').
+                                                                             replace (/p(-?\d[\d-\.]*)/g, (_, n)    >$> '\npitch(#{n});').
+                                                                             replace (/}/g, '\n}')),
+        false))))))}) ();
 
 var run_script = d.rebase (function (s) {
   var c = document.getElementById ('screen');
@@ -28,9 +43,9 @@ var run_script = d.rebase (function (s) {
 
   var move = d >$> commands << (t >$> t.move (d)),
       jump = d >$> commands << (t >$> t.jump (d)),
-      turn = a >$> commands << (t >$> t.turn (a.degrees())),
-      bank = a >$> commands << (t >$> t.bank (a.degrees())),
-     pitch = a >$> commands << (t >$> t.pitch(a.degrees()));
+      turn = a >$> commands << (t >$> t.turn (a)),
+      bank = a >$> commands << (t >$> t.bank (a)),
+     pitch = a >$> commands << (t >$> t.pitch(a));
 
   document.getElementById ('error-area').innerHTML = '';
 
