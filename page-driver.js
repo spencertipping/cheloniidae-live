@@ -39,19 +39,17 @@ var run_script = d.rebase (function (s) {
   var t = cheloniidae.turtle ({pen: new cheloniidae.pen ({color: '#444', opacity: 0.6, size: 1})});
   var v = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
                                      width: 600, height: 350, batch: 10, delay: 0});
-  var commands = [];
 
-  var move = d >$> commands << (t >$> t.move (d)),
-      jump = d >$> commands << (t >$> t.jump (d)),
-      turn = a >$> commands << (t >$> t.turn (a)),
-      bank = a >$> commands << (t >$> t.bank (a)),
-     pitch = a >$> commands << (t >$> t.pitch(a));
+  var move = d >$> (t = t.move (d)),
+      jump = d >$> (t = t.jump (d)),
+      turn = a >$> (t = t.turn (a)),
+      bank = a >$> (t = t.bank (a)),
+     pitch = a >$> (t = t.pitch(a));
 
   document.getElementById ('error-area').innerHTML = '';
 
   try       {eval ('(function() {' + s.toString() + '})') ();
-             t = commands.fold ('$1($0)', t);
-             v.context.clearRect (0, 0, v.width, v.height),
+             v.cancel().context.clearRect (0, 0, v.width, v.height),
              v.queue = t.queue;
              v.render()}
   catch (e) {document.getElementById ('error-area').innerHTML = e.toString()}
