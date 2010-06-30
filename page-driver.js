@@ -19,7 +19,14 @@ d.rebase (function () {
                                                       '            recursion_level - 1);\n' +
                                                       '  else t.move (distance * Math.random());\n' +
                                                       '};\n' +
-                                                      'tree (t.with_pen (t.pen.with_color (\'#797\')).turn(180).jump(-100), 100, 6);'};
+                                                      'tree (t.with_pen (t.pen.with_color (\'#797\')).turn(180).jump(-100), 100, 6);',
+                                                      
+                'Weird Spiral Ladder Thing (power-user mode, contributed by Invisible Bob)': '// Power-user mode\n' +
+                                                                                             'for (var i = 0; i < 1000; i++) {\n' +
+                                                                                             '  t = t.move (10);\n' +
+                                                                                             '  t = t.pitch (i);\n' +
+                                                                                             '  t = t.turn (i);\n' +
+                                                                                             '}'};
 
   d.keys (examples) * (k >$> (
     (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
