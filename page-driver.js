@@ -26,7 +26,13 @@ d.rebase (function () {
                                                                                              '  t = t.move (10);\n' +
                                                                                              '  t = t.pitch (i);\n' +
                                                                                              '  t = t.turn (i);\n' +
-                                                                                             '}'};
+                                                                                             '}',
+                                                                                             
+                    'Star (power-user mode, contributed by Ümit Coşkun Aydınoğlu': '// Power-user mode\n' +
+                                                                                   'for (var i = 0; i < 300; i++) {\n' +
+                                                                                   '  t = t.move (i);\n\n' +
+                                                                                   '  t = t.turn (100);\n' +
+                                                                                   '}'};
 
   d.keys (examples) * (k >$> (
     (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
