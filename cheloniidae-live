@@ -673,7 +673,7 @@ d.rebase (function () {
 
 __zDbTBwvKkGvky3SfbcSTpzwctIPaiPIKUVLKcxvD9O0
 
-meta::code('lib', <<'__GUwAZ6nXdDoWENzmoDeTGNHkXP3gZa+8fzToVlX4Ao0');
+meta::code('lib', <<'__ExTLdwqC73ABnI7AUgVuoP0/JLy93ED3LHp0isN9XRE');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -742,6 +742,14 @@ Turtles.
                   turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),
                                                                         pen: new cheloniidae.pen({opacity: 0.5, color: '#444', size: 0.5}), queue: []}, state || {}),
 
+Mutable turtle shell.
+  Working with immutable turtles can be a bit cumbersome, so there's also a shell interface that internally manages the immutable one. All of the API calls are identical to the ones for
+  rotational_turtle, except for the addition of a clone() method to create a copy.
+
+      mutable_rotational_turtle: (method >$> (_ >$> (this.turtle = this.turtle[method].apply (this.turtle, arguments), this))) |$>
+                                 (proxy_for >$> '@turtle = $0'.ctor (qw('move jump turn pitch bank with_pen') * (k >$> k.maps_to (proxy_for (k))) / d.init,
+                                                                     {clone: _ >$> new this.constructor (this.turtle)})),
+
 Line rendering.
   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
   screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.
@@ -762,7 +770,7 @@ Line rendering.
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();
-__GUwAZ6nXdDoWENzmoDeTGNHkXP3gZa+8fzToVlX4Ao0
+__ExTLdwqC73ABnI7AUgVuoP0/JLy93ED3LHp0isN9XRE
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>

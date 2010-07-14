@@ -72,6 +72,14 @@ var cheloniidae = preprocess (d.rebase (function () {
                   turtle: state >$> new cheloniidae.rotational_turtle ({position: v3(0, 0, 0), direction: v3(0, 1, 0), complement: v3(0, 0, -1),
                                                                         pen: new cheloniidae.pen({opacity: 0.5, color: '#444', size: 0.5}), queue: []}, state || {}),
 
+// Mutable turtle shell.
+//   Working with immutable turtles can be a bit cumbersome, so there's also a shell interface that internally manages the immutable one. All of the API calls are identical to the ones for
+//   rotational_turtle, except for the addition of a clone() method to create a copy.
+
+      mutable_rotational_turtle: (method >$> (_ >$> (this.turtle = this.turtle[method].apply (this.turtle, arguments), this))) |$>
+                                 (proxy_for >$> '@turtle = $0'.ctor (qw('move jump turn pitch bank with_pen') * (k >$> k.maps_to (proxy_for (k))) / d.init,
+                                                                     {clone: _ >$> new this.constructor (this.turtle)})),
+
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
 //   screen. Because Cheloniidae is a high-capacity turtle system, we allow the user to interrupt the rendering process; in JavaScript, this means using continuations separated by timeouts.

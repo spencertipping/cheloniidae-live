@@ -94,7 +94,7 @@ d.rebase (function () {
 
 var run_script = d.rebase (function (s) {
   var c = document.getElementById ('screen');
-  var t = cheloniidae.turtle ({pen: new cheloniidae.pen ({color: '#444', opacity: 0.6, size: 1})});
+  var t = new cheloniidae.mutable_rotational_turtle (cheloniidae.turtle ({pen: new cheloniidae.pen ({color: '#444', opacity: 0.6, size: 1})}));
   var v = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
                                      width: 600, height: 350, batch: 10, delay: 0});
 
@@ -108,7 +108,7 @@ var run_script = d.rebase (function (s) {
 
   try       {eval ('(function() {' + s.toString() + '})') ();
              v.cancel().context.clearRect (0, 0, v.width, v.height),
-             v.queue = t.queue;
+             v.queue = t.turtle.queue;
              v.render()}
   catch (e) {document.getElementById ('error-area').innerHTML = e.toString()}
 
