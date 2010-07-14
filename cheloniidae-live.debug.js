@@ -77,8 +77,8 @@ var cheloniidae = preprocess (d.rebase (function () {
 //   rotational_turtle, except for the addition of a clone() method to create a copy.
 
       mutable_rotational_turtle: (method >$> (_ >$> (this.turtle = this.turtle[method].apply (this.turtle, arguments), this))) |$>
-                                 (proxy_for >$> '@turtle = $0'.ctor (qw('move jump turn pitch bank with_pen') * (k >$> k.maps_to (proxy_for (k))) / d.init,
-                                                                     {clone: _ >$> new this.constructor (this.turtle)})),
+                                 (proxy_for >$> '@turtle = $0, @pen = @turtle.pen, @queue = @turtle.queue'.ctor (
+                                   qw('move jump turn pitch bank with_pen') * (k >$> k.maps_to (proxy_for (k))) / d.init, {clone: _ >$> new this.constructor (this.turtle)})),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the

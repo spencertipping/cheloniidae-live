@@ -21,11 +21,11 @@ d.rebase (function () {
                                                       'var tree = function (t, distance, recursion_level) {\n' +
                                                       '  if (recursion_level > 0)\n' +
                                                       '    for (var i = 0; i < 3; ++i)\n' +
-                                                      '      tree (t.pitch (Math.random() * 60 - 30).bank (Math.random() * 180).\n' +
+                                                      '      tree (t.clone().pitch (Math.random() * 60 - 30).bank (Math.random() * 180).\n' +
                                                       '              move (distance * (Math.random() * 0.2 + 0.8)),\n' +
                                                       '            distance * (Math.random() * 0.5 + 0.4),\n' +
                                                       '            recursion_level - 1);\n' +
-                                                      '  else t.move (distance * Math.random());\n' +
+                                                      '  else t.clone().move (distance * Math.random());\n' +
                                                       '};\n' +
                                                       'tree (t.with_pen (t.pen.with_color (\'#797\')).turn(180).jump(-100), 100, 6);',
                                                       
