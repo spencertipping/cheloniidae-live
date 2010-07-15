@@ -75,9 +75,12 @@ var cheloniidae = preprocess (d.rebase (function () {
 //   Working with immutable turtles can be a bit cumbersome, so there's also a shell interface that internally manages the immutable one. All of the API calls are identical to the ones for
 //   rotational_turtle, except for the addition of a clone() method to create a copy.
 
-      mutable_rotational_turtle: (method >$> (_ >$> (this.turtle = this.turtle[method].apply (this.turtle, arguments), this))) |$>
-                                 (proxy_for >$> '@turtle = $0, @pen = @turtle.pen, @queue = @turtle.queue'.ctor (
-                                   qw('move jump turn pitch bank with_pen') * (k >$> k.maps_to (proxy_for (k))) / d.init, {clone: _ >$> new this.constructor (this.turtle)})),
+      mutable_rotational_turtle: (method >$> (_ >$> (this.turtle = this.turtle[method].apply (this.turtle, arguments), this)),
+                                  method >$> (_ >$> (this.turtle = this.turtle.with_pen (this.pen = this.pen[method].apply (this.pen, arguments)), this)),
+                                  (methods, transform) >$> qw(methods) * (k >$> k.maps_to (transform (k))) / d.init) |$>
+                                 ((proxy_for, pen_proxy_for, method_group) >$> '@turtle = $0, @pen = @turtle.pen, @queue = @turtle.queue'.ctor (
+                                   method_group('move jump turn pitch bank with_pen', proxy_for), method_group('with_color with_opacity with_size', pen_proxy_for),
+                                   {clone: _ >$> new this.constructor (this.turtle)})),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
