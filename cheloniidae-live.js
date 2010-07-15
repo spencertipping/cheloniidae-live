@@ -80,7 +80,8 @@ var cheloniidae = preprocess (d.rebase (function () {
                                   (methods, transform) >$> qw(methods) * (k >$> k.maps_to (transform (k))) / d.init) |$>
                                  ((proxy_for, pen_proxy_for, method_group) >$> '@turtle = $0, @pen = @turtle.pen, @queue = @turtle.queue'.ctor (
                                    method_group('move jump turn pitch bank with_pen', proxy_for), method_group('with_color with_opacity with_size', pen_proxy_for),
-                                   {clone: _ >$> new this.constructor (this.turtle)})),
+                                   {clone: _ >$> new this.constructor (this.turtle)},
+                                   {with_pen: obj >$> (this.turtle = this.turtle.with_pen (this.pen = new cheloniidae.pen (this.pen, obj)), this)})),
 
 // Line rendering.
 //   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
