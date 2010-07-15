@@ -673,7 +673,7 @@ d.rebase (function () {
 
 __zDbTBwvKkGvky3SfbcSTpzwctIPaiPIKUVLKcxvD9O0
 
-meta::code('lib', <<'__TrFGn1/fxj7a4qPe71cdxadsdFwND2fZbpmDgvr83Kc');
+meta::code('lib', <<'__a53hGlM51JI3gfQMpsJ6AH4kQDATXRri09zZIcNkk4k');
 Cheloniidae Live is designed to render onto the HTML5 <canvas> element in much the same way that the current Java version uses the AWT to render shapes. Because JavaScript supports nearly
 uniform abstraction, there are far fewer layers of abstraction here than there are in the original. Most of the code originally represented by interfaces is now just encapsulated into
 functions. This impacts turtle commands, predicates, transforms, render actions, and a host of other things that are really just functions.
@@ -751,7 +751,8 @@ Mutable turtle shell.
                                   (methods, transform) >$> qw(methods) * (k >$> k.maps_to (transform (k))) / d.init) |$>
                                  ((proxy_for, pen_proxy_for, method_group) >$> '@turtle = $0, @pen = @turtle.pen, @queue = @turtle.queue'.ctor (
                                    method_group('move jump turn pitch bank with_pen', proxy_for), method_group('with_color with_opacity with_size', pen_proxy_for),
-                                   {clone: _ >$> new this.constructor (this.turtle)})),
+                                   {clone: _ >$> new this.constructor (this.turtle)},
+                                   {with_pen: obj >$> (this.turtle = this.turtle.with_pen (this.pen = new cheloniidae.pen (this.pen, obj)))})),
 
 Line rendering.
   We can render lines onto a canvas by transforming them into the viewspace, depth-sorting, projecting their endpoints (since projection preserves straight edges), and rendering them to the
@@ -773,7 +774,7 @@ Line rendering.
                                                     pitch:  angle  >$> ((this.forward ^ this.up) |$> (right >$> (this.pov     = this.pov.about     (right, angle),
                                                                                                                  this.forward = this.forward.about (right, angle).unit(),
                                                                                                                  this.up      = this.up.about      (right, angle).unit(), this)).bind (this))})}})) ();
-__TrFGn1/fxj7a4qPe71cdxadsdFwND2fZbpmDgvr83Kc
+__a53hGlM51JI3gfQMpsJ6AH4kQDATXRri09zZIcNkk4k
 
 meta::code('main', <<'__Uoi4zwPLtOi9Wk0CDY9sgowws7OI6tmAMWwgaN3ydj8');
 Cheloniidae Live | Spencer Tipping <spencer@spencertipping.com>
