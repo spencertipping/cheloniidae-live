@@ -1,0 +1,7 @@
+// Weird Spiral Ladder Thing | Invisible Bob
+
+for (var i = 0; i < 1000; i++) {
+  t.move (10);
+  t.pitch (i);
+  t.turn (i);
+}

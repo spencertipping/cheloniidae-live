@@ -1,0 +1,8 @@
+// Dome
+
+t.pitch(60); 
+for (var i = 0; i < 120; ++i) {
+  t.move(i);
+  t.turn(60);
+  t.pitch(-2);
+}

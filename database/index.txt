@@ -1,0 +1,427 @@
+{
+   "standard" : "Standard",
+   "contributions" : "Contributed"
+}
+EOF
+contributions/3d-cube
+// 3D Cube | Casey Roach
+
+var squareFace = function(w,h){
+  t.move(w);
+  t.turn(90);
+  t.move(h);
+  t.turn(90);
+  t.move(w);
+  t.turn(90);
+  t.move(h);
+  t.turn(90);
+};
+
+var moveBy = function(x,y){
+  t.jump(-x);
+  t.turn(90);
+  t.jump(-y);
+  t.turn(-90);
+};
+
+var cube = function(w,h,d){
+  squareFace(w,h);
+  t.pitch(90);
+  squareFace(w,h);
+  moveBy(-w,0);
+  t.pitch(-90);
+  squareFace(w,h);
+  moveBy(-w,0);
+  t.pitch(-90);
+  squareFace(w,h);
+};
+
+t.pitch(30);
+t.bank(30);
+cube(100,100);
+EOF
+contributions/circular-braid
+// Circular Braid | JamesM
+
+t.pitch(60); 
+for (var i = 0; i < 15; ++i) {
+  t.pitch(4.5); 
+  for (var j = 0; j < 35; ++j) {
+    t.move(10); 
+    t.pitch(9);
+  } 
+  t.pitch(-4.5); 
+  t.turn(9);
+}
+EOF
+contributions/donut
+// Donut | niko TM
+
+t.pitch(30); 
+for (var j = 0; j < 45; ++j) {
+  for (var i = 0; i < 360; ++i) {
+    t.move(1); 
+    t.turn(1);
+  } 
+  t.turn(8); 
+  t.jump(2);
+}
+EOF
+contributions/dragon-curve
+// Dragon Curve | Casey Roach
+
+var dragon = function(length, iterations,angle){
+  if(iterations == 1)
+    t.move(length);
+  else{
+    dragon(length, iterations-1,90);
+    t.turn(-angle);
+    dragon(length, iterations-1,-90);
+  }
+}
+
+t.jump(100);
+dragon(3,14,90);
+EOF
+contributions/five-pointed-spiral-vortex
+// Five Pointed Spiral Vortex | JP
+
+t.jump(-170); 
+t.pitch(-30); 
+for (var i = 0; i < 500; ++i) {
+  t.bank(3); 
+  for (var j = 0; j < 2; ++j) {
+    t.move(3); 
+    t.turn(48); 
+    t.move(50); 
+    t.turn(97);
+  } 
+  t.jump(1);
+}
+EOF
+contributions/hilbert-curve
+// Hilbert Curve | Casey Roach
+
+var hilbert = function(n,a,h){
+  if(n == 0)
+    return;
+  t.turn(a);
+  hilbert(n-1, -a, h);
+  t.move(h);
+
+  t.turn(-a);
+  hilbert(n-1,a,h);
+  t.move(h);
+
+  hilbert(n-1,a,h);
+  t.turn(-a);
+  t.move(h);
+
+  hilbert(n-1,-a,h);
+  t.turn(a);
+};
+
+t.jump(-200);
+t.turn(-90);
+t.jump(-300);
+hilbert(6,90,10);
+EOF
+contributions/koch-snowflake
+// Koch Snowflake | Casey Roach
+
+var snowFlake = function(length, iterations){
+  t.turn(120);
+  koch(length, iterations);
+  t.turn(-120);
+  koch(length, iterations);
+  t.turn(-120);
+  koch(length, iterations);
+}
+
+var koch = function(length,iterations){
+  if(iterations==1)
+  t.move(length);
+  else{
+    koch(length, iterations-1);
+    t.turn(60);
+    koch(length, iterations-1);
+    t.turn(-120);
+    koch(length, iterations-1);
+    t.turn(60);
+    koch(length, iterations-1);
+  }
+};
+
+snowFlake(3,5);
+EOF
+contributions/pythagoras-tree
+// Pythagoras Tree | Casey Roach
+
+var pythagoras = function(n,a,h,k){
+  if(n == 0)
+    return;
+  var factor = a*Math.sqrt(2)*0.5;
+  t.move(a);
+  t.turn(-45);
+  pythagoras(n-1,factor,h,k);
+  t.turn(135);
+  t.move(a);
+  t.turn(-135);
+  t.jump(factor);
+  t.turn(90);
+  pythagoras(n-1,a*Math.sqrt(2)*0.5,h,k);
+  t.turn(90);
+  t.jump(factor);
+  t.turn(45);
+  t.move(a);
+  t.turn(90);
+  t.move(a);
+  t.turn(90);
+};
+
+t.jump(160);
+t.turn(90);
+t.jump(40);
+t.turn(90);
+pythagoras(10,90,1,10);
+EOF
+contributions/random-circles
+// Random Circles | Casey Roach
+
+temp = t.clone();
+
+var circle = function(radius){
+  // determines the 'scaling' for the circle
+  var rads = radius*Math.PI/180;
+  for(var i = 0; i < 360; i++){
+    t.move(rads);
+    t.turn(1);
+  }
+};
+
+// allows us to move to a specific coordinate.
+// with x increasing to the right and y increasing going up
+var moveTo = function(x,y){
+  t=temp.jump(-y);
+  t.turn(90);
+  t.jump(-x);
+  t.turn(-90);
+};
+
+for(var i = 0; i < 30; ++i){
+  // random radius
+  var r = Math.floor(Math.random()*50);
+
+  // determine the direction of movement
+  var negX = ((Math.floor(Math.random()*3))%2==0)?-1:1;
+  var negY = ((Math.floor(Math.random()*3))%2==0)?-1:1;
+
+  // attempt to keep the circles inside the viewport
+  var x1 = negX*(Math.floor(Math.random()*v.width/2)-r);
+  var y1 = negY*(Math.floor(Math.random()*v.height/2)-r);
+  moveTo(x1,y1);
+
+  circle(r);
+}
+EOF
+contributions/random-image-generator
+// Random Image Generator | Casey Roach
+
+var poly = function(step, angle){
+  if(step == 0) return;
+  t.move(step);
+  t.turn(angle);
+  poly(step-1,angle);
+}
+
+var r = Math.random()*500;
+poly(100,r);
+EOF
+contributions/sierpinski
+// Sierpinski | Casey Roach
+
+var sierpinski = function(n,length){ 
+  if(n == 0) return;
+  for(var i = 0; i < 3; ++i){
+    sierpinski(n-1,length/2);
+    t.move(length);
+    t.turn(-120);
+  }
+};
+
+sierpinski(7,200);
+EOF
+contributions/sierpinski-curve
+// Sierpinski Curve | Casey Roach
+
+var sier = function(n,a,h,k){
+  if(n == 0)
+    return;
+  t.turn (-a);
+  sier(n-1, -a, h, k);
+  t.turn(a);
+  t.move(h);
+
+  t.turn(a);
+  sier(n-1,-a,h,k);
+  t.turn(-a);
+};
+
+t.jump(-160);
+t.turn(90);
+t.jump(70);
+var h = 12/Math.sqrt(2);
+
+for(var i = 0; i < 4; i++)
+{
+  sier(7,45,h,10);
+  t.turn(-45);
+  t.move(h);
+  t.turn(-45);
+}
+EOF
+contributions/spirals
+// Spirals | Casey Roach
+
+for (var i = 0; i < 4; i++)
+{
+  for (var x = 1; x < 100; x++)
+  {
+    t.move(10);
+    t.turn(-(100-x));
+  }
+}
+EOF
+contributions/star
+// Star | Ümit Coşkun Aydınoğlu
+
+for (var i = 0; i < 300; i++) {
+  t.move (i);
+  t.turn (100);
+}
+EOF
+contributions/ultimate-corkscrew
+// Ultimate Corkscrew | mastermind
+
+t.jump(-200); 
+t.pitch(-45); 
+for (var i = 0; i < 1300; ++i) {
+  t.bank(2); 
+  for (var j = 0; j < 4; ++j) {
+    t.move(-30); 
+    t.turn(90); 
+    t.move(100); 
+    t.turn(90);
+  } 
+  t.jump(1);
+}
+EOF
+contributions/weird-spiral-ladder-thing
+// Weird Spiral Ladder Thing | Invisible Bob
+
+for (var i = 0; i < 1000; i++) {
+  t.move (10);
+  t.pitch (i);
+  t.turn (i);
+}
+EOF
+standard/circle
+// Circle
+
+for (var i = 0; i < 360; ++i) {
+  t.move(1); 
+  t.turn(1);
+}
+EOF
+standard/corkscrew
+// Corkscrew
+
+t.pitch(-30); 
+for (var i = 0; i < 50; ++i) {
+  t.bank(5); 
+  for (var j = 0; j < 2; ++j) {
+    t.move(10); 
+    t.turn(90); 
+    t.move(100); 
+    t.turn(90);
+  } 
+  t.jump(10);
+}
+EOF
+standard/dome
+// Dome
+
+t.pitch(60); 
+for (var i = 0; i < 120; ++i) {
+  t.move(i);
+  t.turn(60);
+  t.pitch(-2);
+}
+EOF
+standard/sphere
+// Sphere
+
+t.jump(85).pitch(60); 
+for (var i = 0; i < 20; ++i) {
+  t.pitch(4.5); 
+  for (var j = 0; j < 40; ++j) {
+    t.move(15).pitch(9);
+  } 
+  t.pitch(-4.5).turn(9);
+}
+EOF
+standard/spiral
+// Spiral
+
+for (var i = 0; i < 120; ++i) {
+  t.move(i).turn(60);
+}
+EOF
+standard/square
+// Square
+
+for (var i = 0; i < 4; ++i) {
+  t.move(100).turn(90);
+}
+EOF
+standard/squares
+// Squares
+
+for (var i = 0; i < 100; ++i) {
+  t.move(100).turn(89).pitch(2);
+}
+EOF
+standard/star
+// Star
+
+t.jump(-80); 
+for (var i = 0; i < 100; ++i) {
+  t.move(160).turn(161).pitch(1);
+}
+EOF
+standard/torus
+// Torus
+
+for (var i = 0; i < 40; ++i) {
+  t.pitch(90).jump(100); 
+  for (var j = 0; j < 30; ++j) {
+    t.move(12).pitch(12);
+  } 
+  t.jump(-100).pitch(-90).turn(90); 
+  t.jump(5).turn(-90).bank(9);
+}
+EOF
+standard/tree
+// Tree
+
+var tree = function (t, distance, recursion_level) {
+  if (recursion_level > 0)
+    for (var i = 0; i < 3; ++i)
+      tree (t.clone().pitch (Math.random() * 60 - 30).bank (Math.random() * 180).
+          move (distance * (Math.random() * 0.2 + 0.8)),
+          distance * (Math.random() * 0.5 + 0.4),
+          recursion_level - 1);
+  else t.clone().move (distance * Math.random());
+};
+tree ((t.with_color ('#797')).turn(180).jump(-100), 100, 6);
+EOF

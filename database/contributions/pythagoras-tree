@@ -1,0 +1,29 @@
+// Pythagoras Tree | Casey Roach
+
+var pythagoras = function(n,a,h,k){
+  if(n == 0)
+    return;
+  var factor = a*Math.sqrt(2)*0.5;
+  t.move(a);
+  t.turn(-45);
+  pythagoras(n-1,factor,h,k);
+  t.turn(135);
+  t.move(a);
+  t.turn(-135);
+  t.jump(factor);
+  t.turn(90);
+  pythagoras(n-1,a*Math.sqrt(2)*0.5,h,k);
+  t.turn(90);
+  t.jump(factor);
+  t.turn(45);
+  t.move(a);
+  t.turn(90);
+  t.move(a);
+  t.turn(90);
+};
+
+t.jump(160);
+t.turn(90);
+t.jump(40);
+t.turn(90);
+pythagoras(10,90,1,10);

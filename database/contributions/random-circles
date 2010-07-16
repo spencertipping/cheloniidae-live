@@ -1,0 +1,37 @@
+// Random Circles | Casey Roach
+
+temp = t.clone();
+
+var circle = function(radius){
+  // determines the 'scaling' for the circle
+  var rads = radius*Math.PI/180;
+  for(var i = 0; i < 360; i++){
+    t.move(rads);
+    t.turn(1);
+  }
+};
+
+// allows us to move to a specific coordinate.
+// with x increasing to the right and y increasing going up
+var moveTo = function(x,y){
+  t=temp.jump(-y);
+  t.turn(90);
+  t.jump(-x);
+  t.turn(-90);
+};
+
+for(var i = 0; i < 30; ++i){
+  // random radius
+  var r = Math.floor(Math.random()*50);
+
+  // determine the direction of movement
+  var negX = ((Math.floor(Math.random()*3))%2==0)?-1:1;
+  var negY = ((Math.floor(Math.random()*3))%2==0)?-1:1;
+
+  // attempt to keep the circles inside the viewport
+  var x1 = negX*(Math.floor(Math.random()*v.width/2)-r);
+  var y1 = negY*(Math.floor(Math.random()*v.height/2)-r);
+  moveTo(x1,y1);
+
+  circle(r);
+}

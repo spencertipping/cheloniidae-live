@@ -1,0 +1,6 @@
+// Star
+
+t.jump(-80); 
+for (var i = 0; i < 100; ++i) {
+  t.move(160).turn(161).pitch(1);
+}

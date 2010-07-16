@@ -1,0 +1,5 @@
+// Square
+
+for (var i = 0; i < 4; ++i) {
+  t.move(100).turn(90);
+}

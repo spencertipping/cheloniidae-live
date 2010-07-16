@@ -1,0 +1,13 @@
+// Corkscrew
+
+t.pitch(-30); 
+for (var i = 0; i < 50; ++i) {
+  t.bank(5); 
+  for (var j = 0; j < 2; ++j) {
+    t.move(10); 
+    t.turn(90); 
+    t.move(100); 
+    t.turn(90);
+  } 
+  t.jump(10);
+}

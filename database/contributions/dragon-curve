@@ -1,0 +1,14 @@
+// Dragon Curve | Casey Roach
+
+var dragon = function(length, iterations,angle){
+  if(iterations == 1)
+    t.move(length);
+  else{
+    dragon(length, iterations-1,90);
+    t.turn(-angle);
+    dragon(length, iterations-1,-90);
+  }
+}
+
+t.jump(100);
+dragon(3,14,90);

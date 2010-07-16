@@ -1,0 +1,14 @@
+// Ultimate Corkscrew | mastermind
+
+t.jump(-200); 
+t.pitch(-45); 
+for (var i = 0; i < 1300; ++i) {
+  t.bank(2); 
+  for (var j = 0; j < 4; ++j) {
+    t.move(-30); 
+    t.turn(90); 
+    t.move(100); 
+    t.turn(90);
+  } 
+  t.jump(1);
+}

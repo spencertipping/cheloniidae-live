@@ -1,0 +1,50 @@
+Script started on Thu 15 Jul 2010 08:29:08 PM MDT
+]0;joycetipping@rose: ~/projects/programs/cheloniidae-live/databasejoycetipping@rose:~/projects/programs/cheloniidae-live/database$ scripts run
+category_map
+index
+]0;joycetipping@rose: ~/projects/programs/cheloniidae-live/databasejoycetipping@rose:~/projects/programs/cheloniidae-live/database$ cd ..
+]0;joycetipping@rose: ~/projects/programs/cheloniidae-livejoycetipping@rose:~/projects/programs/cheloniidae-live$ git commit -a
+[?1000h[?1049h[?1h=[1;43r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[43;1H".git/COMMIT_EDITMSG" 26L, 815C[>c[1;1H[33m  1 
+  2 [m[34m# Please enter the commit message for your changes. Lines starting[m
+[33m  3 [m[34m# with '#' will be ignored, and an empty message aborts the commit.[m
+[33m  4 [m[34m#[m
+[33m  5 [m[34m# Committer: Joyce Tipping <joycetipping@rose.(none)>[m
+[33m  6 [m[34m#[m
+[33m  7 [m[34m# On branch [m[35mmaster[m
+[33m  8 [m[34m# [m[35mChanges to be committed:[m
+[33m  9 [m[34m#   (use "git reset HEAD <file>..." to unstage)[m
+[33m 10 [m[34m#[m
+[33m 11 [m[34m# [m[32mmodified[m[34m: [m[31m  database/index.txt[m
+[33m 12 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/circle[m
+[33m 13 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/corkscrew[m
+[33m 14 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/dome[m
+[33m 15 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/sphere[m
+[33m 16 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/spiral[m
+[33m 17 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/square[m
+[33m 18 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/squares[m
+[33m 19 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/star[m
+[33m 20 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/torus[m
+[33m 21 [m[34m# [m[32mmodified[m[34m: [m[31m  database/standard/tree[m
+[33m 22 [m[34m#[m
+[33m 23 [m[34m# [m[35mUntracked files:[m
+[33m 24 [m[34m#   (use "git add <file>..." to include in what will be committed)[m
+[33m 25 [m[34m#[m
+[33m 26 [m[34m# [m[31mdatabase/run[m
+[1m[34m~                                                                                                                                                                         [28;1H~                                                                                                                                                                         [29;1H~                                                                                                                                                                         [30;1H~                                                                                                                                                                         [31;1H~                                                                                                                                                                         [32;1H~                                                                                                                                                                         [33;1H~                                                                                                                                                                         [34;1H~                                                                                                                                                                         [35;1H~                                                                                                                                                                         [36;1H~                                                                                                                                                                         [37;1H~                                                                                                                                                                         [38;1H~                                                                                                                                                                         [39;1H~                                                                                                                                                                         [40;1H~                                                                                                                                                                         [41;1H~                                                                                                                                                                         [42;1H~                                                                                                                                                                         [m[43;153H1,0-1[9CAll[1;5H[?12l[?25h[?1000l[?1002hP+q436f\P+q6b75\P+q6b64\P+q6b72\P+q6b6c\P+q2332\P+q2334\P+q2569\P+q2a37\P+q6b31\[?25l[43;1H[1m-- INSERT --[m[43;13H[K[43;153H1,1[11CAll[1;5H[?12l[?25h[?25l[33m T[m[43;155H2[1;6H[?12l[?25h[?25l[33mTw[m[43;155H3[1;7H[?12l[?25h[?25l[33mwe[m[43;155H4[1;8H[?12l[?25h[?25l[33mea[m[43;155H5[1;9H[?12l[?25h[?25l[33mak[m[43;155H6[1;10H[?12l[?25h[?25l[33mke[m[43;155H7[1;11H[?12l[?25h[?25l[33med[m[43;155H8[1;12H[?12l[?25h[?25l[33m [m[43;155H9[1;13H[?12l[?25h[?25l[33m s[m[43;155H10[1;14H[?12l[?25h[?25l[33mst[m[43;156H1[1;15H[?12l[?25h[?25l[33mta[m[43;156H2[1;16H[?12l[?25h[?25l[33man[m[43;156H3[1;17H[?12l[?25h[?25l[33mnd[m[43;156H4[1;18H[?12l[?25h[?25l[33mda[m[43;156H5[1;19H[?12l[?25h[?25l[33mar[m[43;156H6[1;20H[?12l[?25h[?25l[33mrd[m[43;156H7[1;21H[?12l[?25h[?25l[33m [m[43;156H8[1;22H[?12l[?25h[?25l[33m e[m[43;156H9[1;23H[?12l[?25h[?25l[33mex[m[43;155H20[1;24H[?12l[?25h[?25l[33mxa[m[43;156H1[1;25H[?12l[?25h[?25l[33mam[m[43;156H2[1;26H[?12l[?25h[?25l[33mmp[m[43;156H3[1;27H[?12l[?25h[?25l[33mpl[m[43;156H4[1;28H[?12l[?25h[?25l[33mle[m[43;156H5[1;29H[?12l[?25h[?25l[33mes[m[43;156H6[1;30H[?12l[?25h[?25l[33ms.[m[43;156H7[1;31H[?12l[?25h[43;1H[K[1;30H[?25l[43;153H1,26[10CAll[1;30H[?12l[?25h[?25l[43;153H[K[43;1H:[?12l[?25hw[?25l[?12l[?25hq[?25l[?12l[?25h[?25l[?1002l".git/COMMIT_EDITMSG" 26L, 841C written
+[?1l>[?12l[?25h[?1049l[master 45f7128] Tweaked standard examples.
+ Committer: Joyce Tipping <joycetipping@rose.(none)>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+If the identity used for this commit is wrong, you can fix it with:
+
+    git commit --amend --author='Your Name <you@example.com>'
+
+ 11 files changed, 52 insertions(+), 52 deletions(-)
+]0;joycetipping@rose: ~/projects/programs/cheloniidae-livejoycetipping@rose:~/projects/programs/cheloniidae-live$ exit
+
+Script done on Thu 15 Jul 2010 08:31:09 PM MDT

@@ -1,0 +1,5 @@
+// Squares
+
+for (var i = 0; i < 100; ++i) {
+  t.move(100).turn(89).pitch(2);
+}

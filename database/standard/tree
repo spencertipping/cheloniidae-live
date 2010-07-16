@@ -1,0 +1,12 @@
+// Tree
+
+var tree = function (t, distance, recursion_level) {
+  if (recursion_level > 0)
+    for (var i = 0; i < 3; ++i)
+      tree (t.clone().pitch (Math.random() * 60 - 30).bank (Math.random() * 180).
+          move (distance * (Math.random() * 0.2 + 0.8)),
+          distance * (Math.random() * 0.5 + 0.4),
+          recursion_level - 1);
+  else t.clone().move (distance * Math.random());
+};
+tree ((t.with_color ('#797')).turn(180).jump(-100), 100, 6);

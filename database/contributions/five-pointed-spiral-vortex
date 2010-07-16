@@ -1,0 +1,14 @@
+// Five Pointed Spiral Vortex | JP
+
+t.jump(-170); 
+t.pitch(-30); 
+for (var i = 0; i < 500; ++i) {
+  t.bank(3); 
+  for (var j = 0; j < 2; ++j) {
+    t.move(3); 
+    t.turn(48); 
+    t.move(50); 
+    t.turn(97);
+  } 
+  t.jump(1);
+}

@@ -1,0 +1,5 @@
+// Spiral
+
+for (var i = 0; i < 120; ++i) {
+  t.move(i).turn(60);
+}

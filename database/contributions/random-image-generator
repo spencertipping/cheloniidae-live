@@ -1,0 +1,11 @@
+// Random Image Generator | Casey Roach
+
+var poly = function(step, angle){
+  if(step == 0) return;
+  t.move(step);
+  t.turn(angle);
+  poly(step-1,angle);
+}
+
+var r = Math.random()*500;
+poly(100,r);

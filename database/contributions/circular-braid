@@ -1,0 +1,12 @@
+// Circular Braid | JamesM
+
+t.pitch(60); 
+for (var i = 0; i < 15; ++i) {
+  t.pitch(4.5); 
+  for (var j = 0; j < 35; ++j) {
+    t.move(10); 
+    t.pitch(9);
+  } 
+  t.pitch(-4.5); 
+  t.turn(9);
+}

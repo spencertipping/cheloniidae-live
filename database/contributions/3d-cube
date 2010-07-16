@@ -1,0 +1,35 @@
+// 3D Cube | Casey Roach
+
+var squareFace = function(w,h){
+  t.move(w);
+  t.turn(90);
+  t.move(h);
+  t.turn(90);
+  t.move(w);
+  t.turn(90);
+  t.move(h);
+  t.turn(90);
+};
+
+var moveBy = function(x,y){
+  t.jump(-x);
+  t.turn(90);
+  t.jump(-y);
+  t.turn(-90);
+};
+
+var cube = function(w,h,d){
+  squareFace(w,h);
+  t.pitch(90);
+  squareFace(w,h);
+  moveBy(-w,0);
+  t.pitch(-90);
+  squareFace(w,h);
+  moveBy(-w,0);
+  t.pitch(-90);
+  squareFace(w,h);
+};
+
+t.pitch(30);
+t.bank(30);
+cube(100,100);

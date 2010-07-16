@@ -1,0 +1,12 @@
+// Sierpinski | Casey Roach
+
+var sierpinski = function(n,length){ 
+  if(n == 0) return;
+  for(var i = 0; i < 3; ++i){
+    sierpinski(n-1,length/2);
+    t.move(length);
+    t.turn(-120);
+  }
+};
+
+sierpinski(7,200);

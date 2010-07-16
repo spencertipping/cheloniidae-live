@@ -1,0 +1,130 @@
+/* General page layout and related commonalities */
+body, #canvas, #code {
+  width: 700px;
+}
+body {
+  margin: 0px auto;
+  font: 12px "Arial", sans-serif;
+  text-align: center;
+}
+#canvas, #code {
+  height: 375px;
+}
+
+
+/* Links */
+a:link, a:active {
+  text-decoration: underline;
+  color: #060;
+}
+a:hover {
+  text-decoration: none;
+  color: #666;
+}
+a:visited {
+  text-decoration: underline;
+  color: #666;
+}
+
+
+/* Title */
+h1 {
+  margin: 50px 0;
+  font: small-caps 50px sans-serif;
+  letter-spacing: 10px;
+}
+#title2 {
+  color: #999;
+}
+#title-tag {
+  margin: 30px 0;
+  font: small-caps 20px sans-serif;
+}
+
+
+/* Viewport */
+#canvas {
+  border: solid 1px black;
+  margin:0; padding:0;
+}
+#mouse-commands span {
+  font: 11px sans-serif;
+  margin: 0 15px;
+}
+
+
+/* Controls */
+#run button {
+  padding: 0 130px;
+  font-family: sans-serif;
+  margin: 10px 0;
+}
+#error-area {
+  color: red;
+}
+#code {
+  margin: 5px 0;
+  padding:0;
+}
+
+
+/* Examples */
+#example-section {
+  margin:0; padding:0;
+}
+.example-columns {
+  text-align: left;
+  float: left;
+  width: 185px;
+  margin: 20px 0 50px 0;
+  padding: 0 5px 0 10px;
+  text-indent: -8px;
+}
+#example-columns-standard {
+  width: 85px;
+}
+.example-columns h4 {
+  margin:0; padding:0;
+}
+.examples {
+  margin: 3px 0; padding:0;
+}
+.example-author {
+  color: #666;
+  margin:0 5px; padding:0;
+}
+#example-section a:visited {
+  text-decoration: underline;
+  color: #060;
+}
+
+
+/* Documentation */
+#documentation {
+  clear: both;
+  margin: 0 auto;
+  text-align: left;
+  font-size: 14px;
+}
+h2 {
+  font-variant: small-caps;
+  font-size: 30px;
+}
+h3 {
+  font-variant: small-caps;
+  font-size: 25px;
+}
+.docs-old-code {
+  color: #f00;
+}
+.docs-new-code {
+  color: #00f;
+}
+
+/* Footer */
+#footer {
+  margin: 100px 0 20px 0;
+}
+#footer div {
+  margin: 3px 0;
+}

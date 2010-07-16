@@ -1,0 +1,26 @@
+// Koch Snowflake | Casey Roach
+
+var snowFlake = function(length, iterations){
+  t.turn(120);
+  koch(length, iterations);
+  t.turn(-120);
+  koch(length, iterations);
+  t.turn(-120);
+  koch(length, iterations);
+}
+
+var koch = function(length,iterations){
+  if(iterations==1)
+  t.move(length);
+  else{
+    koch(length, iterations-1);
+    t.turn(60);
+    koch(length, iterations-1);
+    t.turn(-120);
+    koch(length, iterations-1);
+    t.turn(60);
+    koch(length, iterations-1);
+  }
+};
+
+snowFlake(3,5);

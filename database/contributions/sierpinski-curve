@@ -1,0 +1,27 @@
+// Sierpinski Curve | Casey Roach
+
+var sier = function(n,a,h,k){
+  if(n == 0)
+    return;
+  t.turn (-a);
+  sier(n-1, -a, h, k);
+  t.turn(a);
+  t.move(h);
+
+  t.turn(a);
+  sier(n-1,-a,h,k);
+  t.turn(-a);
+};
+
+t.jump(-160);
+t.turn(90);
+t.jump(70);
+var h = 12/Math.sqrt(2);
+
+for(var i = 0; i < 4; i++)
+{
+  sier(7,45,h,10);
+  t.turn(-45);
+  t.move(h);
+  t.turn(-45);
+}

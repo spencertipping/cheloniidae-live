@@ -1,0 +1,25 @@
+// Hilbert Curve | Casey Roach
+
+var hilbert = function(n,a,h){
+  if(n == 0)
+    return;
+  t.turn(a);
+  hilbert(n-1, -a, h);
+  t.move(h);
+
+  t.turn(-a);
+  hilbert(n-1,a,h);
+  t.move(h);
+
+  hilbert(n-1,a,h);
+  t.turn(-a);
+  t.move(h);
+
+  hilbert(n-1,-a,h);
+  t.turn(a);
+};
+
+t.jump(-200);
+t.turn(-90);
+t.jump(-300);
+hilbert(6,90,10);

@@ -1,0 +1,10 @@
+// Spirals | Casey Roach
+
+for (var i = 0; i < 4; i++)
+{
+  for (var x = 1; x < 100; x++)
+  {
+    t.move(10);
+    t.turn(-(100-x));
+  }
+}

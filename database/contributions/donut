@@ -1,0 +1,11 @@
+// Donut | niko TM
+
+t.pitch(30); 
+for (var j = 0; j < 45; ++j) {
+  for (var i = 0; i < 360; ++i) {
+    t.move(1); 
+    t.turn(1);
+  } 
+  t.turn(8); 
+  t.jump(2);
+}

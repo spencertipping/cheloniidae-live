@@ -1,0 +1,6 @@
+// Star | Ümit Coşkun Aydınoğlu
+
+for (var i = 0; i < 300; i++) {
+  t.move (i);
+  t.turn (100);
+}

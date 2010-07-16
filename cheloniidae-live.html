@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+
+<html lang='en'> 
+<head> 
+<title>Cheloniidae Live</title> 
+
+<script src='divergence.js'></script> 
+<script src='divergence.rebase.js'></script> 
+<script src='divergence.vector.js'></script> 
+<script src='cheloniidae-live.js'></script> 
+<script src='utils/core-001.js'></script>
+
+<link rel='stylesheet' type='text/css' href='cheloniidae-live.css' />
+</head> 
+
+
+
+<body> 
+<div id='title'>
+  <h1><span id='title1'>Cheloniidae</span> <span id='title2'>Live</span></h1>
+  <div id='title-tag'>A javascript turtle graphics library</div>
+</div><!--title-->
+
+
+<div id='viewport'> 
+  <a name='canvas'></a>
+  <canvas id='canvas'> 
+    This page requires a browser with HTML5 canvas support. Valid browsers include <a href='http://getfirefox.com'>Mozilla Firefox</a>, <a
+    href='http://google.com/chrome'>Google Chrome</a>, and most others that aren't Internet Explorer.
+  </canvas> 
+
+  <div id='mouse-commands'> 
+    <span><em>drag</em> : move</span> 
+    <span><em>shift-drag</em> : rotate</span> 
+    <span><em>ctrl-drag</em> : zoom</span> 
+  </div>
+</div><!--viewport-->
+
+
+<div id='controls'>
+  <div id='error-area'></div> 
+  <div id='run'><button onclick='jump_to("canvas");run_script(document.getElementById("code").value)'>Run</button></div> 
+
+  <a name='code'><textarea id='code'></textarea></a>
+
+  <div id='invitation' class='controls-text'><a href='#documentation'>Write your own</a>, or click to load an example. If you make something awesome, <a
+  href='mailto:spencer@spencertipping.com'>send it in</a> and I'll add it to the list.</div> 
+
+  <div id='things-have-changed' class='controls-text'>We've made some changes to Cheloniidae Live. Check out <a href='#docs-changes'>what's
+  new</a>.</div>
+
+</div><!--controls-->
+
+
+<div id='example-section'></div>
+
+
+<div id='documentation'> 
+  <a name='documentation'></a>
+  <h2>Documentation</h2>
+  <a href='#code'>Return to your code</a>
+
+    <a name='docs-changes'></a>
+    <h3>What's New?</h3>
+    <p>Welcome back to Cheloniidae Live! We've made some changes that you should know about.</p>
+
+      <h4>No simple mode</h4>
+      <p>There's no longer a simple mode. All commands are now issued in power-user mode, using method calls on the turtles.</p>
+
+
+      <h4>Mutable turtles</h4>
+      <p>It might be more accurate to say that we've <em>merged</em> simple and power-user modes. We kept the power-user mode syntax, but we've
+      made the turtles mutable the way they were in simple mode. Now, methods on <code>t</code> return a modified <code>t</code>, instead of a new
+      turtle.</p>
+
+<pre class='docs-old-code'>
+// Old: You had to capture changes and store them back into t.
+t = t.move (100);
+</pre>
+
+<pre class='docs-new-code'>
+// New: This does the same thing. Now, t changes itself.
+t.move (100);
+</pre>
+
+      <p>If you're thinking that this looks awfully similar to simple mode, you're right! In fact, you can use the simple mode commands just as
+      before, except now they're methods on <code>t</code>.</p>
+
+<pre>
+t.move (d);   // Same as move (d)
+t.jump (d);   //         jump (d)
+t.turn (a);   //         turn (a)
+t.bank (a);   //         bank (a)
+t.pitch (a);  //         pitch (a)
+</pre>
+ 
+      <p>Since turtles are now mutable, <a href='#docs-branching'>branching</a> is done a little differently.</p>
+
+<pre class='docs-old-code'>
+// Old: t is unchanged
+var r = t.move (100);
+var s = t.turn (90).move (100);
+</pre>
+
+<pre class='docs-new-code'>
+// New: This does the same thing
+var r = t.clone ().move (100);
+var s = t.clone ().turn (90).move (100);
+</pre>
+
+      <h4>The examples</h4>
+      <p>We've ported all of the examples to accomodate the changes. If we've accidentally mangled your code, please <a
+      href='mailto:spencer@spencertipping.com'>let us know</a> and we'll fix it up for you.</p>
+
+  <a href='#code'>Return to your code</a>
+
+    <h3>Turtle Commands</h3> 
+    <p>Turtle commands are simply JavaScript methods that tell a turtle how to move around the screen. Here's a quick overview of the available
+    commands.</p>
+    
+      <h4>Driving the turtle</h4> 
+      <p>Each scene comes with a default turtle called <code>t</code>. There are five basic turtle operations:</p>
+
+<pre>
+var a = 90;     // a is an angle in degrees
+var d = 100;    // d is a distance, roughly in pixels
+
+// Basic turtle commands
+t.move (d);     // Moves d pixels, drawing a line
+t.jump (d);     // Jumps d pixels, without drawing a line
+t.turn (a);     // Turns a degrees to the right (clockwise)
+t.bank (a);     // Banks a degrees to the right (clockwise)
+t.pitch (a);    // Pitches a degrees downwards (counterclockwise)
+</pre>
+
+      <a name='docs-branching'></a>
+      <h4>Branching</h4>
+      <p>To branch into multiple turtles, use the <code>clone()</code> method:</p>
+
+<pre>
+var s = t.clone ();  // s is a copy of t
+s.move (100);        // s moves without changing t
+</pre>
+
+      <h4>Changing pen attributes</h4>
+      <p>By default, the pen color is #444 (gray), opacity is 0.6, and width is 1 pixel. You can change each of these attributes individually, or
+      set them all at once.</p>
+
+<pre> 
+// Set each individually:
+//   with_color takes a string with a hexadecimal color.
+t.with_color ('#f00');  // Changes the color to red.
+
+//   with_opacity takes a float between 0 and 1.
+t.with_opacity (0.25);  // Changes the opacity to 25% opaque.
+
+//   with_size method takes an integer.
+t.with_size (4);        // Changes the pen size to roughly 4 pixels wide.
+
+
+// Set all three at once:
+t.with_pen ({color:'#f00', opacity:0.25, size:4});
+</pre> 
+
+      <h4>Commands are expressions</h4>
+      <p>Each command is an expression that returns the modified turtle. This means you can chain them:</p>
+
+<pre>
+// Move 50 pixels, turn 90 degrees, change the color to red, move 50 pixels.
+t.move (50).turn (90).with_color ('#888').move (50);
+</pre>
+
+      <h4>Go forth and conquer</h4>
+      <p>Have fun writing your turtle programs! If you make anything you're super proud of, be sure to <a
+      href='mailto:spencer@spencertipping.com'>send it in</a>.</p>
+
+  <a href='#code'>Return to your code</a>
+</div><!--documentation-->
+
+
+<div id=footer>
+  <div id='author'>Cheloniidae Live is written by <a href='http://spencertipping.com'>Spencer Tipping</a> and is released under the <a
+  href='http://creativecommons.org/licenses/MIT/'>MIT License</a>. You can download a copy <a
+  href='http://github.com/spencertipping/cheloniidae-live/'>here</a>.</div>
+
+  <div id='design-credit'>This page was designed and coded by <a href='http://joycetipping.com'>Joyce Tipping</a>.</div>
+</div><!--footer-->
+
+<script src='page-driver.js'></script> 
+</body> 
+</html> 
