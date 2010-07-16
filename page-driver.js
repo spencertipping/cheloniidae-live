@@ -1,116 +1,129 @@
-d.rebase (function () {
-  var e = document.getElementById ('examples');
-  var expand = s >$> s.replace (/r(\d+)(\w+)/g,     (_, n, i) >$> '\nfor (var #{i} = 0; #{i} < #{n}; ++#{i})').
-                       replace (/m(-?\d[\d-\.]*)/g, (_, n)    >$> '\nmove(#{n});').
-                       replace (/j(-?\d[\d-\.]*)/g, (_, n)    >$> '\njump(#{n});').
-                       replace (/t(-?\d[\d-\.]*)/g, (_, n)    >$> '\nturn(#{n});').
-                       replace (/b(-?\d[\d-\.]*)/g, (_, n)    >$> '\nbank(#{n});').
-                       replace (/p(-?\d[\d-\.]*)/g, (_, n)    >$> '\npitch(#{n});').
-                       replace (/}/g, '\n}');
+// Bind log to console; to help with debugging.
+var log = console.log.bind (console);
 
-  var examples = {square: expand('r4i {m100 t90}'), circle: expand('r360i {m1 t1}'), spiral: expand('r120i {\nmove(i);t60}'), dome: expand('p60 r120i {\nmove(i);t60 p-2}'),
-                   torus: expand('r40i {p90 j100 r30j {m12 p12} j-100 p-90 t90 j5 t-90 b9}'), squares: expand('r100i {m100 t89 p2}'), sphere: expand('p60 r20i {p4.5 r40j {m10 p9} p-4.5 t9}'),
-               corkscrew: expand('p-30 r50i {b5 r2j {m10 t90 m100 t90} j10}'), original: expand('j-80 r100i {m160 t161 p1}'),
-               
-                   'Ultimate Corkscrew (contributed by mastermind)': expand('j-200 p-45 r1300i {b2 r4j {m-30 t90 m100 t90} j1}'),
-                           'Circular Braid (contributed by JamesM)': expand('p60 r15i {p4.5 r35j {m10 p9} p-4.5 t9}'),
-                   'Five-pointed Spiral Vortex (contributed by JP)': expand('j-170 p-30 r500i {b3 r2j {m3 t48 m50 t97} j1}'),
-                                   'Donut (contributed by niko TM)': expand('p30 r45j {r360i {m1 t1} t8 j2}'),
-                                   
-                'Odd-looking Tree (power-user mode)': '// Power-user mode\n' +
-                                                      'var tree = function (t, distance, recursion_level) {\n' +
-                                                      '  if (recursion_level > 0)\n' +
-                                                      '    for (var i = 0; i < 3; ++i)\n' +
-                                                      '      tree (t.clone().pitch (Math.random() * 60 - 30).bank (Math.random() * 180).\n' +
-                                                      '              move (distance * (Math.random() * 0.2 + 0.8)),\n' +
-                                                      '            distance * (Math.random() * 0.5 + 0.4),\n' +
-                                                      '            recursion_level - 1);\n' +
-                                                      '  else t.clone().move (distance * Math.random());\n' +
-                                                      '};\n' +
-                                                      'tree (t.with_pen (t.pen.with_color (\'#797\')).turn(180).jump(-100), 100, 6);',
-                                                      
-                'Weird Spiral Ladder Thing (power-user mode, contributed by Invisible Bob)': '// Power-user mode\n' +
-                                                                                             'for (var i = 0; i < 1000; i++) {\n' +
-                                                                                             '  t = t.move (10);\n' +
-                                                                                             '  t = t.pitch (i);\n' +
-                                                                                             '  t = t.turn (i);\n' +
-                                                                                             '}',
-                                                                                             
-                    'Star (power-user mode, contributed by Ümit Coşkun Aydınoğlu': '// Power-user mode\n' +
-                                                                                   'for (var i = 0; i < 300; i++) {\n' +
-                                                                                   '  t = t.move (i);\n\n' +
-                                                                                   '  t = t.turn (100);\n' +
-                                                                                   '}',
+// Make the ajax call
+c.ajax ('get', 'database/index.txt', function () { format_example_columns (this.responseText); });
 
-                        'Hilbert Curve (contributed by Casey Roach)': 'var hilbert = function(n,a,h){\n' +
-                                                                      '  if(n == 0)\n' +
-                                                                      '    return;\n' +
-                                                                      '  turn(a);\n' +
-                                                                      '  hilbert(n-1, -a, h);\n' +
-                                                                      '  move(h);\n\n' +
-                                                                      '  turn(-a);\n' +
-                                                                      '  hilbert(n-1,a,h);\n' +
-                                                                      '  move(h);\n\n' +
-                                                                      '  hilbert(n-1,a,h);\n' +
-                                                                      '  turn(-a);\n' +
-                                                                      '  move(h);\n\n' +
-                                                                      '  hilbert(n-1,-a,h);\n' +
-                                                                      '  turn(a);\n' +
-                                                                      '};\n' +
-                                                                      'jump(-200);\n' +
-                                                                      'turn(-90);\n' +
-                                                                      'jump(-300);\n' +
-                                                                      'hilbert(6,90,10);',
-                                                                      
-                     'Sierpinski curve (contributed by Casey Roach)': 'var sier = function(n,a,h,k){\n' +
-                                                                      '  if(n == 0)\n' +
-                                                                      '    return;\n' +
-                                                                      '  turn (-a);\n' +
-                                                                      '  sier(n-1, -a, h, k);\n' +
-                                                                      '  turn(a);\n' +
-                                                                      '  move(h);\n' +
-                                                                      '\n' +
-                                                                      '  turn(a);\n' +
-                                                                      '  sier(n-1,-a,h,k);\n' +
-                                                                      '  turn(-a);\n' +
-                                                                      '};\n' +
-                                                                      'jump(-160);\n' +
-                                                                      'turn(90);\n' +
-                                                                      'jump(70);\n' +
-                                                                      'var h = 12/Math.sqrt(2);\n' +
-                                                                      'for(var i = 0; i < 4; i++)\n' +
-                                                                      '{\n' +
-                                                                      '  sier(7,45,h,10);\n' +
-                                                                      '  turn(-45);\n' +
-                                                                      '  move(h);\n' +
-                                                                      '  turn(-45);\n' +
-                                                                      '}'};
+// Set the canvas width and height.
+// Note: The canvas width and height must be set as attributes (not css) for Cheloniidae Live to work.
+var canvas_width = 700;
+var canvas_height = 375;
+var canvas = c.get ('canvas').fancy ().add_attr ({ width:canvas_width, height:canvas_height });
 
-  d.keys (examples) * (k >$> (
-    (document.createElement ('li'), document.createElement ('a'), document.createTextNode (k)) |$> ((li, a, t) >$> (
-      e.appendChild (li), li.appendChild (a), a.appendChild (t), a.href = '#', a.onclick = (_ >$> (
-        run_script (document.getElementById ('commands').value = examples[k]),
-        false))))))}) ();
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FUNCTION DEFINITIONS
+//
+
+// Jumps to the given anchor.
+var jump_to = function (s) { location.hash = ''; location.hash = s; };
+
+
+// Formats our example columns
+var format_example_columns = function (text) {
+  var data    = text.split ('EOF').trim (),
+      cat_map = eval ('(' + data[0] + ')'),    // Object mapping category name to category title
+      strings = data.slice (1),                // Array of examples in string format
+      tree    = {},                            // An object to hold our example tree
+      links   = { standard:[], other:[] };     // An object to hold our example links (built later), split into two arrays -- standard and everything else
+
+  for (var cat in cat_map) {
+    // Grab the example strings belonging to this category
+    var regex   = new RegExp ('^' + cat + '\/')
+        matches = strings.grep (regex);
+
+    // Create an object for our category subtree (to be populated with examples later)
+    tree[cat] = {};
+
+    // Push the category title onto the correct list of links (either 'standard' or 'other').
+    (cat === 'standard' ? links.standard : links.other).push (c.cr ('h4', { id:cat }, cat_map[cat]));
+
+
+    // For each example string:
+    for (var i = 0, len = matches.length; i < len; i++) {
+
+      // Extract data
+      var lines        = matches[i].split (/\n/),
+          title_author = lines[1].split (/\|/);
+
+      var name   = lines[0].split (/\//)[1].trim (),
+          title  = title_author[0].replace (/^\/\/\s*/, '').trim (),
+          author = (title_author[1] ? title_author[1] : '').trim (),
+          code   = lines.slice (1).join ('\n');
+
+      // Create and build an example object
+      var ex    = tree[cat][name] = {};
+      ex.title  = title;
+      ex.author = author;
+      ex.code   = code;
+
+      // Build a link in the following format:
+      // 
+      //   <div id='cat-name' onclick='run_script(code)'>
+      //     <a href='javascript:void(0)' class='example-title'>title</a>
+      //     <span class='example-author'>author</span>
+      //   </div>
+      //
+      var l = c.cr ('div', { id:cat + '-' + name, className:'examples' },
+                           ['a',    title,  { href      : '#canvas',
+                                              className : 'example-title',
+                                              onclick   : run.fn (code) }],
+                           ['span', author, { className : 'example-author' }]);
+      (cat === 'standard' ? links.standard : links.other).push (l);
+    }
+  }
+
+  // Separate our links into columns
+  //   Standard links go in the first column. All other links are spread evenly over n columns;
+  //   Each column is a div with the following format:
+  //
+  //     <div class='example-columns'>
+  //       <div id='cat-name' onclick='run_script(code)'>...</div>
+  //       <div id='cat-name' onclick='run_script(code)'>...</div>
+  //       <div id='cat-name' onclick='run_script(code)'>...</div>
+  //       ...
+  //     </div>
+  //
+  var columns = [];
+
+  // Wrap standard links in a div and push it onto "columns"
+  columns.push (c.cr ('div', { className:'example-columns', id:'example-columns-standard' }).append (links.standard));
+
+  // Split other links into n columns, wrap each in a div, and push them onto "columns"
+  var n = 3;                                  // Number of columns
+      h = Math.ceil (links.other.length / n); // Height of each column
+  for (var i = 0; i < n; i++) {
+    var content = links.other.slice (i * h, (i + 1) * h);
+    columns.push (c.cr ('div', { className:'example-columns' }).append (content));
+  }
+  var example_section = c.cr (document.getElementById ('example-section')).empty ().append (columns);
+
+  // Preload the sphere example, which is our logo.
+  run (tree.standard.sphere.code);
+};
+
+
+// Runs the script and renders the scene.
 var run_script = d.rebase (function (s) {
-  var c = document.getElementById ('screen');
+  var c = document.getElementById ('canvas');
   var t = new cheloniidae.mutable_rotational_turtle (cheloniidae.turtle ({pen: new cheloniidae.pen ({color: '#444', opacity: 0.6, size: 1})}));
-  var v = new cheloniidae.viewport ({pov: cheloniidae.vector(0, 0, -350), context: c.getContext ('2d'), forward: cheloniidae.vector(0, 0, 1), up: cheloniidae.vector (0, 1, 0),
-                                     width: 600, height: 350, batch: 10, delay: 0});
-
-  var move = d >$> (t = t.move (d)),
-      jump = d >$> (t = t.jump (d)),
-      turn = a >$> (t = t.turn (a)),
-      bank = a >$> (t = t.bank (a)),
-     pitch = a >$> (t = t.pitch(a));
+  var v = new cheloniidae.viewport ({     pov : cheloniidae.vector(0, 0, -canvas_height),
+                                      context : c.getContext ('2d'),
+                                      forward : cheloniidae.vector(0, 0, 1),
+                                           up : cheloniidae.vector (0, 1, 0),
+                                        width : canvas_width,
+                                       height : canvas_height,
+                                        batch : 10,
+                                        delay : 0 });
 
   document.getElementById ('error-area').innerHTML = '';
 
-  try       {eval ('(function() {' + s.toString() + '})') ();
-             v.cancel().context.clearRect (0, 0, v.width, v.height),
-             v.queue = t.turtle.queue;
-             v.render()}
-  catch (e) {document.getElementById ('error-area').innerHTML = e.toString()}
+  try       { eval ('(function() {' + s.toString() + '})') ();
+              v.cancel().context.clearRect (0, 0, v.width, v.height),
+              v.queue = t.queue;
+              v.render() }
+  catch (e) { document.getElementById ('error-area').innerHTML = e.toString() }
 
          c.onmousedown = '@x_down = $0.clientX, @y_down = $0.clientY'.bind (c);
   document.onmousemove = e >$> ((c.x_down || c.y_down) && (e.shiftKey ? v.turn ((c.x_down - (c.x_down = e.clientX)).degrees()).pitch (-(c.y_down - (c.y_down = e.clientY)).degrees()) :
@@ -120,3 +133,10 @@ var run_script = d.rebase (function (s) {
                                                            v.cancel ().render (false)));
   document.onmouseup   = e >$> ((c.x_down || c.y_down) && (v.context.clearRect (0, 0, v.width, v.height), v.cancel().render(true)), c.x_down = c.y_down = null);
 });
+
+
+// Wraps run_script. Pastes the code into textarea before calling run_script on it.
+var run = function (s) {
+  c.get ('code').value = s;
+  run_script (s);
+};
