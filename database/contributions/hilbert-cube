@@ -1,0 +1,153 @@
+// Hilbert Cube | Denis Bredelet
+
+var segm = 4;
+
+/**
+ * coverFRD
+ * Trace all points inside a cube which has current vector as edge
+ * Directions: Front, Right, Down
+ */
+function coverFRD(step)
+{
+  //t.color(1, .5, .8, .7);
+  if (step > segm)
+  {
+    var d = step >> 1;
+    t. turn(-90). bank(90); coverFRD2(d);
+    t. move(segm). bank(-90). turn(90); coverFDR2(d);
+    t. move(segm). bank(-90). turn(90); coverFDR2(d);
+    t. move(segm). bank(-90). turn(90); coverFDR2(d);
+    t. bank(90). turn(90). move(segm). turn(90). bank(-90); coverFRD2(d);
+    t. move(segm); coverFDR2(d);
+    t. bank(-90). turn(-90). move(segm); coverFDR2(d);
+    t. bank(-90). turn(-90). move(segm); coverFRD2(d);
+    t. turn(90). bank(90);
+  }
+  else
+  {
+    coverFRDs();
+  }
+}
+
+/**
+ * coverFRD2
+ * Trace all points inside a cube which has current vector as edge
+ * Directions: Front, Right, Down
+ * Alternate coverage of smaller cubes to avoid multi-segment joints
+ */
+function coverFRD2(step)
+{
+  //t.color(.7, .3, 1, .7);
+  if (step > segm)
+  {
+    var d = step >> 1;
+    t. turn(-90). bank(90); coverFDR(d);
+    t. move(segm). bank(-90). turn(90); coverFRD(d);
+    t. move(segm). bank(-90). turn(90); coverFRD(d);
+    t. move(segm). bank(-90). turn(90); coverFRD(d);
+    t. bank(90). turn(90). move(segm). turn(90). bank(-90); coverFDR(d);
+    t. move(segm); coverFRD(d);
+    t. bank(-90). turn(-90). move(segm); coverFRD(d);
+    t. bank(-90). turn(-90). move(segm); coverFDR(d);
+    t. turn(90). bank(90);
+  }
+  else
+  {
+    coverFRDs();
+  }
+}
+
+/**
+ * coverFDR
+ * Trace all points inside a cube which has current vector as edge
+ * Directions: Front, Down, Right
+ */
+function coverFDR(step)
+{
+  //t.color(.4, 1, .7, .7);
+  if (step > segm)
+  {
+    var d = step >> 1;
+    t.  bank(-90). turn(90); coverFDR2(d);
+    t. move(segm). turn(-90). bank(90); coverFRD2(d);
+    t. move(segm). turn(-90). bank(90); coverFRD2(d);
+    t. move(segm). turn(-90). bank(90); coverFRD2(d);
+    t. turn(90). move(segm). turn(90); coverFDR2(d);
+    t. move(segm); coverFRD2(d);
+    t. turn(90). bank(90). move(segm); coverFRD2(d);
+    t. turn(90). bank(90). move(segm); coverFDR2(d);
+    t. bank(-90). turn(-90);
+  }
+  else
+  {
+    coverFDRs();
+  }
+}
+
+/**
+ * coverFDR2
+ * Trace all points inside a cube which has current vector as edge
+ * Directions: Front, Down, Right
+ * Alternate coverage of smaller cubes to avoid multi-segment joints
+ */
+function coverFDR2(step)
+{
+  //t. color(1, .9, .3, .7);
+  if (step > segm)
+  {
+    var d = step >> 1;
+    t. bank(-90). turn(90); coverFRD(d);
+    t. move(segm). turn(-90). bank(90); coverFDR(d);
+    t. move(segm). turn(-90). bank(90); coverFDR(d);
+    t. move(segm). turn(-90). bank(90); coverFDR(d);
+    t. turn(90). move(segm). turn(90); coverFRD(d);
+    t. move(segm); coverFDR(d);
+    t. turn(90). bank(90). move(segm); coverFDR(d);
+    t. turn(90). bank(90). move(segm); coverFRD(d);
+    t. bank(-90). turn(-90);
+  }
+  else
+  {
+    coverFDRs();
+  }
+}
+
+/**
+ * coverFRDs
+ * Trace all points inside a small cube which has current vector as edge
+ * Directions: Front, Right, Down
+ */
+function coverFRDs()
+{
+  t. turn(-90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(-90). turn(90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(90). turn(90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(-90). turn(90). move(segm);
+  t. turn(-90). bank(-90);
+}
+
+/**
+ * coverFDRs
+ * Trace all points inside a small cube which has current vector as edge
+ * Directions: Front, Down, Right
+ */
+function coverFDRs()
+{
+  t. bank(90). turn(-90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(90). turn(90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(-90). turn(90). move(segm);
+  t. turn(90). move(segm);
+  t. bank(90). turn(90). move(segm);
+  t. turn(-90);
+}
+
+t.pitch(90);
+t.jump(200);
+t.bank(-60);
+coverFRD(segm << 3);
+
