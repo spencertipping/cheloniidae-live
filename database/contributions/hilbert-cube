@@ -9,24 +9,17 @@ var segm = 4;
  */
 function coverFRD(step)
 {
-  //t.color(1, .5, .8, .7);
-  if (step > segm)
-  {
-    var d = step >> 1;
-    t. turn(-90). bank(90); coverFRD2(d);
-    t. move(segm). bank(-90). turn(90); coverFDR2(d);
-    t. move(segm). bank(-90). turn(90); coverFDR2(d);
-    t. move(segm). bank(-90). turn(90); coverFDR2(d);
-    t. bank(90). turn(90). move(segm). turn(90). bank(-90); coverFRD2(d);
-    t. move(segm); coverFDR2(d);
-    t. bank(-90). turn(-90). move(segm); coverFDR2(d);
-    t. bank(-90). turn(-90). move(segm); coverFRD2(d);
-    t. turn(90). bank(90);
-  }
-  else
-  {
-    coverFRDs();
-  }
+  step--;
+  t. turn(-90). bank(90); coverFRD2(step);
+  t. move(segm). bank(-90). turn(90); coverFDR2(step);
+  t. move(segm). bank(-90). turn(90); coverFDR2(step);
+  t. move(segm). bank(-90). turn(90); coverFDR2(step);
+  t. bank(90). turn(90). move(segm). turn(90). bank(-90);
+  coverFRD2(step);
+  t. move(segm); coverFDR2(step);
+  t. bank(-90). turn(-90). move(segm); coverFDR2(step);
+  t. bank(-90). turn(-90). move(segm); coverFRD2(step);
+  t. turn(90). bank(90);
 }
 
 /**
@@ -37,18 +30,16 @@ function coverFRD(step)
  */
 function coverFRD2(step)
 {
-  //t.color(.7, .3, 1, .7);
-  if (step > segm)
+  if (step > 0)
   {
-    var d = step >> 1;
-    t. turn(-90). bank(90); coverFDR(d);
-    t. move(segm). bank(-90). turn(90); coverFRD(d);
-    t. move(segm). bank(-90). turn(90); coverFRD(d);
-    t. move(segm). bank(-90). turn(90); coverFRD(d);
-    t. bank(90). turn(90). move(segm). turn(90). bank(-90); coverFDR(d);
-    t. move(segm); coverFRD(d);
-    t. bank(-90). turn(-90). move(segm); coverFRD(d);
-    t. bank(-90). turn(-90). move(segm); coverFDR(d);
+    t. turn(-90). bank(90); coverFDR(step);
+    t. move(segm). bank(-90). turn(90); coverFRD(step);
+    t. move(segm). bank(-90). turn(90); coverFRD(step);
+    t. move(segm). bank(-90). turn(90); coverFRD(step);
+    t. bank(90). turn(90). move(segm). turn(90). bank(-90); coverFDR(step);
+    t. move(segm); coverFRD(step);
+    t. bank(-90). turn(-90). move(segm); coverFRD(step);
+    t. bank(-90). turn(-90). move(segm); coverFDR(step);
     t. turn(90). bank(90);
   }
   else
@@ -64,24 +55,16 @@ function coverFRD2(step)
  */
 function coverFDR(step)
 {
-  //t.color(.4, 1, .7, .7);
-  if (step > segm)
-  {
-    var d = step >> 1;
-    t.  bank(-90). turn(90); coverFDR2(d);
-    t. move(segm). turn(-90). bank(90); coverFRD2(d);
-    t. move(segm). turn(-90). bank(90); coverFRD2(d);
-    t. move(segm). turn(-90). bank(90); coverFRD2(d);
-    t. turn(90). move(segm). turn(90); coverFDR2(d);
-    t. move(segm); coverFRD2(d);
-    t. turn(90). bank(90). move(segm); coverFRD2(d);
-    t. turn(90). bank(90). move(segm); coverFDR2(d);
-    t. bank(-90). turn(-90);
-  }
-  else
-  {
-    coverFDRs();
-  }
+  step--;
+  t.  bank(-90). turn(90); coverFDR2(step);
+  t. move(segm). turn(-90). bank(90); coverFRD2(step);
+  t. move(segm). turn(-90). bank(90); coverFRD2(step);
+  t. move(segm). turn(-90). bank(90); coverFRD2(step);
+  t. turn(90). move(segm). turn(90); coverFDR2(step);
+  t. move(segm); coverFRD2(step);
+  t. turn(90). bank(90). move(segm); coverFRD2(step);
+  t. turn(90). bank(90). move(segm); coverFDR2(step);
+  t. bank(-90). turn(-90);
 }
 
 /**
@@ -92,18 +75,16 @@ function coverFDR(step)
  */
 function coverFDR2(step)
 {
-  //t. color(1, .9, .3, .7);
-  if (step > segm)
+  if (step > 0)
   {
-    var d = step >> 1;
-    t. bank(-90). turn(90); coverFRD(d);
-    t. move(segm). turn(-90). bank(90); coverFDR(d);
-    t. move(segm). turn(-90). bank(90); coverFDR(d);
-    t. move(segm). turn(-90). bank(90); coverFDR(d);
-    t. turn(90). move(segm). turn(90); coverFRD(d);
-    t. move(segm); coverFDR(d);
-    t. turn(90). bank(90). move(segm); coverFDR(d);
-    t. turn(90). bank(90). move(segm); coverFRD(d);
+    t. bank(-90). turn(90); coverFRD(step);
+    t. move(segm). turn(-90). bank(90); coverFDR(step);
+    t. move(segm). turn(-90). bank(90); coverFDR(step);
+    t. move(segm). turn(-90). bank(90); coverFDR(step);
+    t. turn(90). move(segm). turn(90); coverFRD(step);
+    t. move(segm); coverFDR(step);
+    t. turn(90). bank(90). move(segm); coverFDR(step);
+    t. turn(90). bank(90). move(segm); coverFRD(step);
     t. bank(-90). turn(-90);
   }
   else
@@ -119,6 +100,7 @@ function coverFDR2(step)
  */
 function coverFRDs()
 {
+  t. with_pen({color: "#A5F", opacity: .7});
   t. turn(-90). move(segm);
   t. turn(90). move(segm);
   t. bank(-90). turn(90). move(segm);
@@ -136,6 +118,7 @@ function coverFRDs()
  */
 function coverFDRs()
 {
+  t. with_pen({color: "#FD4", opacity: .7});
   t. bank(90). turn(-90). move(segm);
   t. turn(90). move(segm);
   t. bank(90). turn(90). move(segm);
@@ -149,5 +132,4 @@ function coverFDRs()
 t.pitch(90);
 t.jump(200);
 t.bank(-60);
-coverFRD(segm << 3);
-
+coverFRD(2);
