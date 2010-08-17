@@ -1,0 +1,10 @@
+// Perfect Sphere | doublej472
+
+t.jump(85).pitch(60);
+for (var i = 0; i < 180; ++i) {
+  t.pitch(4.5);
+  for (var j = 0; j < 40; ++j) {
+    t.move(15).pitch(9);
+  }
+  t.pitch(-4.5).turn(1);
+}

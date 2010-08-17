@@ -1,0 +1,8 @@
+// Cool Donut-Shaped Thing | Eric Schram
+t.jump(85).pitch(60);
+for (var i = 0; i < 99; ++i) {
+  for (var j = 0; j < 40; ++j) {
+    t.move(159).pitch(99);
+  }
+  t.pitch(3).turn(50);
+}
