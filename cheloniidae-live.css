@@ -1,4 +1,4 @@
-/* General page layout and related commonalities */
+/* General page layout and related commonalities {{{*/
 body, #canvas, #code {
   width: 700px;
 }
@@ -10,9 +10,9 @@ body {
 #canvas, #code {
   height: 375px;
 }
+/*}}}*/
 
-
-/* Links */
+/* Links {{{*/
 a:link, a:active {
   text-decoration: underline;
   color: #060;
@@ -25,9 +25,9 @@ a:visited {
   text-decoration: underline;
   color: #666;
 }
+/*}}}*/
 
-
-/* Title */
+/* Title {{{*/
 h1 {
   margin: 50px 0;
   font: small-caps 50px sans-serif;
@@ -40,9 +40,9 @@ h1 {
   margin: 30px 0;
   font: small-caps 20px sans-serif;
 }
+/*}}}*/
 
-
-/* Viewport */
+/* Viewport {{{*/
 #canvas {
   border: solid 1px black;
   margin:0; padding:0;
@@ -51,9 +51,9 @@ h1 {
   font: 11px sans-serif;
   margin: 0 15px;
 }
+/*}}}*/
 
-
-/* Controls */
+/* Controls {{{*/
 #run button {
   padding: 0 130px;
   font-family: sans-serif;
@@ -66,9 +66,9 @@ h1 {
   margin: 5px 0;
   padding:0;
 }
+/*}}}*/
 
-
-/* Examples */
+/* Examples {{{*/
 #example-section {
   margin:0; padding:0;
 }
@@ -97,9 +97,9 @@ h1 {
   text-decoration: underline;
   color: #060;
 }
+/*}}}*/
 
-
-/* Documentation */
+/* Documentation {{{*/
 #documentation {
   clear: both;
   margin: 0 auto;
@@ -114,17 +114,19 @@ h3 {
   font-variant: small-caps;
   font-size: 25px;
 }
-.docs-old-code {
+.old-code {
   color: #f00;
 }
-.docs-new-code {
+.new-code {
   color: #00f;
 }
+/*}}}*/
 
-/* Footer */
+/* Footer {{{*/
 #footer {
   margin: 100px 0 20px 0;
 }
 #footer div {
   margin: 3px 0;
 }
+/*}}}*/

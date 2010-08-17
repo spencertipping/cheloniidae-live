@@ -1,14 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE HTML>
 
 <html lang='en'> 
 <head> 
 <title>Cheloniidae Live</title> 
+<meta charset="UTF-8">
+<meta name='description' content="A javascript turtle graphics library." />
 
-<script src='divergence.js'></script> 
-<script src='divergence.rebase.js'></script> 
-<script src='divergence.vector.js'></script> 
-<script src='cheloniidae-live.js'></script> 
-<script src='utils/core-001.js'></script>
+<script type='text/javascript' src='divergence.js'></script> 
+<script type='text/javascript' src='divergence.rebase.js'></script> 
+<script type='text/javascript' src='divergence.vector.js'></script> 
+<script type='text/javascript' src='cheloniidae-live.js'></script> 
+<script type='text/javascript' src='core-001.js'></script>
 
 <link rel='stylesheet' type='text/css' href='cheloniidae-live.css' />
 </head> 
@@ -23,7 +25,6 @@
 
 
 <div id='viewport'> 
-  <a name='canvas'></a>
   <canvas id='canvas'> 
     This page requires a browser with HTML5 canvas support. Valid browsers include <a href='http://getfirefox.com'>Mozilla Firefox</a>, <a
     href='http://google.com/chrome'>Google Chrome</a>, and most others that aren't Internet Explorer.
@@ -41,12 +42,12 @@
   <div id='error-area'></div> 
   <div id='run'><button onclick='jump_to("canvas");run_script(document.getElementById("code").value)'>Run</button></div> 
 
-  <a name='code'><textarea id='code'></textarea></a>
+  <textarea id='code'></textarea>
 
-  <div id='invitation' class='controls-text'><a href='#docs-turtle-commands'>Write your own</a>, or click to load an example. If you make something
+  <div id='invitation' class='controls-text'><a href='#turtle-commands'>Write your own</a>, or click to load an example. If you make something
   awesome, <a href='mailto:spencer@spencertipping.com'>send it in</a> and I'll add it to the list.</div> 
 
-  <div id='things-have-changed' class='controls-text'>We've made some changes to Cheloniidae Live. Check out <a href='#docs-changes'>what's
+  <div id='things-have-changed' class='controls-text'>We've made some changes to Cheloniidae Live. Check out <a href='#changes'>what's
   new</a>.</div>
 
 </div><!--controls-->
@@ -56,12 +57,11 @@
 
 
 <div id='documentation'> 
-  <a name='documentation'></a>
+
   <h2>Documentation</h2>
   <a href='#code'>Return to your code</a>
 
-    <a name='docs-changes'></a>
-    <h3>What's New?</h3>
+    <h3 id='changes'>What's New?</h3>
     <p>Welcome back to Cheloniidae Live! We've made some changes that you should know about.</p>
 
       <h4>No simple mode</h4>
@@ -73,12 +73,12 @@
       made the turtles mutable the way they were in simple mode. Now, methods on <code>t</code> return a modified <code>t</code>, instead of a new
       turtle.</p>
 
-<pre class='docs-old-code'>
+<pre class='old-code'>
 // Old: You had to capture changes and store them back into t.
 t = t.move (100);
 </pre>
 
-<pre class='docs-new-code'>
+<pre class='new-code'>
 // New: This does the same thing. Now, t changes itself.
 t.move (100);
 </pre>
@@ -94,15 +94,15 @@ t.bank (a);   //         bank (a)
 t.pitch (a);  //         pitch (a)
 </pre>
  
-      <p>Since turtles are now mutable, <a href='#docs-branching'>branching</a> is done a little differently.</p>
+      <p>Since turtles are now mutable, <a href='#branching'>branching</a> is done a little differently.</p>
 
-<pre class='docs-old-code'>
+<pre class='old-code'>
 // Old: t is unchanged
 var r = t.move (100);
 var s = t.turn (90).move (100);
 </pre>
 
-<pre class='docs-new-code'>
+<pre class='new-code'>
 // New: This does the same thing
 var r = t.clone ().move (100);
 var s = t.clone ().turn (90).move (100);
@@ -114,8 +114,7 @@ var s = t.clone ().turn (90).move (100);
 
   <a href='#code'>Return to your code</a>
 
-    <a name='docs-turtle-commands'></a>
-    <h3>Turtle Commands</h3> 
+    <h3 id='turtle-commands'>Turtle Commands</h3> 
     <p>Turtle commands are simply JavaScript methods that tell a turtle how to move around the screen. Here's a quick overview of the available
     commands.</p>
     
@@ -134,8 +133,7 @@ t.bank (a);     // Banks a degrees to the right (clockwise)
 t.pitch (a);    // Pitches a degrees downwards (counterclockwise)
 </pre>
 
-      <a name='docs-branching'></a>
-      <h4>Branching</h4>
+      <h4 id='branching'>Branching</h4>
       <p>To branch into multiple turtles, use the <code>clone()</code> method:</p>
 
 <pre>
@@ -179,12 +177,14 @@ t.move (50).turn (90).with_color ('#888').move (50);
 </div><!--documentation-->
 
 
-<div id=footer>
+<div id='footer'>
   <div id='author'>Cheloniidae Live is written by <a href='http://spencertipping.com'>Spencer Tipping</a> and is released under the <a
   href='http://creativecommons.org/licenses/MIT/'>MIT License</a>. You can download a copy <a
   href='http://github.com/spencertipping/cheloniidae-live/'>here</a>.</div>
 
   <div id='design-credit'>This page was designed and coded by <a href='http://joycetipping.com'>Joyce Tipping</a>.</div>
+  <a href='http://validator.w3.org/check/referer'>HTML5</a>,
+  <a href='http://jigsaw.w3.org/css-validator/check/referer'>CSS</a>.
 </div><!--footer-->
 
 <script src='page-driver.js'></script> 
