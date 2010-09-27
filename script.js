@@ -1,5 +1,10 @@
-// Bind log to console; to help with debugging.
-var log = console.log.bind (console);
+// SCRIPT.JS
+// Cheloniidae Live website
+// Joyce Tipping
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACTION
+//
 
 // Make the ajax call
 c.ajax ('get', 'database/index.txt', function () { format_example_columns (this.responseText); });
@@ -16,10 +21,7 @@ var canvas = c.get ('canvas').fancy ().add_attr ({ width:canvas_width, height:ca
 // FUNCTION DEFINITIONS
 //
 
-// Jumps to the given anchor.
-var jump_to = function (s) { location.hash = ''; location.hash = s; };
-
-
+// LOAD EXAMPLES:
 // Formats our example columns
 var format_example_columns = function (text) {
   var data    = text.split ('EOF').trim (),
@@ -103,7 +105,7 @@ var format_example_columns = function (text) {
   run (tree.standard.sphere.code);
 };
 
-
+// RENDERS CANVAS
 // Runs the script and renders the scene.
 var run_script = d.rebase (function (s) {
   var c = document.getElementById ('canvas');
