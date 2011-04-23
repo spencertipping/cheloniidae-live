@@ -273,6 +273,58 @@ t.turn(-90);
 t.jump(-300);
 hilbert(6,90,10);
 EOF
+contributions/honeycomb
+// Honeycomb | Daniel Gabriel B.
+
+//created by Daniel Gabriel B.
+//change numOfCombs to have less or more honeycombs
+//for every 3 red combs you get one extra black
+
+var numOfCombs = 3;
+
+t.with_pen ({color:'#f00', opacity:1, size:4}).turn(30);
+var arrRev = [];
+for(var e=0;e<numOfCombs ;e++){
+  if(e%2==0)
+    var angle = 60;
+  else
+    var angle = -60;
+  for(var i=0+e;i<6+e;i++){
+    t.move(100).turn(angle);
+    var d = t.clone();
+    if(i-e==4)
+      save_t = t.clone();
+    if((angle == 60 && i-e==3) || (angle == -60 && i-e==0) || (angle == -60 && i-e==4))
+      var save = true;
+    else
+      var save = false;
+    if(i%2!=0){
+      d.pitch(-90).move(200).pitch(90);
+      if(save)
+        arrRev.push(d.clone());
+      d.clone().pitch(14).move(103);
+      d.turn(angle).pitch(-14).move(103)
+    } else {
+      d.pitch(-90).move(175).pitch(90);
+      if(save)
+        arrRev.push(d.clone());
+      d.clone().pitch(-14).move(103);
+    }
+    if(arrRev.length==3 && angle == 60){
+      for(var a=0;a<3;a++){
+        var w = arrRev[a].with_pen ({color:'#000', opacity:1, size:4});
+        w.pitch(-90).move(200).pitch(90);
+        if(a==1)
+          w.turn(-120);
+        w.turn(60).move(100).clone().pitch(90).move(175);
+        w.turn(-60).move(100);
+      }
+      arrRev = [];
+    }
+  }
+  t = save_t;
+}
+EOF
 contributions/koch-snowflake
 // Koch Snowflake | Casey Roach
 
