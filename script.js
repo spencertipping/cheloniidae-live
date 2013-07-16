@@ -121,7 +121,7 @@ var run_script = d.rebase (function (s) {
 
   document.getElementById ('error-area').innerHTML = '';
 
-  try       { eval ('(function() {' + s.toString() + '})') ();
+  try       { eval ('(function() {' + s.toString() + '\n})') ();
               v.cancel().context.clearRect (0, 0, v.width, v.height),
               v.queue = t.queue;
               v.render() }
