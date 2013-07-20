@@ -63,6 +63,7 @@ h1 {
   color: red;
 }
 #code {
+  font-family: monospace;
   margin: 5px 0;
   padding:0;
 }
